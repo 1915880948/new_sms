@@ -57,7 +57,8 @@ class Timely extends Backend
             $postData = $this->request->post('row/a');
             $link = (new \app\admin\model\sms\Link())->where('channel_id',trim($postData['channel_id']))->find();
             //根据所选通道确认价格
-            $price = Db::query("select p.PRICEX from channel_pricex p join sms_sp_info s on p.SP_ID=s.remote_account where s.id=?",[$postData['sp_info_id']]);
+            $price = Db::table("channel_pricex")->alias('p')
+                ->join(['sms_sp_info'=>'s'], 'p.SP_ID=s.remote_account')->where("s.id",$postData['sp_info_id'])->value('p.PRICEX');
             if( !$link ){
                 $this->error('查不到此渠道号！！');
             }

@@ -104,7 +104,9 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         // {field: 'sp_num', title: __('Sp_num')},
                         {field: 'failed_num', title: __('Failed_num'),operate:false},
                         // {field: 'retry_status', title: __('Retry_status')},
-                        {field: 'price', title: __('Price'),operate:'like'},
+                        {field: 'price', title: __('成本'),operate:false,formatter:function (value,row,index) {
+                                return (row.total_receive*row.price).toFixed(2);
+                            }},
                         // {field: 'file_path', title: __('File_path')},
                         // {field: 'remark', title: __('Remark')},
                         // {field: 'phone_path', title: __('Phone_path')},

@@ -31,7 +31,8 @@ class ShortLinkAdd extends Command
         //print_r( json_encode($config ));
         $link = (new Link())->where('channel_id',trim($config['channel_id']))->find();
         //根据所选通道确认价格
-        $price = Db::query("select p.PRICEX from channel_pricex p join sms_sp_info s on p.SP_ID=s.remote_account where s.id=?",[$config['sp_info_id']]);
+        $price = Db::table("channel_pricex")->alias('p')
+            ->join(['sms_sp_info'=>'s'], 'p.SP_ID=s.remote_account')->where("s.id",$config['sp_info_id'])->value('p.PRICEX');
         if( !$link ){
             $output->writeln('查不到此渠道号！！');
         }
@@ -80,7 +81,7 @@ class ShortLinkAdd extends Command
                 'link_from' => 1,
                 'create_time' => date('Y-m-d H:i:s'),
                 'creator' => 'lzc',
-                'status' => 4, //4发送中，5发送完成
+                'status' => 5, //4发送中，5发送完成
                 'sm_task_id' => $linkShortModel->id,
                 'file_path' => '',
                 'price' => $price,
