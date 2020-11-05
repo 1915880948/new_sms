@@ -29,7 +29,7 @@ class Timely extends Backend
         $spModel = new Sp();
         $model = new Config();
 
-        $spList = $spModel->field('id,sp_no,sp_name')->select();
+        $spList = $spModel->field('id,sp_no,sp_name,remote_account')->select();
         //print_r( $spList ); die;
         $row = $model->get(18);
         $domainList = [
@@ -56,6 +56,8 @@ class Timely extends Backend
 
             $postData = $this->request->post('row/a');
             $link = (new \app\admin\model\sms\Link())->where('channel_id',trim($postData['channel_id']))->find();
+            //根据所选通道确认价格
+            $price = Db::query("select p.PRICEX from channel_pricex p join sms_sp_info s on p.SP_ID=s.remote_account where s.id=?",[$postData['sp_info_id']]);
             if( !$link ){
                 $this->error('查不到此渠道号！！');
             }
@@ -117,9 +119,10 @@ class Timely extends Backend
                         'link_from' => 1,
                         'create_time' => date('Y-m-d H:i:s'),
                         'creator' => 'lzc',
-                        'status' => 4, //4发送中，5发送完成
+                        'status' => 5, //4发送中，5发送完成
                         'sm_task_id' => $linkShortModel->id,
                         'file_path' => '',
+                        'price' => $price,
                         'finish_time' => date('Y-m-d,H:i:s'),
                         //'remark' => '自动发送',
                     ]);
