@@ -23,14 +23,6 @@ FastAdmin是一款基于ThinkPHP5+Bootstrap的极速后台开发框架。
 * 共用同一账号体系的Web端会员中心权限验证和API接口会员权限验证
 * 二级域名部署支持，同时域名支持绑定到插件
 * 多语言支持，服务端及客户端支持
-* 强大的第三方模块支持([CMS](https://www.fastadmin.net/store/cms.html)、[博客](https://www.fastadmin.net/store/blog.html)、[知识付费问答](https://www.fastadmin.net/store/ask.html)、[在线投票系统](https://www.fastadmin.net/store/vote.html))
-* 支持CMS、博客、知识付费问答无缝整合[Xunsearch全文搜索](https://www.fastadmin.net/store/xunsearch.html)
-* 第三方小程序支持([预订小程序](https://www.fastadmin.net/store/ball.html)、[问答小程序](https://www.fastadmin.net/store/questions.html)、[活动报名小程序](https://www.fastadmin.net/store/huodong.html)、[商城小程序](https://www.fastadmin.net/store/xshop.html)、[博客小程序](https://www.fastadmin.net/store/blog.html))
-* 整合第三方短信接口(阿里云、腾讯云短信)
-* 无缝整合第三方云存储(七牛、阿里云OSS、又拍云)功能
-* 第三方富文本编辑器支持(Summernote、Kindeditor、百度编辑器)
-* 第三方登录(QQ、微信、微博)整合
-* 第三方支付(微信、支付宝)无缝整合，微信支持PC端扫码支付
 * 丰富的插件应用市场
 
 
