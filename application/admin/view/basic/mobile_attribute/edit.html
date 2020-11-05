@@ -1,0 +1,46 @@
+<form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Number_head')}:前7位</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-number_head" class="form-control" name="row[number_head]" type="text" value="{$row.number_head|htmlentities}" >
+        </div>
+    </div>
+    <div  data-toggle="cxselect" data-selects="provence,city">
+        <div class="form-group">
+            <label class="control-label col-xs-12 col-sm-2">{:__('Province_id')}:</label>
+            <div class="col-xs-12 col-sm-8"  >
+                <select id="c-province_id" class="form-control provence" data-rule="required" name="row[province_id]" data-url="basic/province/getProvince" data-value="{$row.province_id}" data-live-search="true"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-xs-12 col-sm-2">{:__('City_id')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <select id="c-city_id" class="form-control city" data-rule="required" name="row[city_id]" data-url="basic/province/getCity" data-query-name="pid" data-value="{$row.city_id}" data-live-search="true"></select>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Vendor_id')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <select id="c-vendor_id" data-rule="required" class="form-control " name="row[vendor_id]">
+                {foreach name="vendorArr" item="vo"}
+                <option value="{$key}" {in name="key" value="$row.vendor_id"}selected{/in}>{$vo}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Create_time')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-create_time" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[create_time]" type="text" value="{$row.create_time}">
+        </div>
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

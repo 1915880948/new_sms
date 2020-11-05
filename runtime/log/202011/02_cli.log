@@ -1,0 +1,24 @@
+[ 2020-11-02T12:07:08+08:00 ][ info ] [ BEHAVIOR ] Run Closure @app_init [ RunTime:0.000092s ]
+[ info ] [ LOG ] INIT File
+[ 2020-11-02T12:07:08+08:00 ][ info ] [ CACHE ] INIT File
+[ 2020-11-02T12:07:08+08:00 ][ info ] [ BEHAVIOR ] Run Closure @app_init [ RunTime:0.002670s ]
+[ 2020-11-02T12:08:20+08:00 ][ info ] [ BEHAVIOR ] Run Closure @app_init [ RunTime:0.000095s ]
+[ info ] [ LOG ] INIT File
+[ 2020-11-02T12:08:20+08:00 ][ info ] [ CACHE ] INIT File
+[ 2020-11-02T12:08:20+08:00 ][ info ] [ BEHAVIOR ] Run Closure @app_init [ RunTime:0.002719s ]
+[ 2020-11-02T12:08:55+08:00 ][ info ] [ BEHAVIOR ] Run Closure @app_init [ RunTime:0.000095s ]
+[ info ] [ LOG ] INIT File
+[ 2020-11-02T12:08:55+08:00 ][ info ] [ CACHE ] INIT File
+[ 2020-11-02T12:08:55+08:00 ][ info ] [ BEHAVIOR ] Run Closure @app_init [ RunTime:0.003815s ]
+[ 2020-11-02T12:09:05+08:00 ][ info ] [ BEHAVIOR ] Run Closure @app_init [ RunTime:0.000094s ]
+[ info ] [ LOG ] INIT File
+[ 2020-11-02T12:09:05+08:00 ][ info ] [ CACHE ] INIT File
+[ 2020-11-02T12:09:05+08:00 ][ info ] [ BEHAVIOR ] Run Closure @app_init [ RunTime:0.002619s ]
+[ 2020-11-02T12:09:11+08:00 ][ info ] [ BEHAVIOR ] Run Closure @app_init [ RunTime:0.000097s ]
+[ info ] [ LOG ] INIT File
+[ 2020-11-02T12:09:11+08:00 ][ info ] [ CACHE ] INIT File
+[ 2020-11-02T12:09:11+08:00 ][ info ] [ BEHAVIOR ] Run Closure @app_init [ RunTime:0.002541s ]
+[ 2020-11-02T12:26:02+08:00 ][ info ] [ BEHAVIOR ] Run Closure @app_init [ RunTime:0.000099s ]
+[ info ] [ LOG ] INIT File
+[ 2020-11-02T12:26:02+08:00 ][ info ] [ CACHE ] INIT File
+[ 2020-11-02T12:26:02+08:00 ][ info ] [ BEHAVIOR ] Run Closure @app_init [ RunTime:0.003007s ]

@@ -1,0 +1,58 @@
+<form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Sheet_id')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-sheet_id" data-rule="required" data-source="sheet/index" class="form-control selectpage" name="row[sheet_id]" type="text" value="{$row.sheet_id|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Province_id')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-province_id" data-rule="required" data-source="province/index" class="form-control selectpage" name="row[province_id]" type="text" value="{$row.province_id|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('City_id')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-city_id" data-rule="required" data-source="city/index" class="form-control selectpage" name="row[city_id]" type="text" value="{$row.city_id|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Bank_id')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-bank_id" data-rule="required" data-source="bank/index" class="form-control selectpage" name="row[bank_id]" type="text" value="{$row.bank_id|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Vendor_id')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-vendor_id" data-rule="required" data-source="vendor/index" class="form-control selectpage" name="row[vendor_id]" type="text" value="{$row.vendor_id|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Circuit_id')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-circuit_id" data-rule="required" data-source="circuit/index" class="form-control selectpage" name="row[circuit_id]" type="text" value="{$row.circuit_id|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Remark')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-remark" data-rule="required" class="form-control" name="row[remark]" type="text" value="{$row.remark|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_radios('row[status]', [1=>__('有效'), 0=>__('无效')],$row['status'])}
+        </div>
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>
