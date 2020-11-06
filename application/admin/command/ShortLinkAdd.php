@@ -50,7 +50,7 @@ class ShortLinkAdd extends Command
                 throw new \Exception('短链生成失败，请稍后重试..');
             }
             $result = $linkShortModel->save([
-                'remark'        => '自动发送',
+                'remark'        => 'ZD-'.date('Ymd').'-M头条水滴展示-SSW-P-C1-'.date("Hi",strtotime($config['send_start_time'])).'_'.date("Hi",strtotime($config['send_end_time'])),//ZD-202021105-M头条水滴展示-SSW-P-C1-0901_1001
                 'link_id'       => $link['id'],
                 'business_link' => $link['link'],
                 'transfer_link' => $transfer_link,
@@ -66,7 +66,7 @@ class ShortLinkAdd extends Command
             //$maxID = $taskSendModel->field('task_id')->where('channel_from',2)->order('task_id','desc')->limit(1)->find();
             //$result1 = $taskSendModel->isUpdate(true)->save(['status'=>5],['channel_from'=>2,'status'=>4]); // 发送完成
             $result = $taskSendModel->isUpdate(false)->save([
-                'title' => '自动发送',
+                'title' => 'ZD-'.date('Ymd').'-M头条水滴展示-SSW-P-C1-'.date("Hi",strtotime($config['send_start_time'])).'_'.date("Hi",strtotime($config['send_end_time'])),
                 'company' => $link['company_name'],
                 'bank' => $link['bank_name'],
                 'business' => $link['business_name'],

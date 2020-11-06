@@ -90,7 +90,7 @@ class Timely extends Backend
                         throw new \Exception('短链生成失败，请稍后重试..');
                     }
                     $result = $linkShortModel->save([
-                        'remark'        => '自动发送',
+                        'remark'        => 'ZD-'.date('Ymd').'-M头条水滴展示-SSW-P-C1-'.date("Hi",strtotime($postData['send_start_time'])).'_'.date("Hi",strtotime($postData['send_end_time'])),
                         'link_id'       => $link['id'],
                         'business_link' => $link['link'],
                         'transfer_link' => $transfer_link,
@@ -105,7 +105,7 @@ class Timely extends Backend
                     // 增加一条短信发送任务
                     $taskSendModel = new \app\admin\model\sms\TaskSend();
                     $result = $taskSendModel->save([
-                        'title' => '自动发送',
+                        'title' => 'ZD-'.date('Ymd').'-M头条水滴展示-SSW-P-C1-'.date("Hi",strtotime($postData['send_start_time'])).'_'.date("Hi",strtotime($postData['send_end_time'])),
                         'company' => $link['company_name'],
                         'bank' => $link['bank_name'],
                         'business' => $link['business_name'],
