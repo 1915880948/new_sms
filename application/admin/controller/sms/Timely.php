@@ -20,12 +20,49 @@ class Timely extends Backend
     public function _initialize()
     {
         parent::_initialize();
+        $this->model = new \app\admin\model\sms\TaskSend;
 //        $this->model = model('AdminLog');
 //        $ipList = $this->model->whereTime('createtime', '-37 days')->group("ip")->column("ip,ip as aa");
 //        $this->view->assign("ipList", $ipList);
     }
 
-    public function index(){
+    public function index()
+    {
+        //设置过滤方法
+        $this->request->filter(['strip_tags']);
+        if ($this->request->isAjax()) {
+            //如果发送的来源是Selectpage，则转发到Selectpage
+//            if( $this->request->get('channel_form') ){
+//                $myWhere['channel_from'] = $this->request->get('channel_form');
+//            }else{
+            // $myWhere['channel_from'] = 2;
+//            }
+
+            if ($this->request->request('keyField')) {
+                return $this->selectpage();
+            }
+            list($where, $sort, $order, $offset, $limit) = $this->buildparams();
+            $total = $this->model
+                ->where($where)//->where($myWhere)
+                ->order($sort, $order)
+                ->count();
+
+            $list = $this->model
+                ->where($where)//->where($myWhere)
+                ->order($sort, $order)
+                ->limit($offset, $limit)
+                ->select();
+
+            $list = collection($list)->toArray();
+            $result = array("total" => $total, "rows" => $list);
+
+            return json($result);
+        }
+        return $this->view->fetch();
+
+    }
+
+    public function config(){
         $spModel = new Sp();
         $model = new Config();
 

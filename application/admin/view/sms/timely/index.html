@@ -1,87 +1,25 @@
-<div class="row">
-    <div class="col-lg-offset-1 col-xs-offset-1 col-md-offset-1">
-        <h3>自动短信参数配置</h3>
-    </div>
-<hr/>
-    <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
-        <div class="widget-body no-padding">
-            <form id="config-form" class="form-commonsearch form-horizontal " role="form" data-toggle="validator" method="POST" action="{:url('sms/timely/index')}">
-                {:token()}
-                <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-2 col-md-2	col-lg-2">渠道号：</label>
-                    <div class="col-xs-12 col-sm-8 col-md-6 col-lg-6">
-                        <input type="text" data-rule="required" class="form-control" name="row[channel_id]" value="{$row.channel_id}" placeholder="渠道号">
-                    </div>
-                </div>
-                 <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-2 col-md-2	col-lg-2">通道：</label>
-<!--                     <div class="col-xs-12 col-sm-8 col-md-6 col-lg-6">-->
-<!--                         <select class="form-control selectpicker" name="row[vendor_id]">-->
-<!--                             <option value="0">中国电信</option>-->
-<!--                             <option value="1">中国移动</option>-->
-<!--                             <option value="2">中国联通</option>-->
-<!--                             <option value="3">通用</option>-->
-<!--                         </select>-->
-<!--                         <select class="form-control selectpicker" name="sp_info_id"></select>-->
-<!--                     </div>-->
-                     <div class="col-xs-12 col-sm-8 col-md-6 col-lg-6">
-                         <select class="selectpicker" data-live-search="true" name="row[sp_info_id]" data-rule="required">
-                             <option value="">请选择</option>
-                              {foreach name="spList" item="vo"}
-                              <option value="{$vo.id}" {$row.sp_info_id==$vo.id?'selected':''}>{$vo.sp_name}</option>
-                              {/foreach}
-                         </select>
-                     </div>
-                </div>
-                 <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-2 col-md-2	col-lg-2">短链域名：</label>
-                     <div class="col-xs-12 col-sm-8 col-md-6 col-lg-6">
-                            {:build_select('row[domain_short]',$domainList,$row.domain_short,['class'=>'form-control selectpicker','data-live-search'=>'true','data-rule'=>'required'])}
-                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-2 col-md-2	col-lg-2">短信文案：</label>
-                    <div class="col-xs-12 col-sm-8 col-md-6 col-lg-6">
-                        <textarea class="form-control" rows="3" name="row[sms_content]" data-rule="required">{$row.sms_content}</textarea>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-2 col-md-2	col-lg-2">城市黑名单：</label>
-                    <div class="col-xs-12 col-sm-8 col-md-6 col-lg-6">
-                        <textarea class="form-control" rows="3" name="row[city]" data-rule="required">{$row.city}</textarea>
-                    </div>
-                    <span>以  |  分割</span>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-2 col-md-2	col-lg-2">发送时间区间：</label>
-                    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-3">
-                        <input type="text" class="form-control datetimepicker" name="row[send_start_time]" value="{$row.send_start_time}" data-date-format="HH:mm:ss" data-date-use-strict="true" data-date-side-by-side="true" data-rule="required">
-                    </div>
-                    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-3">
-                        <input type="text" class="form-control datetimepicker" name="row[send_end_time]" value="{$row.send_end_time}" data-date-format="HH:mm:ss" data-date-use-strict="true" data-date-side-by-side="true" data-rule="required">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-2 col-md-2	col-lg-2">自动状态：</label>
-                    <div class="col-xs-12 col-sm-8 col-md-6 col-lg-6">
-                        <label class="radio-inline">
-                            <input type="radio" name="row[send_status]"  value="1" {$row.send_status==1?'checked':''}> 开启
-                        </label>
-                        <label class="radio-inline">
-                            <input type="radio" name="row[send_status]"  value="2" {$row.send_status==2?'checked':''}> 关闭
-                        </label>
-                    </div>
-                </div>
+<div class="panel panel-default panel-intro">
+    {:build_heading()}
 
-                <div class="form-group">
-                    <div class="col-xs-12 col-sm-8 col-md-6 col-lg-6 col-lg-offset-1 col-xs-offset-1 col-md-offset-1">
-                        <button type="submit" class="btn btn-success btn-embossed">{:__('OK')}</button>
-                        <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+    <div class="panel-body">
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active in" id="one">
+                <div class="widget-body no-padding">
+                    <div id="toolbar" class="toolbar">
+                        <a href="javascript:;" class="btn btn-primary btn-refresh" title="{:__('Refresh')}" ><i class="fa fa-refresh"></i> </a>
+                        <a href="javascript:;" class="btn btn-success btn-config {:$auth->check('sms/timely/config')?'':'hide'}" title="{:__('Config')}" ><i class="fa fa-gear"></i> {:__('Config')}</a>
+                        <!--                        <a href="javascript:;" class="btn btn-success btn-edit btn-disabled disabled {:$auth->check('sms/timely/edit')?'':'hide'}" title="{:__('Edit')}" ><i class="fa fa-pencil"></i> {:__('Edit')}</a>-->
+                        <!--                        <a href="javascript:;" class="btn btn-danger btn-del btn-disabled disabled {:$auth->check('sms/timely/del')?'':'hide'}" title="{:__('Delete')}" ><i class="fa fa-trash"></i> {:__('Delete')}</a>-->
+
                     </div>
+                    <table id="table" class="table table-striped table-bordered table-hover table-nowrap"
+                           data-operate-edit="{:$auth->check('sms/timely/edit')}"
+                           data-operate-del="{:$auth->check('sms/timely/del')}"
+                           width="100%">
+                    </table>
                 </div>
-            </form>
+            </div>
+
         </div>
-
     </div>
 </div>
-<!--<script src="/assets/libs/bootstrap-select/dist/js/bootstrap-select.js"></script>-->

@@ -18,7 +18,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             //在普通搜索渲染后
             table.on('post-common-search.bs.table', function (event, table) {
                 var form = $("form", table.$commonsearch);
-                $("form select[name='channel_from']").val(2);
+                //$("form select[name='channel_from']").val(2);
                 // Form.events.cxselect(form);
                 // Form.events.selectpage(form);
             });
