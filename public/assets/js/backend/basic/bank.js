@@ -21,11 +21,11 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
                 pk: 'id',
                 sortName: 'id',
-                search: true,                       //1.快捷搜索框,设置成false隐藏
+                search: false,                       //1.快捷搜索框,设置成false隐藏
                 showToggle: false,                  //2.列表和视图切换
                 // showColumns: false,                 //3.字段显示
                 // showExport: false,                  //4.导出按钮
-                commonSearch: false,                //5.通用搜索框
+                commonSearch: true,                //5.通用搜索框
                 pagination: true,                   //6.是否显示分页条
                 // onlyInfoPagination: true,           //7.只显示总数据数
                 // showHeader: false,                  //8.是否显示列头
@@ -42,8 +42,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                             // operate: false
                         },
                         // {field: 'area_cover', title: __('Area_cover')},
-                        {field: 'create_time', title: __('Create_time'), operate:'RANGE', addclass:'datetimerange'},
-                        {field: 'update_time', title: __('Update_time'), operate:'RANGE', addclass:'datetimerange', formatter: Table.api.formatter.datetime},
+                        {field: 'create_time', title: __('Create_time'), operate:false, addclass:'datetimerange'},
+                        {field: 'update_time', title: __('Update_time'), operate:false, addclass:'datetimerange', formatter: Table.api.formatter.datetime},
                         {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]
                 ]
