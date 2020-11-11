@@ -193,7 +193,7 @@ class Link extends Backend
         $currentSheet = $PHPExcel->getSheet(0);  //读取文件中的第一个工作表
         $allColumn = $currentSheet->getHighestDataColumn(); //取得最大的列号
         $allRow = $currentSheet->getHighestRow(); //取得一共有多少行
-        $maxColumnNumber = Coordinate::columnIndexFromString($allColumn);
+        //$maxColumnNumber = Coordinate::columnIndexFromString($allColumn);
         for ($currentRow  = 2; $currentRow <= $allRow; $currentRow++) {
             $company      = $currentSheet->getCellByColumnAndRow(1, $currentRow)->getValue();
             $bank         = $currentSheet->getCellByColumnAndRow(2, $currentRow)->getValue();
