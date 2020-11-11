@@ -25,5 +25,10 @@ return [
 //        "9oj" => '9oj.cn',
 //        "4a6" => '4a6.cn',
     ],
+    'transDomain' => [
+        'cca.qlguanli.cn',
+        'cca.smturl.cn',
+        '39.104.74.2'
+    ]
 
 ];
