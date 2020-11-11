@@ -26,9 +26,9 @@ return [
 //        "4a6" => '4a6.cn',
     ],
     'transDomain' => [
-        'cca.qlguanli.cn',
-        'cca.smturl.cn',
-        '39.104.74.2'
+        'cca.qlguanli.cn' => 'cca.qlguanli.cn',
+        'cca.smturl.cn' => 'cca.smturl.cn',
+        '39.104.74.2' => '测试--勿选'
     ]
 
 ];
