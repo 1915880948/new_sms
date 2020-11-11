@@ -1,71 +1,61 @@
 <form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
 
     <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Remark')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-remark" class="form-control" name="row[remark]" type="text" value="{$row.remark|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Link_id')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-link_id" data-rule="required" data-source="link/index" class="form-control selectpage" name="row[link_id]" type="text" value="{$row.link_id|htmlentities}">
+            <input id="c-link_id" data-rule="required" class="form-control" name="row[link_id]" type="text" value="{$row.link_id|htmlentities}" disabled>
         </div>
     </div>
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Business_link')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-business_link" data-rule="required" class="form-control" name="row[business_link]" type="text" value="{$row.business_link|htmlentities}">
+            <input id="c-business_link" data-rule="required" class="form-control" name="row[business_link]" type="text" value="{$row.business_link|htmlentities}" disabled>
         </div>
     </div>
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Transfer_link')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-transfer_link" data-rule="required" class="form-control" name="row[transfer_link]" type="text" value="{$row.transfer_link|htmlentities}">
+            <input id="c-transfer_link" data-rule="required" class="form-control" name="row[transfer_link]" type="text" value="{$row.transfer_link|htmlentities}" disabled>
         </div>
     </div>
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Short_link')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-short_link" class="form-control" name="row[short_link]" type="text" value="{$row.short_link|htmlentities}">
+            <input id="c-short_link" class="form-control" name="row[short_link]" type="text" value="{$row.short_link|htmlentities}" disabled>
         </div>
     </div>
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Send_num')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-send_num" data-rule="required" class="form-control" name="row[send_num]" type="number" value="{$row.send_num|htmlentities}">
+            <input id="c-send_num" data-rule="required" class="form-control" name="row[send_num]" type="number" step="10" min="0" value="{$row.send_num|htmlentities}">
         </div>
     </div>
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Send_success_num')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-send_success_num" data-rule="required" class="form-control" name="row[send_success_num]" type="number" value="{$row.send_success_num|htmlentities}">
+            <input id="c-send_success_num" data-rule="required" class="form-control" name="row[send_success_num]" type="number" min="0" value="{$row.send_success_num|htmlentities}">
         </div>
     </div>
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Click_num')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-click_num" data-rule="required" class="form-control" name="row[click_num]" type="number" value="{$row.click_num|htmlentities}">
+            <input id="c-click_num" data-rule="required" class="form-control" name="row[click_num]" type="number" value="{$row.click_num|htmlentities}" disabled>
         </div>
     </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Remark')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-remark" class="form-control" name="row[remark]" type="text" value="{$row.remark|htmlentities}">
+        </div>
+    </div>
+
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Creator')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-creator" class="form-control" name="row[creator]" type="text" value="{$row.creator|htmlentities}">
+            <input id="c-creator" class="form-control" name="row[creator]" type="text" value="{$row.creator|htmlentities}" disabled>
         </div>
     </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Create_time')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-create_time" data-rule="required" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[create_time]" type="text" value="{$row.create_time}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-status" data-rule="required" class="form-control" name="row[status]" type="number" value="{$row.status|htmlentities}">
-        </div>
-    </div>
+
     <div class="form-group layer-footer">
         <label class="control-label col-xs-12 col-sm-2"></label>
         <div class="col-xs-12 col-sm-8">
