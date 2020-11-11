@@ -69,26 +69,7 @@ class Timely extends Backend
         $spList = $spModel->field('id,sp_no,sp_name,remote_account')->select();
         //print_r( $spList ); die;
         $row = $model->get(18);
-        $domainList = [
-            "z0k"=>'z0k.cn',
-            "9oj"=>'9oj.cn',
-            "5oj"=>'5oj.cn',
-            "vo4"=>'vo4.cn',
-            "j0q"=>'j0q.cn',
-//            "x0e" => 'x0e.cn',
-//            "u9t" => 'u9t.cn',
-//            "d0e" => 'd0e.cn(傅晓妹)',
-//            "o8d" => 'o8d.cn(黄福忠)',
-//            "0i4" => '0i4.cn(左浩然|马蓉蓉)',
-//            "q4f" => 'q4f.cn(姜子文)',
-//            "g0c" => 'g0c.cn(王古锋)',
-//            "q0r" => 'q0r.cn',
-//            "n0x" => 'n0x.cn',
-//            "h0e" => 'h0e.cn',
-//            "o4c" => 'o4c.cn',
-//            "9oj" => '9oj.cn',
-//            "4a6" => '4a6.cn',
-        ];
+        $domainList = \think\Config::get('domainList');
         if(  $this->request->isPost() ){
 
             $postData = $this->request->post('row/a');
