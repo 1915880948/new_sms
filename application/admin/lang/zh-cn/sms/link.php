@@ -19,4 +19,12 @@ return [
     'Create_time'   => '创建时间',
     'Update_timeSms_content'    => '短信更新时间',
     'Update_time'   => '更新时间',
+
+    'Link_id'          => '渠道ID',
+    'Business_link'    => '推广业务链接',
+    'Transfer_link'    => '中转链接',
+    'Send_num'         => '发送数量',
+    'Send_success_num' => '发送成功数',
+    'Click_num'        => '点击量',
+    'Short_link'           => '短链',
 ];

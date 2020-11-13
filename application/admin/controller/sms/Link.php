@@ -7,10 +7,11 @@ use app\admin\model\basic\Business;
 use app\admin\model\basic\Company;
 use app\common\controller\Backend;
 use Exception;
-use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Reader\Xls;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+use think\Config;
 use think\Db;
+use think\Env;
 use think\exception\PDOException;
 use think\exception\ValidateException;
 
@@ -95,13 +96,7 @@ class Link extends Backend
         $this->view->assign('company',$this->company);
         $this->view->assign('bank',$this->bank);
         $this->view->assign('business',$this->business);
-        $this->company = array_flip($this->company);
-        print_r( $this->auth->getUserInfo()['username'] );;
-        $name = '数鸣1231231321';
-        if( !isset($this->company[$name]) ){
-            print_r('没有此下标');
-        }
-        print_r( $this->company['1']); die;
+
         return $this->view->fetch();
 
     }
@@ -243,4 +238,57 @@ class Link extends Backend
         }
         $this->success();
     }
+
+    public function short(){
+        $link_id = $this->request->get('link_id');
+        $offset  = $this->request->get("offset");
+        $limit   = $this->request->get("limit");
+        if( $link_id ){
+            $model = new \app\admin\model\sms\LinkShort();
+            $rows = $model->where('link_id',$link_id)->order('id','desc')->limit($offset,$limit)->select();
+            $total = $model->where('link_id',$link_id)->order('id','desc')->count();
+
+            return json(['total'=>$total,"rows"=>$rows]);
+
+        }
+        return $this->view->fetch();
+    }
+
+    public function short_add(){
+        $link_id = $this->request->get('link_id');
+        $linkShortModel = new \app\admin\model\sms\LinkShort();
+        $link = $this->model->get($link_id);
+        if( $this->request->isPost() ){
+            $params = $this->request->post();
+            //print_r( $params ); die;
+            $linkShortLastID = $linkShortModel->max('id');
+            $transfer_link =  'http://'.$params['transfer_link'].'/link.php?id='.($linkShortLastID+1);
+            $apiUrl = "http://".Env::get('sms_short.host')."/short.php?key=68598736&dm=" . trim($params['short_link']) . '&url=' . rawurlencode($transfer_link);
+            $shortLinkResult = httpRequest($apiUrl, 'GET');
+            $shortLinkResult = json_decode($shortLinkResult, true);
+            if (empty($shortLinkResult['data'][0])) {
+                return json(['data'=>['msg'=>'短链生成失败，请稍后重试..']]);
+            }
+            $result = $linkShortModel->save([
+                'remark'        => $params['remark'],
+                'link_id'       => $link['id'],
+                'business_link' => $link['link'],
+                'transfer_link' => $transfer_link,
+                'short_link'    => $shortLinkResult['data'][0]['short_url'],
+                'creator'       => $this->auth->getUserInfo()['username'],
+                'create_time'   => date('Y-m-d H:i:s'),
+            ]);
+            if( !$result ){
+                return json(['data'=>['msg'=>'提交失败']]);
+            }
+            return json(['data'=>['msg'=>'成功！！'],'code'=>1]);
+        }
+        $transDomain = Config::get('transDomain');
+        $domainList = Config::get('domainList');
+        $this->assign('link',$link);
+        $this->assign('transDomain',$transDomain);
+        $this->assign('domainList',$domainList);
+        return $this->view->fetch();
+    }
+
 }

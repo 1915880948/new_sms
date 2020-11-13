@@ -10,7 +10,9 @@ return [
     'Send_success_num' => '发送成功数',
     'Click_num'        => '点击量',
     'Status'           => '状态',
-    'Short_link'           => '短链',
-    'Creator'           => '操作者',
-    'Create_time'           => '创建时间',
+    'Short_link'       => '短链',
+    'Creator'          => '操作者',
+    'Create_time'      => '创建时间',
+    'Task_send_num'    => '发送任务数',
+
 ];
