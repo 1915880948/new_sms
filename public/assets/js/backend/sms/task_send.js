@@ -139,6 +139,20 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             }
         },
         add: function () {
+            var spList = Config.spList;
+            $("#price").html(0);
+            $("select[name='row[sms_gate_id]']").change(function () {
+                var sms_gate_id = this.value;
+                let price = 0;
+                spList.forEach(function(item){
+                    if( item.id == sms_gate_id ){
+                        price = (item.price) ; return;
+                    }
+                });
+                //console.log(sms_gate_id);
+               $("#price").html(price);
+            });
+
             Controller.api.bindevent();
         },
         edit: function () {
