@@ -166,27 +166,27 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                    {field: 'click_num', title: __('Click_num')},
                    {field: 'create_time', title: __('Create_time'), operate:false, },
                     {field: 'operate', title: __('Operate'), table: $("#short"), events: Table.api.events.operate,
-                        buttons: [{
-                            name: 'click',
-                            //text: '发送短信',
-                            title: '发送短信',
-                            extend: 'data-toggle="tooltip"',
-                            icon: 'fa fa-paper-plane',
-                            classname: 'btn btn-info btn-xs btn-click',
-                            click:function(data,row){
-                                console.log(row);
-                                Layer.alert('暂不支持此处发送短信。。');
-                                //location.href = 'sms/task_send/add?link_form=1&ref=addtabs';
-                                //Fast.api.open('sms/task_send/add?ids='+row.id);
-                            },
-                            //url: 'sms/task_send/add?link_from=1'
-                        },{
-                            title: '外部发送',
-                            extend: 'data-toggle="tooltip"',
-                            icon: 'fa fa-paper-plane',
-                            classname: 'btn btn-danger btn-xs btn-addtabs',
-                            url: 'sms/task_send/add?link_from=2'
-                        }],
+                        // buttons: [{
+                        //     name: 'click',
+                        //     //text: '发送短信',
+                        //     title: '发送短信',
+                        //     extend: 'data-toggle="tooltip"',
+                        //     icon: 'fa fa-paper-plane',
+                        //     classname: 'btn btn-info btn-xs btn-click',
+                        //     click:function(data,row){
+                        //         console.log(row);
+                        //         Layer.alert('暂不支持此处发送短信。。');
+                        //         //location.href = 'sms/task_send/add?link_form=1&ref=addtabs';
+                        //         //Fast.api.open('sms/task_send/add?ids='+row.id);
+                        //     },
+                        //     //url: 'sms/task_send/add?link_from=1'
+                        // },{
+                        //     title: '外部发送',
+                        //     extend: 'data-toggle="tooltip"',
+                        //     icon: 'fa fa-paper-plane',
+                        //     classname: 'btn btn-danger btn-xs btn-addtabs',
+                        //     //url: 'sms/task_send/add?link_from=2'
+                        // }],
                         formatter: Table.api.formatter.operate
                     }
                 ]
