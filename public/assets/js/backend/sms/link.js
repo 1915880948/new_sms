@@ -16,6 +16,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             });
 
             var table = $("#table");
+            Fast.config.openArea = ['1000px','600px'];
 
             // 初始化表格
             table.bootstrapTable({
@@ -164,29 +165,31 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                    {field: 'send_num', title: __('Send_num')},
                    {field: 'send_success_num', title: __('Send_success_num')},
                    {field: 'click_num', title: __('Click_num')},
+                   {field: 'task_send_num', title: __('Task_send_num')},
                    {field: 'create_time', title: __('Create_time'), operate:false, },
                     {field: 'operate', title: __('Operate'), table: $("#short"), events: Table.api.events.operate,
-                        // buttons: [{
-                        //     name: 'click',
-                        //     //text: '发送短信',
-                        //     title: '发送短信',
-                        //     extend: 'data-toggle="tooltip"',
-                        //     icon: 'fa fa-paper-plane',
-                        //     classname: 'btn btn-info btn-xs btn-click',
-                        //     click:function(data,row){
-                        //         console.log(row);
-                        //         Layer.alert('暂不支持此处发送短信。。');
-                        //         //location.href = 'sms/task_send/add?link_form=1&ref=addtabs';
-                        //         //Fast.api.open('sms/task_send/add?ids='+row.id);
-                        //     },
-                        //     //url: 'sms/task_send/add?link_from=1'
-                        // },{
-                        //     title: '外部发送',
-                        //     extend: 'data-toggle="tooltip"',
-                        //     icon: 'fa fa-paper-plane',
-                        //     classname: 'btn btn-danger btn-xs btn-addtabs',
-                        //     //url: 'sms/task_send/add?link_from=2'
-                        // }],
+                        buttons: [{
+                            name: 'click',
+                            //text: '发送短信',
+                            title: '发送短信',
+                            extend: 'data-toggle="tooltip"',
+                            icon: 'fa fa-paper-plane',
+                            classname: 'btn btn-info btn-xs btn-click',
+                            click:function(data,row){
+                                console.log(row);
+                                //Layer.alert('暂不支持此处发送短信。。');
+                                //location.href = 'sms/task_send/add?link_form=1&ref=addtabs';
+                                Fast.api.open('sms/task_send/add?link_from=1&ids='+row.id);
+                            },
+                        },{
+                            title: '外部发送',
+                            extend: 'data-toggle="tooltip"',
+                            icon: 'fa fa-paper-plane',
+                            classname: 'btn btn-danger btn-xs btn-click',
+                            click:function(data,row){
+                                Fast.api.open('sms/task_send/add?link_from=2&ids='+row.id);
+                            },
+                        }],
                         formatter: Table.api.formatter.operate
                     }
                 ]

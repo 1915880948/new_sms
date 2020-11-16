@@ -27,4 +27,6 @@ return [
     'Send_success_num' => '发送成功数',
     'Click_num'        => '点击量',
     'Short_link'           => '短链',
+    'Task_send_num'    => '发送任务数',
+
 ];
