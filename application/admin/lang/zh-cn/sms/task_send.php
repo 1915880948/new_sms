@@ -43,8 +43,8 @@ return [
     'Retry_status'        => '1: 待重发 2：发送中 3：发送完成',
     'Sm_task_id'          => '短链ID',
     'Price'               => '单价',
-    'File_path'           => '导入发送文件',
+    'File_path'           => '发送文件',
     'Remark'              => '备注',
-    'Phone_path'          => '导入空号文件',
+    'Phone_path'          => '空号文件',
     'Finish_time'         => '完成时间',
 ];
