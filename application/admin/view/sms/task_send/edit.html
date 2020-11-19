@@ -1,81 +1,103 @@
-<form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+<form id="add-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
 
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Sm_task_id')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-sm_task_id" class="form-control" name="row[sm_task_id]" type="text" value="{$row.sm_task_id}">
+            <span >（内部链接自动填，外部任务需要手动填入） </span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Shortlink')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-short_link" class="form-control" name="row[shortlink]" type="text" value="{$row.shortlink}">
+            <a href="{$row.shortlink}" target="_blank" >访问 </a>
+        </div>
+    </div>
+    {if $row.link_from==1}
+    <div class="input-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('File_path')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="col-xs-10 col-sm-10">
+                <input id="c-files" class="form-control" size="50" name="row[file_path]" type="text" value="{$row.file_path}">
+            </div>
+            <div class="col-xs-2 col-sm-2">
+                <div class="input-group-addon no-border no-padding">
+                    <span><button type="button" id="plupload-files" class="btn btn-danger plupload" data-input-id="c-files" data-mimetype="*" data-multiple="false" data-preview-id="p-files"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+<!--                    <span><button type="button" id="fachoose-files" class="btn btn-primary fachoose" data-input-id="c-files" data-mimetype="text" data-multiple="false"><i class="fa fa-list"></i> {:__('Choose')}</button></span>-->
+                </div>
+                <span class="msg-box n-right" for="c-files"></span>
+            </div>
+
+        </div>
+    </div>
+    {/if}
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Title')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-title" class="form-control" name="row[title]" type="text" value="{$row.title|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Company_id')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-company_id" data-rule="required" data-source="company/index" class="form-control selectpage" name="row[company_id]" type="text" value="{$row.company_id|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Company')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-company" class="form-control" name="row[company]" type="text" value="{$row.company|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Bank_id')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-bank_id" data-rule="required" data-source="bank/index" class="form-control selectpage" name="row[bank_id]" type="text" value="{$row.bank_id|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Bank')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-bank" class="form-control" name="row[bank]" type="text" value="{$row.bank|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Business_id')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-business_id" data-rule="required" data-source="business/index" class="form-control selectpage" name="row[business_id]" type="text" value="{$row.business_id|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Business')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-business" class="form-control" name="row[business]" type="text" value="{$row.business|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Exclude_recent_sent')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-exclude_recent_sent" data-rule="required" class="form-control" name="row[exclude_recent_sent]" type="number" value="{$row.exclude_recent_sent|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Exclude_blacklist')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-exclude_blacklist" data-rule="required" class="form-control" name="row[exclude_blacklist]" type="number" value="{$row.exclude_blacklist|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Channel_id')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-channel_id" data-rule="required" data-source="channel/index" class="form-control selectpage" name="row[channel_id]" type="text" value="{$row.channel_id|htmlentities}">
+            <input id="c-title" class="form-control" name="row[title]" type="text" value="{$row.title}">
         </div>
     </div>
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Data_id')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-data_id" data-rule="required" data-source="data/index" class="form-control selectpage" name="row[data_id]" type="text" value="{$row.data_id|htmlentities}">
+            <input id="c-data_id" class="form-control" name="row[data_id]" type="text" value="{$row.data_id}">
         </div>
     </div>
     <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Data_pack_no')}:</label>
+        <label class="control-label col-xs-12 col-sm-2">{:__('Link_from')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-data_pack_no" class="form-control" name="row[data_pack_no]" type="number" value="{$row.data_pack_no|htmlentities}">
+            {:build_radios('row[link_from]',['0'=>'未知','1'=>'内部','2'=>'外部'],$row.link_from)}
         </div>
     </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Sms_gate_id')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <select class="selectpicker" data-live-search="true" name="row[sms_gate_id]" data-rule="required">
+                <option value="">请选择</option>
+                {foreach name="spList" item="vo"}
+                <option value="{$vo.id}" {$row.sms_gate_id==$vo.id?'selected':''}>{$vo.sp_name}</option>
+                {/foreach}
+            </select>
+            <span>当前价格：<a href="#" id="price" style="color: red;"></a></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Sms_content')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="col-xs-10 col-sm-10">
+                <textarea id="sms_content" class="form-control" rows="3" name="row[sms_content]"  data-rule="required" maxlength="70">{$row.sms_content}</textarea>
+                <input id="c-sms_content" class="form-control" name="row[sms_template_id]" type="hidden" value="{$row.sms_template_id}">
+            </div>
+            <div class="col-xs-2 col-sm-2">
+                <div class="input-group-addon no-border no-padding">
+                    <span><button type="button" id="fachoose-sms" class="btn btn-primary fachoose-sms" data-input-id="sms_content" data-mimetype="text" data-multiple="false"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    {if $row.link_from==1}
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Dynamic_shortlink')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_select('row[dynamic_shortlink]',$domainList,$row.dynamic_shortlink,['class'=>'form-control selectpicker','data-live-search'=>'true'])}
+            <span class="check-tips">（选择后每个用户收到的短链各不相同，可针对每个用户记录是否点击，比较消耗服务器性能）</span>
+        </div>
+    </div>
+    {/if}
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Exclude_blacklist')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_radios('row[exclude_blacklist]',['0'=>'否','1'=>'是'],$row.exclude_blacklist)}
+        </div>
+    </div>
+
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Send_limit')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-send_limit" data-rule="required" class="form-control" name="row[send_limit]" type="number" value="{$row.send_limit|htmlentities}">
+            <input id="c-send_limit" data-rule="required" class="form-control" name="row[send_limit]" type="number" min="0" step="100" value="{$row.send_limit}">
         </div>
     </div>
     <div class="form-group">
@@ -84,192 +106,14 @@
             <input id="c-send_time" data-rule="required" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[send_time]" type="text" value="{$row.send_time}">
         </div>
     </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Sms_gate_id')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-sms_gate_id" data-rule="required" data-source="sms/gate/index" class="form-control selectpage" name="row[sms_gate_id]" type="text" value="{$row.sms_gate_id|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Retry_on_failure')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-retry_on_failure" data-rule="required" class="form-control" name="row[retry_on_failure]" type="number" value="{$row.retry_on_failure|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Retry_sms_gate_id')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-retry_sms_gate_id" data-rule="required" data-source="retry/sms/gate/index" class="form-control selectpage" name="row[retry_sms_gate_id]" type="text" value="{$row.retry_sms_gate_id|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Retry_limit_minute')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-retry_limit_minute" class="form-control" name="row[retry_limit_minute]" type="number" value="{$row.retry_limit_minute|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Sms_template_id')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-sms_template_id" data-rule="required" data-source="sms/template/index" class="form-control selectpage" name="row[sms_template_id]" type="text" value="{$row.sms_template_id|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Sms_content')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-sms_content" class="form-control" name="row[sms_content]" type="text" value="{$row.sms_content|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Link')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-link" class="form-control" name="row[link]" type="text" value="{$row.link|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Transfer_link')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-transfer_link" class="form-control" name="row[transfer_link]" type="text" value="{$row.transfer_link|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Dynamic_shortlink')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-dynamic_shortlink" data-rule="required" class="form-control" name="row[dynamic_shortlink]" type="number" value="{$row.dynamic_shortlink|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Shortlink')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-shortlink" class="form-control" name="row[shortlink]" type="text" value="{$row.shortlink|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Channel_from')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-channel_from" class="form-control" name="row[channel_from]" type="number" value="{$row.channel_from|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Link_from')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-link_from" data-rule="required" class="form-control" name="row[link_from]" type="number" value="{$row.link_from|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Create_time')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-create_time" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[create_time]" type="text" value="{$row.create_time}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Update_time')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-update_time" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[update_time]" type="text" value="{:$row.update_time?datetime($row.update_time):''}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Creator')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-creator" class="form-control" name="row[creator]" type="text" value="{$row.creator|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-status" data-rule="required" class="form-control" name="row[status]" type="number" value="{$row.status|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Schedule_percent')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-schedule_percent" class="form-control" name="row[schedule_percent]" type="number" value="{$row.schedule_percent|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Task_num')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-task_num" class="form-control" name="row[task_num]" type="number" value="{$row.task_num|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Total_num')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-total_num" class="form-control" name="row[total_num]" type="number" value="{$row.total_num|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Total_send')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-total_send" class="form-control" name="row[total_send]" type="number" value="{$row.total_send|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Total_receive')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-total_receive" class="form-control" name="row[total_receive]" type="number" value="{$row.total_receive|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Total_click')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-total_click" class="form-control" name="row[total_click]" type="number" value="{$row.total_click|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Sp_num')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-sp_num" class="form-control" name="row[sp_num]" type="number" value="{$row.sp_num|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Failed_num')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-failed_num" class="form-control" name="row[failed_num]" type="number" value="{$row.failed_num|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Retry_status')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-retry_status" class="form-control" name="row[retry_status]" type="number" value="{$row.retry_status|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Sm_task_id')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-sm_task_id" data-rule="required" data-source="sm/task/index" class="form-control selectpage" name="row[sm_task_id]" type="text" value="{$row.sm_task_id|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Price')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-price" class="form-control" name="row[price]" type="text" value="{$row.price|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('File_path')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-file_path" data-rule="required" class="form-control" name="row[file_path]" type="text" value="{$row.file_path|htmlentities}">
-        </div>
-    </div>
+
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Remark')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-remark" class="form-control" name="row[remark]" type="text" value="{$row.remark|htmlentities}">
+            <input id="c-remark" class="form-control" name="row[remark]" type="text" value="{$row.remark}">
         </div>
     </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Finish_time')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-finish_time" data-rule="required" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[finish_time]" type="text" value="{$row.finish_time}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Phone_path')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-phone_path" class="form-control" name="row[phone_path]" type="text" value="{$row.phone_path|htmlentities}">
-        </div>
-    </div>
+    {if in_array($row['status'], [1, 2, 3, 6, 7, 9]) }
     <div class="form-group layer-footer">
         <label class="control-label col-xs-12 col-sm-2"></label>
         <div class="col-xs-12 col-sm-8">
@@ -277,4 +121,5 @@
             <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
         </div>
     </div>
+    {/if}
 </form>

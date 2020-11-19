@@ -6,21 +6,60 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             Table.api.init({
                 extend: {
                     index_url: 'sms/task_send/index' + location.search,
-                    add_url: 'sms/task_send/add',
+                    add_url: 'sms/task_send/add?link_from=1',
                     edit_url: 'sms/task_send/edit',
-                    del_url: 'sms/task_send/del',
+                    //del_url: 'sms/task_send/del',
                     multi_url: 'sms/task_send/multi',
+                    filter_url: 'sms/task_send/index?is_filter=',
+                    failed_url: 'task_send/failedDownload',
+                    success_url: 'task_send/successDownload',
+                    stop_url: 'sms/task_send/stop',
+                    start_url: 'sms/task_send/start',
                     table: 'sms_task_send',
                 }
             });
-
+            var is_filter = '';
             var table = $("#table");
+            // 指定搜索条件
+            $(document).on("click", ".btn-filter", function () {
+                var parenttable = table.closest('.bootstrap-table');
+                //Bootstrap-table配置
+                var options = table.bootstrapTable('getOptions');
+                //Bootstrap操作区
+                var toolbar = $(options.toolbar, parenttable);
+                is_filter===1? $('.btn-filter').text('过滤空记录'): $('.btn-filter').text('显示全部');
+                is_filter = (is_filter === 1?'':1);
+                var url = options.extend.filter_url+is_filter;
+                table.bootstrapTable('refresh',{url:url});
+            });
+            // 失败下载
+            $(document).on("click", ".btn-filed_download", function () {
+                var _this = this;
+                //Bootstrap-table配置
+                var options = table.bootstrapTable('getOptions');
+                var ids = Table.api.selectedids(table);
+                Layer.confirm('你确定失败下载选中的'+ids.length+'项吗？', {icon: 3, title: __('Warning'), offset: 100, shadeClose: true},
+                    function (index) {
+                        window.location.href = options.extend.failed_url+"?ids="+ids;
+                        Layer.close(index);
+                    }
+                );
+            });
+            // 成功下载
+            $(document).on("click", ".btn-success_download", function () {
+                var options = table.bootstrapTable('getOptions');
+                var ids = Table.api.selectedids(table);
+                Layer.confirm('你确定成功下载选中的'+ids.length+'项吗？', {icon: 3, title: __('Warning'), offset: 100, shadeClose: true},
+                    function (index) {
+                        window.location.href = options.extend.success_url+"?ids="+ids;
+                        Layer.close(index);
+                    }
+                );
+            });
             //在普通搜索渲染后
             table.on('post-common-search.bs.table', function (event, table) {
                 var form = $("form", table.$commonsearch);
                 //$("form select[name='channel_from']").val(2);
-                // Form.events.cxselect(form);
-                // Form.events.selectpage(form);
             });
 
             // 初始化表格
@@ -86,7 +125,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                 15: '超信任务添加手机号失败',
                                 16: '超信任务提交失败',
                                 17: '入队列完毕'},
-
                         },
                         // {field: 'schedule_percent', title: __('Schedule_percent')},
                         {field: 'task_num', title: __('Task_num'),operate:false},
@@ -114,7 +152,144 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'send_time', title: __('Send_time'), operate:'RANGE', addclass:'datetimerange'},
                         {field: 'finish_time', title: __('Finish_time'), operate:'RANGE', addclass:'datetimerange'},
 
-                        // {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
+                        {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate,
+                            buttons: [{
+                                name: 'click',
+                                title: '一键复发',
+                                extend: 'data-toggle="tooltip"',
+                                icon: 'fa fa-random',
+                                classname: 'btn btn-primary btn-xs btn-click',
+                                click:function(data,row){
+                                    //console.log(row);
+                                    if(row.total_num < 1 ){
+                                        Layer.msg('没有需要复发的短信！',{icon: 2});
+                                        return false;
+                                    }
+                                    Fast.api.open('sms/task_send/relapse?ids='+row.ids,'一键复发----'+'源ID：'+row.task_id+'--复发数量：'+row.total_num);
+                                },
+                            },{
+                                title: '失败复发',
+                                extend: 'data-toggle="tooltip"',
+                                icon: 'fa fa-retweet',
+                                classname: 'btn btn-danger btn-xs btn-click',
+                                click:function(data,row){
+                                    if( row.status === 6 ){ Layer.msg('任务被删除',{icon:2}); return false;}
+                                    if( row.total_send < 1 ){ Layer.msg('发送任务总量小于1，无需复发',{icon:2}); return false;}
+                                    if( row.total_send === row.total_receive ){ Layer.msg('没有失败的短信，无需复发',{icon:2}); return  false;}
+                                    Fast.api.open('sms/task_send/repeat?ids='+row.ids,'失败复发------'+'源ID：'+row.task_id+'--复发数量：'+row.total_num);
+                                },
+                            },{
+                                name:'ajax',
+                                title: '停止任务',
+                                extend: 'data-toggle="tooltip"',
+                                icon: 'fa fa-pause',
+                                classname: 'btn btn-warning btn-xs btn-ajax',
+                                confirm: '确认停止任务？',
+                                url: 'sms/task_send/stop',
+                                success: function (data, ret) {
+                                    //console.log(ret);
+                                    table.bootstrapTable('refresh',{});
+                                    //如果需要阻止成功提示，则必须使用return false;
+                                    //return false;
+                                },
+                                error: function (data, ret) {
+                                    //console.log(data, ret);
+                                    Layer.alert(ret.msg);
+                                    return false;
+                                }
+                            },{
+                                name:'ajax',
+                                title: '开始任务',
+                                extend: 'data-toggle="tooltip"',
+                                icon: 'fa fa-play',
+                                classname: 'btn btn-info btn-xs btn-ajax',
+                                confirm: '确认开始任务？',
+                                url: 'sms/task_send/start',
+                                success: function (data, ret) {
+                                    //console.log(ret);
+                                    table.bootstrapTable('refresh',{});
+                                    //如果需要阻止成功提示，则必须使用return false;
+                                    //return false;
+                                },
+                                error: function (data, ret) {
+                                    console.log(data, ret);
+                                    Layer.alert(ret.msg);
+                                    return false;
+                                }
+                            }],
+                            // formatter:function (value,row,index) {
+                            //     var table = this.table;
+                            //     // 操作配置
+                            //     var options = table ? table.bootstrapTable('getOptions') : {};
+                            //     // 默认按钮组
+                            //     var buttons = $.extend([], this.buttons || []);
+                            //     // 所有按钮名称
+                            //     var names = [];
+                            //     buttons.forEach(function (item) {
+                            //         names.push(item.name);
+                            //     });
+                            //     if (options.extend.dragsort_url !== '' && names.indexOf('dragsort') === -1) {
+                            //         buttons.push(Table.button.dragsort);
+                            //     }
+                            //     if (options.extend.edit_url !== '' && names.indexOf('edit') === -1) {
+                            //         Table.button.edit.url = options.extend.edit_url;
+                            //         buttons.push(Table.button.edit);
+                            //     }
+                            //     if (options.extend.del_url !== '' && names.indexOf('del') === -1) {
+                            //         buttons.push(Table.button.del);
+                            //     }
+                            //     if ( $.inArray(row.status,[1,2,3]) !== -1 ){
+                            //         buttons.push({
+                            //             name:'ajax',
+                            //             title: '停止任务',
+                            //             extend: 'data-toggle="tooltip"',
+                            //             icon: 'fa fa-pause',
+                            //             classname: 'btn btn-danger btn-xs btn-ajax',
+                            //             // confirm: '确认停止任务？',
+                            //             url: options.extend.stop_url,
+                            //             success: function (data, ret) {
+                            //                 alert(1);
+                            //                 console.log(ret);
+                            //                 row.status = ret.status;
+                            //                 //Layer.alert(ret.msg + ",返回数据：" + JSON.stringify(data));
+                            //                 table.bootstrapTable('refresh',{});
+                            //                 //如果需要阻止成功提示，则必须使用return false;
+                            //                 //return false;
+                            //             },
+                            //             error: function (data, ret) {
+                            //                 console.log(data, ret);
+                            //                 Layer.alert(ret.msg);
+                            //                 return false;
+                            //             }
+                            //         });
+                            //     }
+                            //     if ( row.status === 6 ){
+                            //         buttons.push({
+                            //             title: '开始任务',
+                            //             extend: 'data-toggle="tooltip"',
+                            //             icon: 'fa fa-play',
+                            //             classname: 'btn btn-danger btn-xs btn-ajax',
+                            //             // confirm: '确认开始任务？',
+                            //             url: options.extend.start_url,
+                            //             success: function (data, ret) {
+                            //                 alert(2);
+                            //                 row.status = ret.status;
+                            //                 //Layer.alert(ret.msg + ",返回数据：" + JSON.stringify(data));
+                            //                 table.bootstrapTable('refresh',{});
+                            //                 //如果需要阻止成功提示，则必须使用return false;
+                            //                 //return false;
+                            //             },
+                            //             error: function (data, ret) {
+                            //                 console.log(data, ret);
+                            //                 Layer.alert(ret.msg);
+                            //                 return false;
+                            //             }
+                            //         });
+                            //     }
+                            //     return Table.api.buttonlink(this, buttons, value, row, index, 'operate');
+                            // }
+                            formatter: Table.api.formatter.operate
+                        }
                     ]
                 ]
             });
@@ -153,16 +328,246 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                $("#price").html(price);
             });
 
+            // 选择短信模板
+            $(document).on("click", "#fachoose-sms", function () {
+                var that = this;
+                var multiple = $(this).data("multiple") ? $(this).data("multiple") : false;
+                var mimetype = $(this).data("mimetype") ? $(this).data("mimetype") : '';
+                var admin_id = $(this).data("admin-id") ? $(this).data("admin-id") : '';
+                var user_id = $(this).data("user-id") ? $(this).data("user-id") : '';
+                parent.Fast.api.open("basic/sms_template/select?element_id=" + $(this).attr("id") + "&multiple=" + multiple + "&mimetype=" + mimetype + "&admin_id=" + admin_id + "&user_id=" + user_id, __('Choose'), {
+                    callback: function (data) {
+                        var button = $("#" + $(that).attr("id"));
+                        var maxcount = $(button).data("maxcount");
+                        var input_id = $(button).data("input-id") ? $(button).data("input-id") : "";
+                        maxcount = typeof maxcount !== "undefined" ? maxcount : 0;
+                        if (input_id && data.multiple) {
+                            var urlArr = [];
+                            var inputObj = $("#" + input_id);
+                            var value = $.trim(inputObj.val());
+                            if (value !== "") {
+                                urlArr.push(inputObj.val());
+                            }
+                            urlArr.push(data.url)
+                            var result = urlArr.join(",");
+                            if (maxcount > 0) {
+                                var nums = value === '' ? 0 : value.split(/\,/).length;
+                                var files = data.url !== "" ? data.url.split(/\,/) : [];
+                                var remains = maxcount - nums;
+                                if (files.length > remains) {
+                                    Toastr.error(__('You can choose up to %d file%s', remains));
+                                    return false;
+                                }
+                            }
+                            inputObj.val(result).trigger("change").trigger("validate");
+                        } else {
+                            $("#" + input_id).val(data.row.copy).trigger("change").trigger("validate");
+                            $("#c-" + input_id).val(data.row.id).trigger("change").trigger("validate");
+                        }
+                    }
+                });
+                return false;
+            });
+
             Controller.api.bindevent();
         },
         edit: function () {
             Controller.api.bindevent();
+            var spList = Config.spList;
+            let price = 0;
+            let selectID = $("select[name='row[sms_gate_id]']").val();
+            spList.forEach(function(item){
+                if( item.id == selectID ){
+                    price = (item.price) ; return;
+                }
+            });
+            $("#price").html(price);
+            $("select[name='row[sms_gate_id]']").change(function () {
+                var sms_gate_id = this.value;
+                spList.forEach(function(item){
+                    if( item.id == sms_gate_id ){
+                        price = (item.price) ; return;
+                    }
+                });
+                //console.log(sms_gate_id);
+                $("#price").html(price);
+            });
+
+            // 选择短信模板
+            $(document).on("click", "#fachoose-sms", function () {
+                var that = this;
+                var multiple = $(this).data("multiple") ? $(this).data("multiple") : false;
+                var mimetype = $(this).data("mimetype") ? $(this).data("mimetype") : '';
+                var admin_id = $(this).data("admin-id") ? $(this).data("admin-id") : '';
+                var user_id = $(this).data("user-id") ? $(this).data("user-id") : '';
+                parent.Fast.api.open("basic/sms_template/select?element_id=" + $(this).attr("id") + "&multiple=" + multiple + "&mimetype=" + mimetype + "&admin_id=" + admin_id + "&user_id=" + user_id, __('Choose'), {
+                    callback: function (data) {
+                        var button = $("#" + $(that).attr("id"));
+                        var maxcount = $(button).data("maxcount");
+                        var input_id = $(button).data("input-id") ? $(button).data("input-id") : "";
+                        maxcount = typeof maxcount !== "undefined" ? maxcount : 0;
+                        if (input_id && data.multiple) {
+                            var urlArr = [];
+                            var inputObj = $("#" + input_id);
+                            var value = $.trim(inputObj.val());
+                            if (value !== "") {
+                                urlArr.push(inputObj.val());
+                            }
+                            urlArr.push(data.url)
+                            var result = urlArr.join(",");
+                            if (maxcount > 0) {
+                                var nums = value === '' ? 0 : value.split(/\,/).length;
+                                var files = data.url !== "" ? data.url.split(/\,/) : [];
+                                var remains = maxcount - nums;
+                                if (files.length > remains) {
+                                    Toastr.error(__('You can choose up to %d file%s', remains));
+                                    return false;
+                                }
+                            }
+                            inputObj.val(result).trigger("change").trigger("validate");
+                        } else {
+                            $("#" + input_id).val(data.row.copy).trigger("change").trigger("validate");
+                            $("#c-" + input_id).val(data.row.id).trigger("change").trigger("validate");
+                        }
+                    }
+                });
+                return false;
+            });
+
         },
         api: {
             bindevent: function () {
                 Form.api.bindevent($("form[role=form]"));
             }
-        }
+        },
+        relapse:function () {
+            Controller.api.bindevent();
+            var spList = Config.spList;
+            let price = 0;
+            let selectID = $("select[name='row[sms_gate_id]']").val();
+            spList.forEach(function(item){
+                if( item.id == selectID ){
+                    price = (item.price) ; return;
+                }
+            });
+            $("#price").html(price);
+            $("select[name='row[sms_gate_id]']").change(function () {
+                var sms_gate_id = this.value;
+                spList.forEach(function(item){
+                    if( item.id == sms_gate_id ){
+                        price = (item.price) ; return;
+                    }
+                });
+                //console.log(sms_gate_id);
+                $("#price").html(price);
+            });
+
+            // 选择短信模板
+            $(document).on("click", "#fachoose-sms", function () {
+                var that = this;
+                var multiple = $(this).data("multiple") ? $(this).data("multiple") : false;
+                var mimetype = $(this).data("mimetype") ? $(this).data("mimetype") : '';
+                var admin_id = $(this).data("admin-id") ? $(this).data("admin-id") : '';
+                var user_id = $(this).data("user-id") ? $(this).data("user-id") : '';
+                parent.Fast.api.open("basic/sms_template/select?element_id=" + $(this).attr("id") + "&multiple=" + multiple + "&mimetype=" + mimetype + "&admin_id=" + admin_id + "&user_id=" + user_id, __('Choose'), {
+                    callback: function (data) {
+                        var button = $("#" + $(that).attr("id"));
+                        var maxcount = $(button).data("maxcount");
+                        var input_id = $(button).data("input-id") ? $(button).data("input-id") : "";
+                        maxcount = typeof maxcount !== "undefined" ? maxcount : 0;
+                        if (input_id && data.multiple) {
+                            var urlArr = [];
+                            var inputObj = $("#" + input_id);
+                            var value = $.trim(inputObj.val());
+                            if (value !== "") {
+                                urlArr.push(inputObj.val());
+                            }
+                            urlArr.push(data.url)
+                            var result = urlArr.join(",");
+                            if (maxcount > 0) {
+                                var nums = value === '' ? 0 : value.split(/\,/).length;
+                                var files = data.url !== "" ? data.url.split(/\,/) : [];
+                                var remains = maxcount - nums;
+                                if (files.length > remains) {
+                                    Toastr.error(__('You can choose up to %d file%s', remains));
+                                    return false;
+                                }
+                            }
+                            inputObj.val(result).trigger("change").trigger("validate");
+                        } else {
+                            $("#" + input_id).val(data.row.copy).trigger("change").trigger("validate");
+                            $("#c-" + input_id).val(data.row.id).trigger("change").trigger("validate");
+                        }
+                    }
+                });
+                return false;
+            });
+
+        },
+        repeat:function () {
+            Controller.api.bindevent();
+            var spList = Config.spList;
+            let price = 0;
+            let selectID = $("select[name='row[sms_gate_id]']").val();
+            spList.forEach(function(item){
+                if( item.id == selectID ){
+                    price = (item.price) ; return;
+                }
+            });
+            $("#price").html(price);
+            $("select[name='row[sms_gate_id]']").change(function () {
+                var sms_gate_id = this.value;
+                spList.forEach(function(item){
+                    if( item.id == sms_gate_id ){
+                        price = (item.price) ; return;
+                    }
+                });
+                //console.log(sms_gate_id);
+                $("#price").html(price);
+            });
+
+            // 选择短信模板
+            $(document).on("click", "#fachoose-sms", function () {
+                var that = this;
+                var multiple = $(this).data("multiple") ? $(this).data("multiple") : false;
+                var mimetype = $(this).data("mimetype") ? $(this).data("mimetype") : '';
+                var admin_id = $(this).data("admin-id") ? $(this).data("admin-id") : '';
+                var user_id = $(this).data("user-id") ? $(this).data("user-id") : '';
+                parent.Fast.api.open("basic/sms_template/select?element_id=" + $(this).attr("id") + "&multiple=" + multiple + "&mimetype=" + mimetype + "&admin_id=" + admin_id + "&user_id=" + user_id, __('Choose'), {
+                    callback: function (data) {
+                        var button = $("#" + $(that).attr("id"));
+                        var maxcount = $(button).data("maxcount");
+                        var input_id = $(button).data("input-id") ? $(button).data("input-id") : "";
+                        maxcount = typeof maxcount !== "undefined" ? maxcount : 0;
+                        if (input_id && data.multiple) {
+                            var urlArr = [];
+                            var inputObj = $("#" + input_id);
+                            var value = $.trim(inputObj.val());
+                            if (value !== "") {
+                                urlArr.push(inputObj.val());
+                            }
+                            urlArr.push(data.url)
+                            var result = urlArr.join(",");
+                            if (maxcount > 0) {
+                                var nums = value === '' ? 0 : value.split(/\,/).length;
+                                var files = data.url !== "" ? data.url.split(/\,/) : [];
+                                var remains = maxcount - nums;
+                                if (files.length > remains) {
+                                    Toastr.error(__('You can choose up to %d file%s', remains));
+                                    return false;
+                                }
+                            }
+                            inputObj.val(result).trigger("change").trigger("validate");
+                        } else {
+                            $("#" + input_id).val(data.row.copy).trigger("change").trigger("validate");
+                            $("#c-" + input_id).val(data.row.id).trigger("change").trigger("validate");
+                        }
+                    }
+                });
+                return false;
+            });
+
+        },
     };
     return Controller;
 });
