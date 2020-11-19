@@ -8,6 +8,7 @@ use think\addons\Service;
 use think\Cache;
 use think\Config;
 use think\Db;
+use think\Env;
 use think\Lang;
 use think\Validate;
 
@@ -115,10 +116,12 @@ class Ajax extends Backend
         $savekey = $upload['savekey'];
         $savekey = str_replace(array_keys($replaceArr), array_values($replaceArr), $savekey);
 
-        $uploadDir = substr($savekey, 0, strripos($savekey, '/') + 1);
+        //$uploadDir = substr($savekey, 0, strripos($savekey, '/') + 1);
+        $uploadDir = Env::get('file.FILE_ROOT_DIR').substr($savekey, 0, strripos($savekey, '/') + 1);
         $fileName = substr($savekey, strripos($savekey, '/') + 1);
         //
-        $splInfo = $file->validate(['size' => $size])->move(ROOT_PATH . '/public' . $uploadDir, $fileName);
+        //$splInfo = $file->validate(['size' => $size])->move(ROOT_PATH . '/public' . $uploadDir, $fileName);
+        $splInfo = $file->validate(['size' => $size])->move( $uploadDir, $fileName);
         if ($splInfo) {
             $params = array(
                 'admin_id'    => (int)$this->auth->id,
