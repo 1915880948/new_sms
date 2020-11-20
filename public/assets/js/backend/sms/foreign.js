@@ -6,8 +6,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             Table.api.init({
                 extend: {
                     index_url: 'sms/foreign/index' + location.search,
-                    add_url: 'sms/foreign/add',
-                    edit_url: 'sms/foreign/edit',
+                    add_url: 'sms/task_send/add?link_from=2',
+                    edit_url: 'sms/task_send/edit',
                     del_url: 'sms/foreign/del',
                     multi_url: 'sms/foreign/multi',
                     table: 'sms_task_send',
@@ -114,7 +114,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'send_time', title: __('Send_time'), operate:'RANGE', addclass:'datetimerange'},
                         {field: 'finish_time', title: __('Finish_time'), operate:'RANGE', addclass:'datetimerange'},
 
-                        // {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
+                        {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]
                 ]
             });
