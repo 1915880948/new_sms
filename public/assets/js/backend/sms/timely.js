@@ -1,11 +1,29 @@
 define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefined, Backend, Table, Form) {
 
+    function cellStyle() {
+        return {
+            css:{
+                'min-width':'100px',"max-width":'200px',
+                'white-space':'nowrap',"text-overflow": "ellipsis",
+                'overflow':'hidden','cursor':'pointer',
+            }
+        };
+    }
+    function paramsMatter(value,row,index) {
+        var span = document.createElement("span");
+        span.setAttribute("title",value);
+        span.setAttribute("data-toggle","tooltip");
+        span.innerHTML = value;
+        return span.outerHTML;
+    }
+
     var Controller = {
         index: function () {
             // 初始化表格参数配置
             Table.api.init({
                 extend: {
                     index_url: 'sms/timely/index' + location.search,
+                    list_url: 'sms/timely/list',
                     config_url: 'sms/timely/config',
                     edit_url: 'sms/timely/config',
                     del_url: 'sms/timely/del',
@@ -15,16 +33,17 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             });
 
             var table = $("#table");
+            Fast.config.openArea = ['1000px','800px'];
 
             // 指定搜索条件
-            $(document).on("click", ".btn-config", function () {
+            $(document).on("click", ".btn-list", function () {
                 var parenttable = table.closest('.bootstrap-table');
                 //Bootstrap-table配置
                 var options = table.bootstrapTable('getOptions');
                 //Bootstrap操作区
                 var toolbar = $(options.toolbar, parenttable);
 
-                var url = options.extend.config_url;
+                var url = options.extend.list_url;
                 Fast.api.open(url, __('Config'), $(this).data() || {});
             });
 
@@ -60,22 +79,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'company', title: __('Company')},
                         {field: 'bank', title: __('Bank')},
                         {field: 'business', title: __('Business')},
-                        // {field: 'exclude_recent_sent', title: __('Exclude_recent_sent')},
-                        // {field: 'exclude_blacklist', title: __('Exclude_blacklist')},
-                        // {field: 'channel_id', title: __('Channel_id')},
-                        // {field: 'data_id', title: __('Data_id')},
-                        // {field: 'data_pack_no', title: __('Data_pack_no')},
-                        // {field: 'send_limit', title: __('Send_limit')},
-                        // {field: 'sms_gate_id', title: __('Sms_gate_id')},
-                        // {field: 'retry_on_failure', title: __('Retry_on_failure')},
-                        // {field: 'retry_sms_gate_id', title: __('Retry_sms_gate_id')},
-                        // {field: 'retry_limit_minute', title: __('Retry_limit_minute')},
-                        // {field: 'sms_template_id', title: __('Sms_template_id')},
-                        // {field: 'sms_content', title: __('Sms_content')},
-                        // {field: 'link', title: __('Link')},
-                        // {field: 'transfer_link', title: __('Transfer_link')},
-                        // {field: 'dynamic_shortlink', title: __('Dynamic_shortlink')},
-                        // {field: 'shortlink', title: __('Shortlink')},
                         {field: 'channel_from', title: __('Channel_from'),
                             formatter: Table.api.formatter.normal,
                             searchList:{0:'常规短信',1:'动态短信',2:'实时短信'},
@@ -84,8 +87,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                             formatter: Table.api.formatter.normal,
                             searchList:{0:'未知',1:'内部',2:'外部'},
                         },
-                        // {field: 'create_time', title: __('Create_time'), operate:'RANGE', addclass:'datetimerange'},
-                        // {field: 'update_time', title: __('Update_time'), operate:'RANGE', addclass:'datetimerange', formatter: Table.api.formatter.datetime},
                         {field: 'status', title: __('Status'),
                             formatter: Table.api.formatter.status,
                             searchList:{1:'待生成短链',2:'生成动态短链中',3:'等待发送',4:'发送中',5:'发送完成',6:'已中止',7:'已删除',8 :'无需发送', 9 :'暂存',
@@ -99,9 +100,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                 17: '入队列完毕'},
 
                         },
-                        // {field: 'schedule_percent', title: __('Schedule_percent')},
                         {field: 'task_num', title: __('Task_num'),operate:false},
-                        // {field: 'total_num', title: __('Total_num')},
                         {field: 'total_send', title: __('Total_send'),operate:false},
                         {field: 'total_receive', title: __('Total_receive'),operate:false},
                         {field: 'total_click', title: __('Total_click'),operate:false},
@@ -112,15 +111,10 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                     return 0+'%';
                                 }
                             }},
-                        // {field: 'sp_num', title: __('Sp_num')},
                         {field: 'failed_num', title: __('Failed_num'),operate:false},
-                        // {field: 'retry_status', title: __('Retry_status')},
                         {field: 'price', title: __('成本'),operate:false,formatter:function (value,row,index) {
                                 return (row.total_receive*row.price).toFixed(2);
                             }},
-                        // {field: 'file_path', title: __('File_path')},
-                        // {field: 'remark', title: __('Remark')},
-                        // {field: 'phone_path', title: __('Phone_path')},
                         {field: 'creator', title: __('Creator'),operate:'like'},
                         {field: 'send_time', title: __('Send_time'), operate:'RANGE', addclass:'datetimerange'},
                         {field: 'finish_time', title: __('Finish_time'), operate:'RANGE', addclass:'datetimerange'},
@@ -132,22 +126,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
 
             // 为表格绑定事件
             Table.api.bindevent(table);
-            function cellStyle() {
-                return {
-                    css:{
-                        'min-width':'100px',"max-width":'200px',
-                        'white-space':'nowrap',"text-overflow": "ellipsis",
-                        'overflow':'hidden','cursor':'pointer',
-                    }
-                };
-            }
-            function paramsMatter(value,row,index) {
-                var span = document.createElement("span");
-                span.setAttribute("title",value);
-                span.setAttribute("data-toggle","tooltip");
-                span.innerHTML = value;
-                return span.outerHTML;
-            }
         },
         add: function () {
             Controller.api.bindevent();
@@ -160,6 +138,62 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 Form.api.bindevent($("form[role=form]"));
             }
         },
+        list:function () {
+            $(document).on("click", ".btn-refresh", function () {
+                $("#list").bootstrapTable('refresh',{});
+            });
+            $(document).on("click", ".btn-add", function () {
+                Layer.confirm('确认添加一条自动发送配置吗？',{},function (index) {
+                    Fast.api.ajax({url: 'sms/timely/add',}, function (data) {
+                        Toastr.success(data.msg);
+                        Layer.closeAll('dialog');
+                        $("#list").bootstrapTable('refresh',{});
+                        return false;
+                    });
+                });
+            });
+            $("#list").bootstrapTable({
+                url:"sms/timely/list",
+                extend: {
+                    index_url: "sms/timely/list",
+                    add_url: 'sms/timely/add',
+                    edit_url: 'sms/timely/config',
+                    table: '',
+                },
+                pk: 'id',
+                sortName: 'id',
+                search: false,                       //1.快捷搜索框,设置成false隐藏
+                showToggle: false,                  //2.列表和视图切换
+                showColumns: false,                 //3.字段显示
+                showExport: false,                  //4.导出按钮
+                commonSearch: false,                //5.通用搜索框
+                pagination: true,                   //6.是否显示分页条
+                // onlyInfoPagination: true,           //7.只显示总数据数
+                // showHeader: false,                  //8.是否显示列头
+                // paginationVAlign: 'top',            //9.指定分页条垂直位置
+                // showRefresh:false,
+                sidePagination:'server',
+                // pageSize:20,
+                // pageList:[20,50,100,'all'],
+                columns: [
+                    {field: 'id', title: 'ID',operate:false},
+                    {field: 'title', title: '标题',operate:false},
+                    {field: 'channel_id', title: '渠道号'},
+                    {field: 'sp_info_id', title: __('通道'),},
+                    {field: 'domain_short', title: __('短链域名'),operate:false},
+                    {field: 'sms_content', title: __('短信文案'), cellStyle: cellStyle(), formatter: paramsMatter,},
+                    {field: 'city', title: __('城市黑名单')},
+                    {field: 'send_start_time', title: __('发送时间区间'),formatter:function (index,row,value) {
+                            return row.send_start_time+'~'+row.send_end_time;
+                        }},
+                    {field: 'send_status', title: __('自动状态'),formatter: Table.api.formatter.normal,
+                        searchList:{1:'开启',2:'关闭'}
+                    },
+                    {field: 'operate', title: __('Operate'), table: $("#list"), events: Table.api.events.operate, formatter: Table.api.formatter.operate}
+                ]
+            });
+            Controller.api.bindevent();
+        },
         config: function (){
             Controller.api.bindevent();
         }
@@ -168,24 +202,3 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
 });
 
 
-// define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload'], function ($, undefined, Backend, Table, Form, Upload) {
-//
-//     var Controller = {
-//         index: function () {
-//             Form.api.bindevent($("#config-form"));
-//         },
-//
-//         add: function () {
-//             Controller.api.bindevent();
-//         },
-//         edit: function () {
-//             Controller.api.bindevent();
-//         },
-//         api: {
-//             bindevent: function () {
-//                 Form.api.bindevent($("form[role=form]"));
-//             }
-//         }
-//     };
-//     return Controller;
-// });

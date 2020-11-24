@@ -21,9 +21,6 @@ class Timely extends Backend
     {
         parent::_initialize();
         $this->model = new \app\admin\model\sms\TaskSend;
-//        $this->model = model('AdminLog');
-//        $ipList = $this->model->whereTime('createtime', '-37 days')->group("ip")->column("ip,ip as aa");
-//        $this->view->assign("ipList", $ipList);
     }
 
     public function index()
@@ -62,13 +59,45 @@ class Timely extends Backend
 
     }
 
-    public function config(){
+    public function add(){
+        $model = new Config();
+        $data = [
+            'value' => '自动发送',
+            'content' => '自动发送',
+            'channel_id'=>'',
+            'sp_info_id'=>'',
+            'domain_short'=>'',
+            'send_start_time'=>'',
+            'send_end_time'=>'',
+            'sms_content'=>'',
+        ];
+        $result = $model->allowField(true)->save($data);
+        return json(['data'=>['msg'=>'添加配置成功，请修改配置以生效！！'],'code'=>1]);
+    }
+    public function list(){
+        $model = new Config();
+        $offset  = $this->request->get("offset");
+        $limit   = $this->request->get("limit");
+        if ($this->request->isAjax()) {
+            $myWhere['id'] = ['>',17];
+
+            $list = $model->where($myWhere)->order('id','desc')->limit($offset,$limit)->select();
+            $total = $model->where($myWhere)->order('id','desc')->count();
+
+            $list = collection($list)->toArray();
+            $result = array("total" => $total, "rows" => $list);
+
+            return json($result);
+        }
+        return $this->view->fetch();
+    }
+
+    public function config($ids){
         $spModel = new Sp();
         $model = new Config();
 
         $spList = $spModel->field('id,sp_no,sp_name,remote_account')->select();
-        //print_r( $spList ); die;
-        $row = $model->get(18);
+        $row = $model->get($ids);
         $domainList = \think\Config::get('domainList');
         if(  $this->request->isPost() ){
 
@@ -83,6 +112,7 @@ class Timely extends Backend
             Db::startTrans();
             try{
                 $result = $row->save([
+                    'title' => trim($postData['title']),
                     'channel_id' => trim($postData['channel_id']),
                     'sp_info_id' => $postData['sp_info_id'],
                     'domain_short' => $postData['domain_short'],
