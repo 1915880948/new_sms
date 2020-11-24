@@ -138,7 +138,7 @@ class Timely extends Backend
                         throw new \Exception('短链生成失败，请稍后重试..');
                     }
                     $result = $linkShortModel->save([
-                        'remark'        => 'ZD-'.date('Ymd').'-M头条水滴展示-SSW-P-C1-'.date("Hi",strtotime($postData['send_start_time'])).'_'.date("Hi",strtotime($postData['send_end_time'])),
+                        'remark'        => 'ZD-'.date('Ymd').'-'.trim($postData['title']).'-'.date("Hi",strtotime($postData['send_start_time'])).'_'.date("Hi",strtotime($postData['send_end_time'])),
                         'link_id'       => $link['id'],
                         'business_link' => $link['link'],
                         'transfer_link' => $transfer_link,
