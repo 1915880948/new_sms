@@ -60,7 +60,7 @@ class AutoSend extends Command
             $phoneEncodeStrNum[$item['name']] = 0;
             //$phoneEncodeBlackStr[$item['name'] = '';
             $cityBlack[$item['name']] = explode('|',$item['city']);
-            $phoneBlack[$item['name']] = $item['name'];
+            $bankBlack[$item['name']] = $item['bank_id'];
         }
         $sendTime = date('H:i:s');
         $cityCode = Db::table('sms_city_code')->field('city,city_no')->select();
@@ -92,7 +92,7 @@ class AutoSend extends Command
                     $phoneEncodeStrNum[$index]++;
                     if( $phoneEncodeStrNum[$index] == 10000){  // 最多一万个
                         Log::log('10000手机号个请求一次加解密');
-                        $this->dealEnPhone($taskSendData[$index],$linkShortData[$index],$config[$index],$spInfo[$index],$phoneEncodeStr[$index],$redis4,$phoneBlack[$index]);
+                        $this->dealEnPhone($taskSendData[$index],$linkShortData[$index],$config[$index],$spInfo[$index],$phoneEncodeStr[$index],$redis4,$bankBlack[$index]);
                         $phoneEncodeStrNum[$index] = 0;
                         $phoneEncodeStr[$index] ='';
                     }
@@ -102,9 +102,9 @@ class AutoSend extends Command
 
         // 剩余不足10000个请求一次
         foreach ($config as $k){
-            Log::log(('$phoneEncodeStrNum[$k[\'name\']]'.$phoneEncodeStrNum[$k['name']]));
+            Log::log(('phoneEncodeStrNum['.$k['name'].']'.$phoneEncodeStrNum[$k['name']]));
             if( $phoneEncodeStrNum[$k['name']] > 0 ){
-                $this->dealEnPhone($taskSendData[$k['name']],$linkShortData[$k['name']],$config[$k['name']],$spInfo[$k['name']],$phoneEncodeStr[$k['name']],$redis4,$phoneBlack[$k['name']]);
+                $this->dealEnPhone($taskSendData[$k['name']],$linkShortData[$k['name']],$config[$k['name']],$spInfo[$k['name']],$phoneEncodeStr[$k['name']],$redis4,$bankBlack[$k['name']]);
             }
         }
 
@@ -115,7 +115,7 @@ class AutoSend extends Command
 
     }
 
-    public function dealEnPhone($taskSendData,$linkShortData,$config,$spInfo,$phoneEncodeStr,$redis4,$phoneBlack){   // 解密手机号，最多10000个。
+    public function dealEnPhone($taskSendData,$linkShortData,$config,$spInfo,$phoneEncodeStr,$redis4,$bankBlack){   // 解密手机号，最多10000个。
         //Log::log('dealEnPhone');
         $decodeResult = curl_encrypt($phoneEncodeStr); //解密手机号，最多10000
         $decodeResult = json_decode($decodeResult, true);
@@ -128,8 +128,8 @@ class AutoSend extends Command
         foreach ( $decodeResult['data'] as $k=>$v){
             if( $redis4->get('sms_blackuser_'.$v) ) continue;
             if( $redis4->get('sms_senno_'.$v) ) continue;
-            if( $redis4->get($phoneBlack.'_'.$v) ) continue;
-            $redis4->setex($phoneBlack.'_'.$v,86400,1) ;  // 已发短信，列入保险黑名单24h。
+            if( $redis4->get('bank_'.$bankBlack.'_'.$v) ) continue;
+            $redis4->setex('bank_'.$bankBlack.'_'.$v,86400,1) ;  // 已发短信，列入保险黑名单24h。
 
             if( strlen($v)  == 11 ){ // 是手机号
                 $this->total_send ++;
