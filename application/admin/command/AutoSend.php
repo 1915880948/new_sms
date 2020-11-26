@@ -74,8 +74,6 @@ class AutoSend extends Command
                 continue ;
             }
             if( $i % 5000 ==0 ){
-                Log::log(json($obj));
-                Log::log(json($config[$index]));
                 Log::log('已经执行到：'.$i.'条');
             }
             // 确定配置
@@ -104,7 +102,7 @@ class AutoSend extends Command
 
         // 剩余不足10000个请求一次
         foreach ($config as $k){
-            Log::log(('phoneEncodeStrNum['.$k['name'].']'.$phoneEncodeStrNum[$k['name']]));
+            Log::log(('最后一次phoneEncodeStrNum['.$k['name'].']'.$phoneEncodeStrNum[$k['name']]));
             if( $phoneEncodeStrNum[$k['name']] > 0 ){
                 $this->dealEnPhone($taskSendData[$k['name']],$linkShortData[$k['name']],$config[$k['name']],$spInfo[$k['name']],$phoneEncodeStr[$k['name']],$redis4,$bankBlack[$k['name']]);
             }
