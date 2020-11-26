@@ -74,6 +74,8 @@ class AutoSend extends Command
                 continue ;
             }
             if( $i % 5000 ==0 ){
+                Log::log(json($obj));
+                Log::log(json($config[$index]));
                 Log::log('已经执行到：'.$i.'条');
             }
             // 确定配置
