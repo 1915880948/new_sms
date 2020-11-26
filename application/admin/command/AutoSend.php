@@ -53,7 +53,7 @@ class AutoSend extends Command
         $config = [];
         foreach ($list as  $item ){
             $config[$item['name']]        = $item;
-            $taskSendData[$item['name']]  =  $taskSendModel->where(['channel_from'=>['=',2],'remark'=>['=',$item['name']] ])->order('task_id','desc')->limit(1)->find();
+            $taskSendData[$item['name']]  =  $taskSendModel->where(['channel_from'=>['=',2],'bank_id'=>['=',$item['bank_id']] ])->order('task_id','desc')->limit(1)->find();
             $linkShortData[$item['name']] = $linkShortModel->where('id', $taskSendData[$item['name']]['sm_task_id'])->find();
             $spInfo[$item['name']] = $spModel->where('id',$item['sp_info_id'])->find();
             $phoneEncodeStr[$item['name']] = '';

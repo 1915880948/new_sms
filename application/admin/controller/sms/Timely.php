@@ -158,8 +158,11 @@ class Timely extends Backend
                     $result = $taskSendModel->save([
                         'title' => 'ZD-'.date('Ymd').'-'.trim($postData['title']).'-'.date("Hi",strtotime($postData['send_start_time'])).'_'.date("Hi",strtotime($postData['send_end_time'])),
                         'company' => $link['company_name'],
+                        'company_id' => $link['company_id'],
                         'bank' => $link['bank_name'],
+                        'bank_id' => $link['bank_id'],
                         'business' => $link['business_name'],
+                        'business_id' => $link['business_id'],
                         'channel_id' => $link['channel_id'],
                         'data_id' => 0,
                         'send_time' => date('Y-m-d,H:i:s'),
