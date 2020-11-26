@@ -115,6 +115,7 @@ class Timely extends Backend
                     'name' => trim($postData['name']), // 作为下标：channel_product
                     'title' => trim($postData['title']),
                     'channel_id' => trim($postData['channel_id']),
+                    'bank_id' => $link['bank_id'],
                     'sp_info_id' => $postData['sp_info_id'],
                     'domain_short' => $postData['domain_short'],
                     'send_start_time' => $postData['send_start_time'],
