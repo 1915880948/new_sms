@@ -112,6 +112,7 @@ class Timely extends Backend
             Db::startTrans();
             try{
                 $result = $row->save([
+                    'name' => trim($postData['name']), // 作为下标：channel_product
                     'title' => trim($postData['title']),
                     'channel_id' => trim($postData['channel_id']),
                     'sp_info_id' => $postData['sp_info_id'],
@@ -121,6 +122,7 @@ class Timely extends Backend
                     'sms_content' => trim($postData['sms_content']),
                     'send_status' => $postData['send_status'],
                     'city' => $postData['city'],
+                    'group' => $this->auth->getUserInfo()['username'], // 用于每天自动生成任务时，确定该配置文件的所有者
                 ]);
                 if( !$result ){
                     throw new \Exception('参数更新失败');
@@ -143,7 +145,7 @@ class Timely extends Backend
                         'business_link' => $link['link'],
                         'transfer_link' => $transfer_link,
                         'short_link'    => $shortLinkResult['data'][0]['short_url'],
-                        'creator'       => 'lzc',
+                        'creator'       => $this->auth->getUserInfo()['username'],
                         'create_time'   => date('Y-m-d H:i:s'),
 
                     ]);
@@ -153,7 +155,7 @@ class Timely extends Backend
                     // 增加一条短信发送任务
                     $taskSendModel = new \app\admin\model\sms\TaskSend();
                     $result = $taskSendModel->save([
-                        'title' => 'ZD-'.date('Ymd').'-M头条水滴展示-SSW-P-C1-'.date("Hi",strtotime($postData['send_start_time'])).'_'.date("Hi",strtotime($postData['send_end_time'])),
+                        'title' => 'ZD-'.date('Ymd').'-'.trim($postData['title']).'-'.date("Hi",strtotime($postData['send_start_time'])).'_'.date("Hi",strtotime($postData['send_end_time'])),
                         'company' => $link['company_name'],
                         'bank' => $link['bank_name'],
                         'business' => $link['business_name'],
@@ -167,13 +169,13 @@ class Timely extends Backend
                         'channel_from' => 2, // 0，1动态短信，2实时短信
                         'link_from' => 1,
                         'create_time' => date('Y-m-d H:i:s'),
-                        'creator' => 'lzc',
+                        'creator' => $this->auth->getUserInfo()['username'],
                         'status' => 5, //4发送中，5发送完成
                         'sm_task_id' => $linkShortModel->id,
                         'file_path' => '',
                         'price' => $price,
                         'finish_time' => date('Y-m-d,H:i:s'),
-                        //'remark' => '自动发送',
+                        'remark' => trim($postData['name']),
                     ]);
                     if( !$result ){
                         throw new \Exception('短信发送任务创建失败！');

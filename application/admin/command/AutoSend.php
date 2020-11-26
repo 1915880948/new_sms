@@ -32,8 +32,7 @@ class AutoSend extends Command
 
     protected function execute(Input $input, Output $output){
         $runtime = microtime(true);
-        $autoSendType = ['sd'];
-        $popNum = 100;
+        $popNum = 30;
         $redis3 = new Client([
             'host' => Env::get('redis3.host'),
             'port' => Env::get('redis3.port'),
@@ -44,77 +43,70 @@ class AutoSend extends Command
             'port' => Env::get('redis4.port'),
             'password' => Env::get('redis4.password')
         ]);
-        $popNum = $redis3->llen('sms_toutiao_message_queue');
-        Log::log('开始执行--------->本次从队列取出'.$popNum.'条');
+        //$popNum = $redis3->llen('sms_toutiao_message_queue');
+        Log::log('开始执行--------->从队列取出'.$popNum.'条');
         $taskSendModel = new TaskSend();
         $linkShortModel = new LinkShort();
-        $taskSendData = $taskSendModel->where('channel_from',2)->order('task_id','desc')->limit(1)->find();
-        $linkShortData = $linkShortModel->where('id',$taskSendData['sm_task_id'])->find();
-        //print_r($taskSendData); exit();
-        $config = Db::table('fa_config')->where('id',18)->find();
-        $sendTime = date('H:i:s');
-       // print_r( $time ); die;
-        if( $config['send_status'] == 2 || empty($taskSendData)  || !($config['send_start_time']<$sendTime && $sendTime<$config['send_end_time']) ){
-            $output->writeln('stop to send or no send data!!');
-            Log::log('只取，不做处理：'.$popNum.'条');
-            for($i=0;$i<$popNum; $i++){
-                $redis3->rpop('sms_toutiao_message_queue');
-            }
-            exit();
+        $spModel = new Sp();
+        $list =  Db::table('fa_config')->where(['id'=>['>',17]])->select();
+        $autoSendType = array_column($list,'name');
+        $config = [];
+        foreach ($list as  $item ){
+            $config[$item['name']]        = $item;
+            $taskSendData[$item['name']]  =  $taskSendModel->where(['channel_from'=>['=',2],'remark'=>['=',$item['name']] ])->order('task_id','desc')->limit(1)->find();
+            $linkShortData[$item['name']] = $linkShortModel->where('id', $taskSendData[$item['name']]['sm_task_id'])->find();
+            $spInfo[$item['name']] = $spModel->where('id',$item['sp_info_id'])->find();
+            $phoneEncodeStr[$item['name']] = '';
+            $phoneEncodeStrNum[$item['name']] = 0;
+            //$phoneEncodeBlackStr[$item['name'] = '';
+            $cityBlack[$item['name']] = explode('|',$item['city']);
+            $phoneBlack[$item['name']] = $item['name'];
         }
-        $spInfo = (new Sp())->where('id',$config['sp_info_id'])->find();
+        $sendTime = date('H:i:s');
         $cityCode = Db::table('sms_city_code')->field('city,city_no')->select();
         $cityArray = array_combine(array_column($cityCode,'city_no'),array_column($cityCode,'city'));
-        $phoneEncodeStr = '';
-        $phoneEncodeStrNum = 0;
-        $phoneEncodeBlackStr = '';
-        $cityBlack = explode('|',$config['city']);
         for($i=0;$i<$popNum; $i++){
             $obj = json_decode($redis3->rpop('sms_toutiao_message_queue'),true);
             $obj = json_decode($obj,true );
-            if( !$obj )   break;
-            if( !in_array($obj['channel'],$autoSendType )){
+            if( !$obj )   continue;
+            $index = $obj['channel'].'_'.$obj['product']; // 业务下标
+            if( !in_array($index,$autoSendType )){
                 continue ;
             }
             if( $i % 5000 ==0 ){
                 Log::log('已经执行到：'.$i.'条');
             }
-//            $output->writeln( $obj['imei']);
-//            $output->writeln( substr($obj['imei'],0,6) );
-//            $output->writeln( substr($obj['imei'],6) );
-            //die;
+            // 确定配置
+            if( $config[$index]['send_status'] == 2 || empty($taskSendData[$index])  || !($config[$index]['send_start_time']<$sendTime && $sendTime<$config[$index]['send_end_time']) ){
+               continue ;
+            }
+
             $phoneStr = $redis4->hget(substr($obj['imei'],0,6),substr($obj['imei'],6));
-            //print_r( $phoneStr ); die;
             if( $phoneStr ){
                 $phoneExplode = explode(',',$phoneStr);
                 foreach ($phoneExplode as $v) {
-                   // print_r( $v );
-                    if ( in_array($cityArray[substr($v,3,3)],$cityBlack)){
-                        // $phoneEncodeBlackStr .= $v.',';   // 城市黑名单
-                    }else{
-                        $phoneEncodeStr .= $v.',';
-                        $phoneEncodeStrNum++;
-                        if( $phoneEncodeStrNum == 10000){  // 最对一万个
-                            Log::log('10000手机号个请求一次加解密');
-                            $this->dealEnPhone($taskSendData,$linkShortData,$config,$spInfo,$phoneEncodeStr,$redis4);
-                            $phoneEncodeStrNum = 0;
-                            $phoneEncodeStr ='';
-                        }
+                    if ( in_array($cityArray[substr($v,3,3)],$cityBlack[$index])){
+                        continue ; // $phoneEncodeBlackStr .= $v.',';   // 城市黑名单
+                    }
+                    $phoneEncodeStr[$index] .= $v.',';
+                    $phoneEncodeStrNum[$index]++;
+                    if( $phoneEncodeStrNum[$index] == 10000){  // 最多一万个
+                        Log::log('10000手机号个请求一次加解密');
+                        $this->dealEnPhone($taskSendData[$index],$linkShortData[$index],$config[$index],$spInfo[$index],$phoneEncodeStr[$index],$redis4,$phoneBlack[$index]);
+                        $phoneEncodeStrNum[$index] = 0;
+                        $phoneEncodeStr[$index] ='';
                     }
                 }
             }
         }
 
-        //print_r($phoneEncodeStr); die;
         // 剩余不足10000个请求一次
-        $this->dealEnPhone($taskSendData,$linkShortData,$config,$spInfo,$phoneEncodeStr,$redis4);
-//        Log::log('入列完成，更新任务、发送数量');
-//        Db::table('sms_task_send')->where('task_id',$taskSendData['task_id'])
-//            ->data(['status' => 17])
-//            ->inc('task_num',$this->task_num)
-//            ->inc('total_num',$this->total_num)
-//            ->inc('total_send',$this->total_send)
-//            ->update();
+        foreach ($config as $k){
+            Log::log(('$phoneEncodeStrNum[$k[\'name\']]'.$phoneEncodeStrNum[$k['name']]));
+            if( $phoneEncodeStrNum[$k['name']] > 0 ){
+                $this->dealEnPhone($taskSendData[$k['name']],$linkShortData[$k['name']],$config[$k['name']],$spInfo[$k['name']],$phoneEncodeStr[$k['name']],$redis4,$phoneBlack[$k['name']]);
+            }
+        }
 
         Log::log('执行完毕！！总耗时：'.round(microtime(true)-$runtime,3).' 内存消耗：'.round(memory_get_usage()/(1024*1024),3)."MB" );
         $output->writeln('success!  Running='.round(microtime(true)-$runtime,3) );
@@ -123,22 +115,21 @@ class AutoSend extends Command
 
     }
 
-    public function dealEnPhone($taskSendData,$linkShortData,$config,$spInfo,$phoneEncodeStr,$redis4){   // 解密手机号，最多10000个。
-
+    public function dealEnPhone($taskSendData,$linkShortData,$config,$spInfo,$phoneEncodeStr,$redis4,$phoneBlack){   // 解密手机号，最多10000个。
+        //Log::log('dealEnPhone');
         $decodeResult = curl_encrypt($phoneEncodeStr); //解密手机号，最多10000
         $decodeResult = json_decode($decodeResult, true);
-    //print_r( $decodeResult['data']);  die;
+        //Log::log( json($decodeResult['data']));
         $queueTime =  date("Y-m-d H:i:s");
         $createShortPre = 40; // 为用户生成短链 40请求一次
         $linkArr = [] ;
         $this->task_num +=count($decodeResult['data']);
         $this->total_num = $this->task_num;
         foreach ( $decodeResult['data'] as $k=>$v){
-            //print_r( $v);
             if( $redis4->get('sms_blackuser_'.$v) ) continue;
             if( $redis4->get('sms_senno_'.$v) ) continue;
-            if( $redis4->get('sms_send_bx_'.$v) ) continue;
-            $redis4->setex('sms_send_bx_'.$v,86400,1) ;  // 已发短信，列入保险黑名单24h。
+            if( $redis4->get($phoneBlack.'_'.$v) ) continue;
+            $redis4->setex($phoneBlack.'_'.$v,86400,1) ;  // 已发短信，列入保险黑名单24h。
 
             if( strlen($v)  == 11 ){ // 是手机号
                 $this->total_send ++;
@@ -174,6 +165,7 @@ class AutoSend extends Command
     }
 
     public function createShortLinkForUser($linkArr,$task_id,$sp_no,$queue_time,$config){ // 为用户生成短链，受接口限制每次40个。
+        //Log::log('createShortLinkForUser');
         $phonePattern = '/^1[3-9][\\d]{9}$/';
         $pattern = '/http[s]?:\\/\\/[-.=%&\\?\\w\\/]+/';
 
@@ -273,6 +265,14 @@ class AutoSend extends Command
 //"channel":"sd",
 //"cid":"1680513086751806",
 //"csite":"900000000",
-//"idfa":"",
-//"imei":"",
+//"idfa":"",175012345678
+//"imei":"",6176a45d2cd5136b9e3d093e50b7d16d:17502199183  6176a45d2cd5136b9e3d093e50b7d16d:15885052629    1a2b3c5d2cd5136b9e3d093e50b7d16d:13061968020
 //"ip":"139.213.70.192","oaid":"","oaid_md5":"","os":"android","product":"sdb","type":"3"}
+
+
+// {"aid":"1679065789348920","androidid":"6176a45d2cd5136b9e3d093e50b7d16d","callback":"","channel":"sd","cid":"1679068252857463","csite":"900000000","idfa":"","imei":"6176a45d2cd5136b9e3d093e50b7d16d","ip":"223.107.232.152","oaid":"","oaid_md5":"","os":"android","product":"sdb","type":"3"}
+// {"aid":"1679065789348920","androidid":"1234565d2cd5136b9e3d093e50b7d16d","callback":"","channel":"za","cid":"1679068252857463","csite":"900000000","idfa":"","imei":"1234565d2cd5136b9e3d093e50b7d16d","ip":"223.107.232.152","oaid":"","oaid_md5":"","os":"android","product":"sdb","type":"3"}
+// {"aid":"1679065789348920","androidid":"6543215d2cd5136b9e3d093e50b7d16d","callback":"","channel":"sd","cid":"1679068252857463","csite":"900000000","idfa":"","imei":"6543215d2cd5136b9e3d093e50b7d16d","ip":"223.107.232.152","oaid":"","oaid_md5":"","os":"android","product":"sdb","type":"3"}
+
+
+
