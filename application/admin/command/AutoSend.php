@@ -32,7 +32,7 @@ class AutoSend extends Command
 
     protected function execute(Input $input, Output $output){
         $runtime = microtime(true);
-        $popNum = 30;
+        $popNum = 10;
         $redis3 = new Client([
             'host' => Env::get('redis3.host'),
             'port' => Env::get('redis3.port'),
@@ -43,7 +43,7 @@ class AutoSend extends Command
             'port' => Env::get('redis4.port'),
             'password' => Env::get('redis4.password')
         ]);
-        $popNum = $redis3->llen('sms_toutiao_message_queue');
+        //$popNum = $redis3->llen('sms_toutiao_message_queue');
         Log::log('开始执行--------->从队列取出'.$popNum.'条');
         $taskSendModel = new TaskSend();
         $linkShortModel = new LinkShort();
@@ -82,7 +82,7 @@ class AutoSend extends Command
             }
             $imei = 'imei';
             if( $obj['channel'] == 'za') $imei = 'imei2';
-            $phoneStr = $redis4->hget(substr($obj['imei'],0,6),substr($obj[$imei],6));
+            $phoneStr = $redis4->hget(substr($obj[$imei],0,6),substr($obj[$imei],6));
             if( $phoneStr ){
                 $phoneExplode = explode(',',$phoneStr);
                 foreach ($phoneExplode as $v) {
