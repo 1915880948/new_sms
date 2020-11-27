@@ -43,7 +43,7 @@ class AutoSend extends Command
             'port' => Env::get('redis4.port'),
             'password' => Env::get('redis4.password')
         ]);
-        //$popNum = $redis3->llen('sms_toutiao_message_queue');
+        $popNum = $redis3->llen('sms_toutiao_message_queue');
         Log::log('开始执行--------->从队列取出'.$popNum.'条');
         $taskSendModel = new TaskSend();
         $linkShortModel = new LinkShort();
