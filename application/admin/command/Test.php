@@ -33,19 +33,19 @@ class Test extends Command
             'password' => Env::get('redis3.password')
         ]);
 
-        for($i=0;$i<100;$i++){
-            $redis3->lpush('sms_toutiao_message_queue',json_encode('{"aid":"","androidid":"","callback":"","channel":"sd","cid":"","csite":"","idfa":"","imei":"6176a404676a5fb1082267f89c211aa7","ip":"223.107.232.152","oaid":"","oaid_md5":"","os":"android","product":"sdb","type":"3"}'));
-            $redis3->lpush('sms_toutiao_message_queue',json_encode('{"aid":"","androidid":"","callback":"","channel":"sd","cid":"","csite":"","idfa":"","imei":"6176a4cb82dc03384c4e1478a61281a9","ip":"223.107.232.152","oaid":"","oaid_md5":"","os":"android","product":"sdb","type":"3"}'));
-            $redis3->lpush('sms_toutiao_message_queue',json_encode('{"aid":"","androidid":"","callback":"","channel":"sd","cid":"","csite":"","idfa":"","imei":"6176a447a52b7c6cbc1e7663984c5a65","ip":"223.107.232.152","oaid":"","oaid_md5":"","os":"android","product":"sdb","type":"3"}'));
-        }
+//        for($i=0;$i<100;$i++){
+//            $redis3->lpush('sms_toutiao_message_queue',json_encode('{"aid":"","androidid":"","callback":"","channel":"sd","cid":"","csite":"","idfa":"","imei":"6176a404676a5fb1082267f89c211aa7","ip":"223.107.232.152","oaid":"","oaid_md5":"","os":"android","product":"sdb","type":"3"}'));
+//            $redis3->lpush('sms_toutiao_message_queue',json_encode('{"aid":"","androidid":"","callback":"","channel":"sd","cid":"","csite":"","idfa":"","imei":"6176a4cb82dc03384c4e1478a61281a9","ip":"223.107.232.152","oaid":"","oaid_md5":"","os":"android","product":"sdb","type":"3"}'));
+//            $redis3->lpush('sms_toutiao_message_queue',json_encode('{"aid":"","androidid":"","callback":"","channel":"sd","cid":"","csite":"","idfa":"","imei":"6176a447a52b7c6cbc1e7663984c5a65","ip":"223.107.232.152","oaid":"","oaid_md5":"","os":"android","product":"sdb","type":"3"}'));
+//        }
 
 //        $obj = json_decode($redis3->rpop('sms_toutiao_message_queue'),true);
 //        $obj = json_decode($obj,true );
 //        Log::log($obj['channel']);
 //        $output->writeln('success!!');
 
-
-
+        $list =  Db::table('fa_config')->where(['id'=>['>',17],'type'=>['=',1]])->select();
+        print_r( $list );
     }
     //加密
     public function en($str) {

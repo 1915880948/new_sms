@@ -48,7 +48,7 @@ class AutoSend extends Command
         $taskSendModel = new TaskSend();
         $linkShortModel = new LinkShort();
         $spModel = new Sp();
-        $list =  Db::table('fa_config')->where(['id'=>['>',17]])->select();
+        $list =  Db::table('fa_config')->where(['id'=>['>',17],'type'=>['=',1]])->select();
         $autoSendType = array_column($list,'name');
         $config = [];
         foreach ($list as  $item ){
