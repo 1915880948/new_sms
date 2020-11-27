@@ -53,7 +53,7 @@ class AutoSend extends Command
         $config = [];
         foreach ($list as  $item ){
             $config[$item['name']]        = $item;
-            $taskSendData[$item['name']]  =  $taskSendModel->where(['channel_from'=>['=',2],'bank_id'=>['=',$item['bank_id']],'remark'=>['=',$item['name']]])->order('task_id','desc')->limit(1)->find();
+            $taskSendData[$item['name']]  =  $taskSendModel->where(['channel_from'=>['=',2],'send_status'=>['send_status',1],'bank_id'=>['=',$item['bank_id']],'remark'=>['=',$item['name']]])->order('task_id','desc')->limit(1)->find();
             $linkShortData[$item['name']] = $linkShortModel->where('id', $taskSendData[$item['name']]['sm_task_id'])->find();
             $spInfo[$item['name']] = $spModel->where('id',$item['sp_info_id'])->find();
             $phoneEncodeStr[$item['name']] = '';
@@ -76,8 +76,8 @@ class AutoSend extends Command
             if( !in_array($index,$autoSendType )){
                 continue ;
             }
-            // 确定配置
-            if( $config[$index]['send_status'] == 2 || empty($taskSendData[$index])  || !($config[$index]['send_start_time']<$sendTime && $sendTime<$config[$index]['send_end_time']) ){
+            // 确定配置  $config[$index]['send_status'] == 2 ||
+            if(  empty($taskSendData[$index])  || !($config[$index]['send_start_time']<$sendTime && $sendTime<$config[$index]['send_end_time']) ){
                continue ;
             }
 
@@ -91,7 +91,7 @@ class AutoSend extends Command
                     $phoneEncodeStr[$index] .= $v.',';
                     $phoneEncodeStrNum[$index]++;
                     if( $phoneEncodeStrNum[$index] == 10000){  // 最多一万个
-                        Log::log('10000手机号个请求一次加解密');
+                        Log::log('10000手机号个请求一次加解密===>'.$index);
                         $this->dealEnPhone($taskSendData[$index],$linkShortData[$index],$config[$index],$spInfo[$index],$phoneEncodeStr[$index],$redis4,$bankBlack[$index]);
                         $phoneEncodeStrNum[$index] = 0;
                         $phoneEncodeStr[$index] ='';
