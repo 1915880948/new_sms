@@ -62,6 +62,7 @@ class Timely extends Backend
     public function add(){
         $model = new Config();
         $data = [
+            'type' => '1',
             'value' => '自动发送',
             'content' => '自动发送',
             'channel_id'=>'',
@@ -80,6 +81,7 @@ class Timely extends Backend
         $limit   = $this->request->get("limit");
         if ($this->request->isAjax()) {
             $myWhere['id'] = ['>',17];
+            $myWhere['type'] = ['=',1];
 
             $list = $model->where($myWhere)->order('id','desc')->limit($offset,$limit)->select();
             $total = $model->where($myWhere)->order('id','desc')->count();
