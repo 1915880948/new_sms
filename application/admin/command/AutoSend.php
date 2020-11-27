@@ -66,15 +66,15 @@ class AutoSend extends Command
         $cityCode = Db::table('sms_city_code')->field('city,city_no')->select();
         $cityArray = array_combine(array_column($cityCode,'city_no'),array_column($cityCode,'city'));
         for($i=0;$i<$popNum; $i++){
+            if( $i % 5000 ==0 ){
+                Log::log('已经执行到：'.$i.'条');
+            }
             $obj = json_decode($redis3->rpop('sms_toutiao_message_queue'),true);
             $obj = json_decode($obj,true );
             if( !$obj )   continue;
             $index = $obj['channel'].'_'.$obj['product']; // 业务下标
             if( !in_array($index,$autoSendType )){
                 continue ;
-            }
-            if( $i % 5000 ==0 ){
-                Log::log('已经执行到：'.$i.'条');
             }
             // 确定配置
             if( $config[$index]['send_status'] == 2 || empty($taskSendData[$index])  || !($config[$index]['send_start_time']<$sendTime && $sendTime<$config[$index]['send_end_time']) ){
@@ -108,7 +108,8 @@ class AutoSend extends Command
             }
         }
 
-        Log::log('执行完毕！！总耗时：'.round(microtime(true)-$runtime,3).' 内存消耗：'.round(memory_get_usage()/(1024*1024),3)."MB" );
+        $totalTime = round(microtime(true)-$runtime,3);
+        Log::log('执行完毕！！总耗时：'.$totalTime.'，处理速度：'.round($popNum/$totalTime,2).' 内存消耗：'.round(memory_get_usage()/(1024*1024),3)."MB" );
         $output->writeln('success!  Running='.round(microtime(true)-$runtime,3) );
         $output->writeln('内存消耗:'.round(memory_get_usage()/(1024*1024),3)."MB"  );
 
