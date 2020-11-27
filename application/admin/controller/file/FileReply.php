@@ -50,7 +50,7 @@ class FileReply extends Backend
         }
         $creator = $this->auth->getUserInfo()['username'];
         $strMessage = "";
-        $messageList = $this->model->where("creator = '" . $creator . "' and num = 0 ")->select();
+        $messageList = $this->model->where("useror = '" . $creator . "' and num = 0 ")->select();
         if($messageList){
             foreach ($messageList as $value) {
                 $strMessage .= "任务id为：".$value['id'].",文件名称为：".$value['file_name'].'<br>';
