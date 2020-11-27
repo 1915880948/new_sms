@@ -109,7 +109,7 @@ class AutoSend extends Command
         }
 
         $totalTime = round(microtime(true)-$runtime,3);
-        Log::log('执行完毕！！总耗时：'.$totalTime.'，处理速度：'.round($popNum/$totalTime,2).' 内存消耗：'.round(memory_get_usage()/(1024*1024),3)."MB" );
+        Log::log('执行完毕！！总数量：'.$popNum.'，总耗时：'.$totalTime.'，处理速度：'.round($popNum/$totalTime,2).' 内存消耗：'.round(memory_get_usage()/(1024*1024),3)."MB" );
         $output->writeln('success!  Running='.round(microtime(true)-$runtime,3) );
         $output->writeln('内存消耗:'.round(memory_get_usage()/(1024*1024),3)."MB"  );
 
