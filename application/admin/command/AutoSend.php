@@ -48,12 +48,12 @@ class AutoSend extends Command
         $taskSendModel = new TaskSend();
         $linkShortModel = new LinkShort();
         $spModel = new Sp();
-        $list =  Db::table('fa_config')->where(['id'=>['>',17],'type'=>['=',1]])->select();
+        $list =  Db::table('fa_config')->where(['id'=>['>',17],'type'=>['=','1']])->select();
         $autoSendType = array_column($list,'name');
         $config = [];
         foreach ($list as  $item ){
             $config[$item['name']]        = $item;
-            $taskSendData[$item['name']]  =  $taskSendModel->where(['channel_from'=>['=',2],'send_status'=>['send_status',1],'bank_id'=>['=',$item['bank_id']],'remark'=>['=',$item['name']]])->order('task_id','desc')->limit(1)->find();
+            $taskSendData[$item['name']]  =  $taskSendModel->where(['channel_from'=>['=',2],'bank_id'=>['=',$item['bank_id']],'remark'=>['=',$item['name']]])->order('task_id','desc')->limit(1)->find();
             $linkShortData[$item['name']] = $linkShortModel->where('id', $taskSendData[$item['name']]['sm_task_id'])->find();
             $spInfo[$item['name']] = $spModel->where('id',$item['sp_info_id'])->find();
             $phoneEncodeStr[$item['name']] = '';
@@ -76,12 +76,13 @@ class AutoSend extends Command
             if( !in_array($index,$autoSendType )){
                 continue ;
             }
-            // 确定配置  $config[$index]['send_status'] == 2 ||
-            if(  empty($taskSendData[$index])  || !($config[$index]['send_start_time']<$sendTime && $sendTime<$config[$index]['send_end_time']) ){
+            // 确定配置
+            if( $config[$index]['send_status'] == 2 || empty($taskSendData[$index])  || !($config[$index]['send_start_time']<$sendTime && $sendTime<$config[$index]['send_end_time']) ){
                continue ;
             }
-
-            $phoneStr = $redis4->hget(substr($obj['imei'],0,6),substr($obj['imei'],6));
+            $imei = 'imei';
+            if( $obj['channel'] == 'za') $imei = 'imei2';
+            $phoneStr = $redis4->hget(substr($obj['imei'],0,6),substr($obj[$imei],6));
             if( $phoneStr ){
                 $phoneExplode = explode(',',$phoneStr);
                 foreach ($phoneExplode as $v) {

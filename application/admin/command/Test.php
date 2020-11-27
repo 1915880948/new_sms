@@ -44,7 +44,7 @@ class Test extends Command
 //        Log::log($obj['channel']);
 //        $output->writeln('success!!');
 
-        $list =  Db::table('fa_config')->where(['id'=>['>',17],'type'=>['=',1]])->select();
+        $list =  Db::table('fa_config')->where(['id'=>['>',17],'type'=>['=','1']])->select();
         print_r( $list );
     }
     //加密
