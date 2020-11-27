@@ -21,5 +21,6 @@ return [
 
     'app\admin\command\ShortLinkAdd',
     'app\admin\command\AutoSend',
+    'app\admin\command\AutoReply',
 
 ];

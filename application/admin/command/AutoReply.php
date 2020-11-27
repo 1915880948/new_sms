@@ -25,7 +25,7 @@ class AutoReply extends Command
 
     protected function execute(Input $input, Output $output){
 
-        $config = Db::table('fa_config')->where('id',19)->find();
+        $config = Db::table('fa_config')->where('name','file_reply')->find();
         $names = explode("|",$config['value']);
         $count = count($names);
         //print_r( json_encode($config ));
