@@ -28,7 +28,7 @@ class ShortLinkAdd extends Command
 
     protected function execute(Input $input, Output $output){
         $linkShortModel =new LinkShort();
-        $list = Db::table('fa_config')->where(['id'=>['>',17]])->select();
+        $list = Db::table('fa_config')->where(['id'=>['>',17],'type'=>['=',1]])->select();
         foreach ($list  as  $config ){
 
             //print_r( json_encode($config ));
@@ -57,7 +57,7 @@ class ShortLinkAdd extends Command
                     'business_link' => $link['link'],
                     'transfer_link' => $transfer_link,
                     'short_link'    => $shortLinkResult['data'][0]['short_url'],
-                    'creator'       => 'lzc',
+                    'creator'       => $config['group'],
                     'create_time'   => date('Y-m-d H:i:s'),
                 ]);
                 if( !$result ){
