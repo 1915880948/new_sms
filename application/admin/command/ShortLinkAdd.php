@@ -28,6 +28,7 @@ class ShortLinkAdd extends Command
 
     protected function execute(Input $input, Output $output){
         $linkShortModel =new LinkShort();
+        $taskSendModel = new TaskSend();
         $list = Db::table('fa_config')->where(['id'=>['>',17],'type'=>['=',1]])->select();
         foreach ($list  as  $config ){
 
@@ -51,7 +52,7 @@ class ShortLinkAdd extends Command
                     $output->writeln('短链生成失败，请稍后重试..');
                     throw new \Exception('短链生成失败，请稍后重试..');
                 }
-                $result = $linkShortModel->save([
+                $result = $linkShortModel->isUpdate(false)->save([
                     'remark'        => 'ZD-'.date('Ymd').'-'.$config['title'].'-'.date("Hi",strtotime($config['send_start_time'])).'_'.date("Hi",strtotime($config['send_end_time'])),//ZD-202021105-M头条水滴展示-SSW-P-C1-0901_1001
                     'link_id'       => $link['id'],
                     'business_link' => $link['link'],
@@ -63,8 +64,8 @@ class ShortLinkAdd extends Command
                 if( !$result ){
                     throw new \Exception('短链添加失败..');
                 }
+                Log::log('$linkShortModel->id===='.$linkShortModel->id);
                 // 增加一条短信发送任务
-                $taskSendModel = new TaskSend();
                 //$maxID = $taskSendModel->field('task_id')->where('channel_from',2)->order('task_id','desc')->limit(1)->find();
                 //$result1 = $taskSendModel->isUpdate(true)->save(['status'=>5],['channel_from'=>2,'status'=>4]); // 发送完成
                 $result = $taskSendModel->isUpdate(false)->save([
@@ -74,7 +75,7 @@ class ShortLinkAdd extends Command
                     'bank' => $link['bank_name'],
                     'bank_id' => $link['bank_id'],
                     'business' => $link['business_name'],
-                    'business_id' => $link['business_name_id'],
+                    'business_id' => $link['business_id'],
                     'channel_id' => $link['channel_id'],
                     'data_id' => 0,
                     'send_time' => date('Y-m-d,H:i:s'),
@@ -96,11 +97,12 @@ class ShortLinkAdd extends Command
                 if( !$result ){
                     throw new \Exception('短信发送任务创建失败..');
                 }
+                Log::log('sm_task_id=>'.  $linkShortModel->id);
                 Db::commit();
             }catch (\Exception $e){
                 Db::rollback();
             }
-
+            sleep(1);
         }
 
         $output->writeln('success!');
