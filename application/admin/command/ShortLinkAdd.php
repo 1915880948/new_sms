@@ -25,7 +25,7 @@ class ShortLinkAdd extends Command
         $this->setName('shortlinkadd')
             ->setDescription('everyday add a record');
     }
-
+// 强制合并
     protected function execute(Input $input, Output $output){
         $linkShortModel =new LinkShort();
         $taskSendModel = new TaskSend();
