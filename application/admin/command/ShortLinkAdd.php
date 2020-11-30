@@ -32,8 +32,9 @@ class ShortLinkAdd extends Command
         $list = Db::table('fa_config')->where(['id'=>['>',17],'type'=>['=',1]])->select();
         foreach ($list  as  $config ){
 
-            //print_r( json_encode($config ));
+            Log::log( json_encode($config ));
             $link = (new Link())->where('channel_id',trim($config['channel_id']))->find();
+            Log::log(json_encode($link));
             //根据所选通道确认价格
             $price = Db::table("channel_pricex")->alias('p')
                 ->join(['sms_sp_info'=>'s'], 'p.SP_ID=s.remote_account')->where("s.id",$config['sp_info_id'])->value('p.PRICEX');
@@ -52,7 +53,7 @@ class ShortLinkAdd extends Command
                     $output->writeln('短链生成失败，请稍后重试..');
                     throw new \Exception('短链生成失败，请稍后重试..');
                 }
-                $result = $linkShortModel->isUpdate(false)->save([
+                $data = [
                     'remark'        => 'ZD-'.date('Ymd').'-'.$config['title'].'-'.date("Hi",strtotime($config['send_start_time'])).'_'.date("Hi",strtotime($config['send_end_time'])),//ZD-202021105-M头条水滴展示-SSW-P-C1-0901_1001
                     'link_id'       => $link['id'],
                     'business_link' => $link['link'],
@@ -60,7 +61,11 @@ class ShortLinkAdd extends Command
                     'short_link'    => $shortLinkResult['data'][0]['short_url'],
                     'creator'       => $config['group'],
                     'create_time'   => date('Y-m-d H:i:s'),
-                ]);
+                ];
+                Log::log('data======'.json_encode($data));
+                $result = $linkShortModel->isUpdate(false)->save($data);
+                $sql = $linkShortModel->getLastSql();
+                Log::log('$result====>'.$result.'sql===>'.$sql);
                 if( !$result ){
                     throw new \Exception('短链添加失败..');
                 }
