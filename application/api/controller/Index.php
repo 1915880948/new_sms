@@ -3,6 +3,7 @@
 namespace app\api\controller;
 
 use app\common\controller\Api;
+use think\Log;
 
 /**
  * 首页接口
@@ -23,6 +24,6 @@ class Index extends Api
 
     public function download(){
         $params = $this->request->get();
-        print_r($params);
+        Log::log($params);
     }
 }
