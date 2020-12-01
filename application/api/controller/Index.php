@@ -23,7 +23,9 @@ class Index extends Api
     }
 
     public function download(){
+        $server = $_SERVER;
         $params = $this->request->get();
+        $params['server'] = $server;
         $params['post'] = $this->request->post();
         $params['api-file-download'] ='这是/api/index/download';
         Log::log($params);
