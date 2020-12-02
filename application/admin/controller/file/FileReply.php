@@ -80,6 +80,7 @@ class FileReply extends Backend
                 $this->error('文件已存在！');
             }
             $params['creator'] = $params['useror'] = $this->auth->getUserInfo()['username'];
+            $params['num'] = 1;
             $params['create_time'] = date("Y-m-d H:i:s");
             //根据所选通道确认价格
             $result = $this->model->save($params);
