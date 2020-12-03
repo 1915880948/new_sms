@@ -13,10 +13,10 @@ class Index extends Frontend
 
     public function index()
     {
-        $redis = new \Redis();
-        $redis->connect('39.104.20.84', '6379');
+//        $redis = new \Redis();
+//        $redis->connect('39.104.20.84', '6379');
 //$auth = $redis->auth('');
-        print_r("Server is running: " . $redis->ping());
+//        print_r("Server is running: " . $redis->ping());
         phpinfo();
         exit;
         //$this->redirect('/admin.php/index/login');
