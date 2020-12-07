@@ -333,6 +333,11 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                $("#price").html(price);
             });
 
+            $("#plupload-files").data("upload-success", function(data, ret){
+                let file_json = JSON.parse(data.row.extparam);
+                $("input[name='file_name']").val(file_json.name);
+            });
+
             // 选择短信模板
             $(document).on("click", "#fachoose-sms", function () {
                 var that = this;
@@ -437,6 +442,12 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     }
                 });
                 return false;
+            });
+            $("#plupload-files").data("upload-success", function(data, ret){
+                //这里进行后续操作
+                console.log(data.row);
+                let file_json = JSON.parse(data.row.extparam);
+                $("input[name='file_name']").val(file_json.name);
             });
 
         },

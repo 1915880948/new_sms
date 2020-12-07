@@ -367,6 +367,12 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 });
                 return false;
             });
+            $("#plupload-files").data("upload-success", function(data, ret){
+                //这里进行后续操作
+                console.log(data.row);
+                let file_json = JSON.parse(data.row.extparam);
+                $("input[name='file_name']").val(file_json.name);
+            });
 
             Controller.api.bindevent();
         },
@@ -431,6 +437,12 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     }
                 });
                 return false;
+            });
+            $("#plupload-files").data("upload-success", function(data, ret){
+                //这里进行后续操作
+                console.log(data.row);
+                let file_json = JSON.parse(data.row.extparam);
+                $("input[name='file_name']").val(file_json.name);
             });
 
         },

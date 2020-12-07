@@ -4,6 +4,7 @@ namespace app\admin\controller\sms;
 
 use app\admin\model\basic\Sp;
 use app\common\controller\Backend;
+use app\common\model\Attachment;
 use Exception;
 use think\Db;
 use think\db\Query;
@@ -195,7 +196,10 @@ class TaskSend extends Backend
         //$linkShortModel = new \app\admin\model\sms\LinkShort();
         //$linkShort = $linkShortModel->get($row['sm_task_id']);
         $spList = $spModel->field('id,sp_no,sp_name,remote_account,price')->select();
-
+        $attachmentModel = new Attachment();
+        $file_name = $attachmentModel->where('url',$row['file_path'])->value('extparam');
+        $file_name = json_decode($file_name,true);
+        $row['file_name'] = $file_name['name'];
         $adminIds = $this->getDataLimitAdminIds();
         if (is_array($adminIds)) {
             if (!in_array($row[$this->dataLimitField], $adminIds)) {
