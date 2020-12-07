@@ -26,24 +26,25 @@ class TaskSend extends Backend
     protected $model = null;
     protected $domainList = [
                 '' =>'不使用动态短链',
-                "1" =>'u9t.cn',
-                "2" =>'x0e.cn',
+                //"1" =>'u9t.cn',
+                //"2" =>'x0e.cn',
                 //"3" =>> 'q9e.cn',
-                "4" =>'d0e.cn(傅晓妹)',
+                //"4" =>'d0e.cn(傅晓妹)',
                 //"5" =>'7d0.cn(杨刚)',
-                "6" =>'o8d.cn(黄福忠)',
-                "7" =>'0i4.cn(左浩然|马蓉蓉)',
-                "8" =>'q4f.cn(姜子文)',
-                "9" =>'g0c.cn(王古锋)',
-                //"10" =>'z0k.cn',
-                "11" => 'q0r.cn',
-                "12" => 'n0x.cn',
-                "13" => 'h0e.cn',
-                "14" => 'o4c.cn',
+                //"6" =>'o8d.cn(黄福忠)',
+                //"7" =>'0i4.cn(左浩然|马蓉蓉)',
+                //"8" =>'q4f.cn(姜子文)',
+                //"9" =>'g0c.cn(王古锋)',
+                "10" =>'z0k.cn',
+                //"11" => 'q0r.cn',
+                "12" => 'n0x.cn(游戏专用)',
+                "13" => 'h0e.cn(短信内容无http://)',
+                //"14" => 'o4c.cn',
                 "15" => '9oj.cn',
-                //"16" =>'5oj.cn',
-                //"17" =>'vo4.cn',
-                "18" =>'4a6.cn',
+                "16" =>'5oj.cn',
+                "17" =>'vo4.cn',
+                //"18" =>'4a6.cn',
+                "19" =>'j0q.cn',
     ];
     protected $statusArr = [
         1 => '待生成短链',
@@ -63,6 +64,8 @@ class TaskSend extends Backend
         15 => '超信任务添加手机号失败',
         16 => '超信任务提交失败',
         17 => '入队列完毕',
+        18 => '写入发送队列中',
+        19 => '通道连接异常',
     ];
     protected $pattern = '/http[s]?:\\/\\/[-.=%&\\?\\w\\/]+/';
     public function _initialize()
@@ -106,6 +109,16 @@ class TaskSend extends Backend
                 ->select();
 
             $list = collection($list)->toArray();
+            $spInfos = (new Sp())->getSpInfo('id, sp_no, sp_name, vendor_id, price', 0, '1');
+            foreach ($list as $k => &$v)
+            {
+                if (isset($spInfos[$v['sms_gate_id']])) {
+                    $v['sp_name'] = $spInfos[$v['sms_gate_id']]['sp_name'];
+                }else{
+                    $v['sp_name'] = '';
+                }
+            }
+            unset($v);
             $result = array("total" => $total, "rows" => $list);
 
             return json($result);
