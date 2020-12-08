@@ -5,7 +5,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             // 初始化表格参数配置
             Table.api.init({
                 extend: {
-                    index_url: 'sms/task_send/index' + location.search,
+                    index_url: 'sms/single/index' + location.search,
                     add_url: 'sms/task_send/add?link_from=1',
                     edit_url: 'sms/task_send/edit',
                     //del_url: 'sms/task_send/del',

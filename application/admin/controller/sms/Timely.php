@@ -29,23 +29,23 @@ class Timely extends Backend
         $this->request->filter(['strip_tags']);
         if ($this->request->isAjax()) {
             //如果发送的来源是Selectpage，则转发到Selectpage
-//            if( $this->request->get('channel_form') ){
-//                $myWhere['channel_from'] = $this->request->get('channel_form');
-//            }else{
-            // $myWhere['channel_from'] = 2;
-//            }
+            if( $this->request->get('channel_form') ){
+                $myWhere['channel_from'] = $this->request->get('channel_form');
+            }else{
+             $myWhere['channel_from'] = 2;
+            }
 
             if ($this->request->request('keyField')) {
                 return $this->selectpage();
             }
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
             $total = $this->model
-                ->where($where)//->where($myWhere)
+                ->where($where)->where($myWhere)
                 ->order($sort, $order)
                 ->count();
 
             $list = $this->model
-                ->where($where)//->where($myWhere)
+                ->where($where)->where($myWhere)
                 ->order($sort, $order)
                 ->limit($offset, $limit)
                 ->select();
