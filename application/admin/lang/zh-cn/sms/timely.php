@@ -38,11 +38,11 @@ return [
     'Creator'             => '创建者',
     'Status'              => '状态',
     'Schedule_percent'    => '当前状态进度百分比',
-    'Task_num'            => '任务原始总量',
+    'Task_num'            => '任务总量',
     'Total_num'           => '未过滤的任务总量',
-    'Total_send'          => '发送总量',
-    'Total_receive'       => '接收总量',
-    'Total_click'         => '点击总量',
+    'Total_send'          => '发送量',
+    'Total_receive'       => '接收量',
+    'Total_click'         => '点击量',
     'Sp_num'              => '通道成功量',
     'Failed_num'          => '失败量',
     'Retry_status'        => '1: 待重发 2：发送中 3：发送完成',
@@ -53,5 +53,6 @@ return [
     'Phone_path'          => '导入空号文件',
     'Finish_time'         => '完成时间',
     'Config'         => '配置',
+    'Sp_name'             => '通道名称',
 
 ];

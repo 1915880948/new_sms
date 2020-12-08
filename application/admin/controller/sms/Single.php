@@ -9,6 +9,7 @@
 namespace app\admin\controller\sms;
 
 
+use app\admin\model\basic\Sp;
 use app\common\controller\Backend;
 
 class Single extends Backend
@@ -45,6 +46,16 @@ class Single extends Backend
                 ->select();
 
             $list = collection($list)->toArray();
+            $spInfos = (new Sp())->getSpInfo('id, sp_no, sp_name, vendor_id, price', 0, '1');
+            foreach ($list as $k => &$v)
+            {
+                if (isset($spInfos[$v['sms_gate_id']])) {
+                    $v['sp_name'] = $spInfos[$v['sms_gate_id']]['sp_name'];
+                }else{
+                    $v['sp_name'] = '';
+                }
+            }
+            unset($v);
             $result = array("total" => $total, "rows" => $list);
 
             return json($result);

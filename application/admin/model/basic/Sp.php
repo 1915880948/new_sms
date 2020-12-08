@@ -27,7 +27,24 @@ class Sp extends Model
     protected $append = [
 
     ];
-    
+
+    public function getSpInfo($fields = '', $id = 0, $status = 1)
+    {
+        $where = " status in ({$status})";
+        if ($id) {
+            $where .= " and id=$id ";
+        }
+
+        $list = $this->field($fields)->where($where)->select();
+        $list = collection($list)->toArray();
+
+        $sps = [];
+        foreach ($list as $v) {
+            $sps[$v['id']] = $v;
+        }
+
+        return $sps;
+    }
 
     
 
