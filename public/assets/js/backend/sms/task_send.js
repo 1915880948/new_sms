@@ -465,7 +465,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             $("select[name='row[sms_gate_id]']").change(function () {
                 var sms_gate_id = this.value;
                 spList.forEach(function(item){
-                    if( item.id == sms_gate_id ){
+                    if( item.id == sms_gate_id ){ 
                         price = (item.price) ; return;
                     }
                 });
