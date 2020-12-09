@@ -5,12 +5,12 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             // 初始化表格参数配置
             Table.api.init({
                 extend: {
-                    index_url: 'sms/single/index' + location.search,
-                    add_url: 'sms/task_send/add?link_from=1',
+                    index_url: 'sms/given/index' + location.search,
+                    add_url: 'sms/task_send/add?channel_from=1&link_from=1',
                     edit_url: 'sms/task_send/edit',
                     //del_url: 'sms/task_send/del',
                     multi_url: 'sms/task_send/multi',
-                    filter_url: 'sms/single/index?is_filter=',
+                    filter_url: 'sms/given/index?is_filter=',
                     failed_url: 'task_send/failedDownload',
                     success_url: 'task_send/successDownload',
                     stop_url: 'sms/task_send/stop',

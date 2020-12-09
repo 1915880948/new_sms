@@ -131,6 +131,7 @@ class TaskSend extends Backend
     {
         $short_link_id = $this->request->get('ids');
         $link_from = $this->request->get('link_from');
+        $channel_from = $this->request->get('channel_from'); // 0: 1:特定 2:实时
         $spModel = new Sp();
         $linkShortModel = new \app\admin\model\sms\LinkShort();
         $linkShort = $linkShortModel->get($short_link_id);
@@ -179,6 +180,7 @@ class TaskSend extends Backend
             $this->success('任务创建成功！！');
         }
         $this->assign('link_from',$link_from);
+        $this->assign('channel_from',$channel_from);
         $this->assign('domainList',$this->domainList);
         $this->assign('spList',$spList);
         $this->assignconfig('spList',$spList);

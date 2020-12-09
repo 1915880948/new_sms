@@ -2,8 +2,8 @@
 /**
  * Created by : PhpStorm
  * User: daisy
- * Date: 2020/11/16
- * Time: 10:21
+ * Date: 2020/12/9
+ * Time: 14:20
  */
 
 namespace app\admin\controller\sms;
@@ -12,7 +12,7 @@ namespace app\admin\controller\sms;
 use app\admin\model\basic\Sp;
 use app\common\controller\Backend;
 
-class Single extends Backend
+class Given extends Backend
 {
     protected $model = null;
     public function _initialize()
@@ -22,7 +22,7 @@ class Single extends Backend
 
     }
 
-    // 单点短信
+    // 特定短信
     public function index()
     {
         //设置过滤方法
@@ -30,7 +30,8 @@ class Single extends Backend
         if ($this->request->isAjax()) {
             $params = $this->request->get();
             $myWhere['dynamic_shortlink'] = ['>',0];
-            $myWhere['status'] = ['<>',7];
+            $myWhere['status'] = [['<>',7],['<>',8],'and'];
+            $myWhere['channel_from'] = ['=',1];
             if ($this->request->request('keyField')) {
                 return $this->selectpage();
             }
