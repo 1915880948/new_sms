@@ -553,12 +553,9 @@ class TaskSend extends Backend
                 $list = Db::table($table)->distinct(true)->field('phone_sec,phone')->where(['shortlink_id' => ['in', $shortIds],['phone'=>['>',0]]])->select();
                 foreach ($list as $user) {
                     $gwcontent = substr($user['phone'],0,7);
-                    $carrierContent = $carrier[$gwcontent];
-                    $provinceContent = $province[$gwcontent];
-                    $cityContent = $city[$gwcontent];
-                    $carrierContent = $carrierContent ? $carrierContent : 4;
-                    $provinceContent = $provinceContent ? $provinceContent : '00';
-                    $cityContent = $cityContent ? $cityContent : '000';
+                    $carrierContent = isset($carrier[$gwcontent]) ? $carrier[$gwcontent] : 4;
+                    $provinceContent = isset($province[$gwcontent]) ? $province[$gwcontent] : '00';
+                    $cityContent = isset($city[$gwcontent]) ? $city[$gwcontent] : '000';
                     $enContent = $carrierContent.$provinceContent.$cityContent.'00'.$user['phone_sec'];
                     echo $enContent . "\n";
                 }
