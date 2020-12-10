@@ -501,6 +501,70 @@ class TaskSend extends Backend
 
     }
 
+    // 点击下载
+    public function clickDownload($ids){
+        if(!$ids){
+            $this->error('请选择下载项');
+        }
+        set_time_limit(0);
+        ini_set('memory_limit', '512M');
+        $ids = explode(',', $ids);
+        $minTime = $this->model->where(['task_id' => ['in', $ids]])->order('send_time','desc')->limit(1)->value('send_time');
+        $shortIds = $this->model->where(['task_id' => ['in', $ids]])->column('sm_task_id');
+        if (empty($shortIds)) {
+            $this->error('下载任务不存在...');
+        }
+        $starttime = strtotime($minTime);//要用到的是9月    所以从8月开始
+        $starttime = strtotime(date('Y-m-01',$starttime));
+        $endDay = date("Y-m-01");
+        $endtime = strtotime("$endDay +1 month");
+        while( $starttime < $endtime){
+            $month_arr[] = date('Ym',$starttime); // 取得递增月;
+            $starttime = strtotime('+1 month', $starttime);
+        }
+        $extract_file = 'send_click.txt';
+        header("Content-Type: application/octet-stream");
+        if (preg_match("/MSIE/", $_SERVER['HTTP_USER_AGENT']) ) {
+            header('Content-Disposition:  attachment; filename="' . $extract_file . '"');
+        } elseif (preg_match("/Firefox/", $_SERVER['HTTP_USER_AGENT'])) {
+            header('Content-Disposition: attachment; filename*="' .  $extract_file . '"');
+        } else {
+            header('Content-Disposition: attachment; filename="' .  $extract_file . '"');
+        }
+
+        $city = $province = $carrier = [];
+        $gw_mobile = fopen($_SERVER['DOCUMENT_ROOT']."/gw_mobilearea.txt", 'r');
+        $gw_phone = fgets($gw_mobile);
+        while ($gw_phone !== false) {
+            $gw_phone = trim($gw_phone);
+            $gws = explode("|",$gw_phone);
+            $city[$gws[0]] = $gws[1];
+            $province[$gws[0]] = $gws[2];
+            $carrier[$gws[0]] = $gws[3];
+
+            $gw_phone = fgets($gw_mobile);
+        }
+
+        fclose($gw_mobile);
+        foreach ($month_arr as $month) {
+            $table = 'sms_send_data.sms_click_log_' . $month;
+            $count = Db::table($table)->where(['shortlink_id' => ['in', $shortIds],'phone'=>['>',0]])->count();
+            if ($count > 0) {
+                $list = Db::table($table)->distinct(true)->field('phone_sec,phone')->where(['shortlink_id' => ['in', $shortIds],['phone'=>['>',0]]])->select();
+                foreach ($list as $user) {
+                    $gwcontent = substr($user['phone'],0,7);
+                    $carrierContent = $carrier[$gwcontent];
+                    $provinceContent = $province[$gwcontent];
+                    $cityContent = $city[$gwcontent];
+                    $carrierContent = $carrierContent ? $carrierContent : 4;
+                    $provinceContent = $provinceContent ? $provinceContent : '00';
+                    $cityContent = $cityContent ? $cityContent : '000';
+                    $enContent = $carrierContent.$provinceContent.$cityContent.'00'.$user['phone_sec'];
+                    echo $enContent . "\n";
+                }
+            }
+        }
+    }
     // 一键复发
     public function relapse($ids){
         $row = $this->model->get($ids);
