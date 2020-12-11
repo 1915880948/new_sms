@@ -11,6 +11,7 @@ use think\db\Query;
 use think\Env;
 use think\exception\PDOException;
 use think\exception\ValidateException;
+use think\Log;
 
 /**
  * 短信发送任务管理
@@ -503,6 +504,7 @@ class TaskSend extends Backend
 
     // 点击下载
     public function clickDownload($ids){
+        Log::log('点击下载');
         if(!$ids){
             $this->error('请选择下载项');
         }
@@ -531,7 +533,7 @@ class TaskSend extends Backend
         } else {
             header('Content-Disposition: attachment; filename="' .  $extract_file . '"');
         }
-
+        Log::log('1');
         $city = $province = $carrier = [];
         $gw_mobile = fopen($_SERVER['DOCUMENT_ROOT']."/gw_mobilearea.txt", 'r');
         $gw_phone = fgets($gw_mobile);
@@ -541,17 +543,19 @@ class TaskSend extends Backend
             $city[$gws[0]] = $gws[1];
             $province[$gws[0]] = $gws[2];
             $carrier[$gws[0]] = $gws[3];
-
+            Log::log('1.1----');
             $gw_phone = fgets($gw_mobile);
         }
-
+        Log::log('2');
         fclose($gw_mobile);
         foreach ($month_arr as $month) {
+            Log::log('3');
             $table = 'sms_send_data.sms_click_log_' . $month;
             $count = Db::table($table)->where(['shortlink_id' => ['in', $shortIds],'phone'=>['>',0]])->count();
             if ($count > 0) {
                 $list = Db::table($table)->distinct(true)->field('phone_sec,phone')->where(['shortlink_id' => ['in', $shortIds],['phone'=>['>',0]]])->select();
                 foreach ($list as $user) {
+                    Log::log('4');
                     $gwcontent = substr($user['phone'],0,7);
                     $carrierContent = isset($carrier[$gwcontent]) ? $carrier[$gwcontent] : 4;
                     $provinceContent = isset($province[$gwcontent]) ? $province[$gwcontent] : '00';
