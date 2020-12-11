@@ -127,6 +127,7 @@ class AddBatch extends Backend
                 //短信文案
                 $sendTasks['sms_content'] = trim($currentSheet->getCellByColumnAndRow(7, $currentRow)->getValue());
                 $sendTime = trim($currentSheet->getCellByColumnAndRow(8, $currentRow)->getValue());
+                Log::log($sendTime);
                 $sendTasks['send_time'] = gmdate('Y-m-d H:i',intval(($sendTime - 25569) * 3600 * 24));
                 if ($sendTime == "=NOW()"){
                     $sendTasks['send_time'] = date('Y-m-d H:i');
