@@ -555,9 +555,9 @@ class TaskSend extends Backend
             Log::log($count1);
             $count3 = Db::table($table)->where(['phone'=>['>','0']])->select(false);
             Log::log($count3);
-            $count = Db::table($table)->where(['shortlink_id' =>$shortIds])->select(false);
+            $count = Db::table($table)->where(['shortlink_id' =>json_encode($shortIds)])->select(false);
             Log::log($count);
-            $count2 = Db::table($table)->where(['shortlink_id' =>$shortIds])->where(['phone','>','0'])->select(false);
+            $count2 = Db::table($table)->where(['shortlink_id' =>json_encode($shortIds)])->where(['phone'=>['>','0']])->select(false);
             Log::log($count2);
             if ($count > 0) {
                 $list = Db::table($table)->distinct(true)->field('phone_sec,phone')->where(['shortlink_id' => ['in', $shortIds]])->where([['phone'=>['>',0]]])->select();
