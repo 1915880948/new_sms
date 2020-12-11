@@ -513,7 +513,6 @@ class TaskSend extends Backend
         $ids = explode(',', $ids);
         $minTime = $this->model->where(['task_id' => ['in', $ids]])->order('send_time','desc')->limit(1)->value('send_time');
         $shortIds = $this->model->where(['task_id' => ['in', $ids]])->column('sm_task_id');
-        Log::log(json_encode($shortIds));
         if (empty($shortIds)) {
             $this->error('下载任务不存在...');
         }
@@ -534,7 +533,6 @@ class TaskSend extends Backend
         } else {
             header('Content-Disposition: attachment; filename="' .  $extract_file . '"');
         }
-        Log::log('1');
         $city = $province = $carrier = [];
         $gw_mobile = fopen($_SERVER['DOCUMENT_ROOT']."/gw_mobilearea.txt", 'r');
         $gw_phone = fgets($gw_mobile);
@@ -544,18 +542,18 @@ class TaskSend extends Backend
             $city[$gws[0]] = $gws[1];
             $province[$gws[0]] = $gws[2];
             $carrier[$gws[0]] = $gws[3];
-            Log::log('1.1----');
             $gw_phone = fgets($gw_mobile);
         }
         Log::log('2');
         fclose($gw_mobile);
+        Log::log(json_encode($shortIds));
         foreach ($month_arr as $month) {
             Log::log('3');
             $table = 'sms_send_data.sms_click_log_' . $month;
-            $count = Db::table($table)->where(['shortlink_id' => ['in', $shortIds],'phone'=>['>',0]])->count(false);
+            $count = Db::table($table)->where(['shortlink_id' => ['in', $shortIds]])->where(['phone'=>['>',0]])->count(false);
             Log::log($count);
             if ($count > 0) {
-                $list = Db::table($table)->distinct(true)->field('phone_sec,phone')->where(['shortlink_id' => ['in', $shortIds],['phone'=>['>',0]]])->select();
+                $list = Db::table($table)->distinct(true)->field('phone_sec,phone')->where(['shortlink_id' => ['in', $shortIds]])->where([['phone'=>['>',0]]])->select();
                 foreach ($list as $user) {
                     Log::log('4');
                     $gwcontent = substr($user['phone'],0,7);
