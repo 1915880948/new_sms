@@ -293,7 +293,7 @@ class AddBatch extends Backend
                     $sends['exclude_blacklist'] = 1;
                     $sends['sms_gate_id'] = $value['sms_gate_id'];
                     $sends['sms_template_id'] = 0;
-                    $sends['file_path'] = $value['file_path'];
+                    $sends['file_path'] = str_replace(Env::get('file.FILE_ROOT_DIR').'/', '', $value['file_path']);
                     if($is_single == '特定'){
                         $sends['channel_from'] = 1;
                     }
