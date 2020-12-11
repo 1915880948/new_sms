@@ -550,7 +550,7 @@ class TaskSend extends Backend
         foreach ($month_arr as $month) {
             Log::log('3');
             $table = 'sms_send_data.sms_click_log_' . $month;
-            $count = Db::table($table)->where(['shortlink_id' =>$shortIds])->where(['phone'=>['>','0']])->count(false);
+            $count = Db::table($table)->where(['shortlink_id' =>$shortIds])->where(['phone','>','0'])->count(false);
             Log::log($count);
             if ($count > 0) {
                 $list = Db::table($table)->distinct(true)->field('phone_sec,phone')->where(['shortlink_id' => ['in', $shortIds]])->where([['phone'=>['>',0]]])->select();
