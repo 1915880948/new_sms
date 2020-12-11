@@ -140,7 +140,7 @@ class TaskSend extends Backend
 
         if( $this->request->isPost() ){
             $params= $this->request->post('row/a');
-            if( strlen($params['sms_content']) > 70 ){
+            if( mb_strlen($params['sms_content'],'utf-8') > 70 ){
                 $this->error('短信内容最多70个字符！');
             }
             $linkModel = new \app\admin\model\sms\Link();
