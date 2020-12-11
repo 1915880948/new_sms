@@ -544,25 +544,13 @@ class TaskSend extends Backend
             $carrier[$gws[0]] = $gws[3];
             $gw_phone = fgets($gw_mobile);
         }
-        Log::log('2');
         fclose($gw_mobile);
-        Log::log(json_encode($shortIds));
-        Log::log(json_encode($month_arr));
         foreach ($month_arr as $month) {
-            Log::log('3');
             $table = 'sms_send_data.sms_click_log_' . $month;
-            $count1 = Db::table($table)->where(['phone','>','0'])->select(false);
-            Log::log($count1);
-            $count3 = Db::table($table)->where(['phone'=>['>','0']])->select(false);
-            Log::log($count3);
-            $count = Db::table($table)->where(['shortlink_id' =>json_encode($shortIds)])->select(false);
-            Log::log($count);
-            $count2 = Db::table($table)->where(['shortlink_id' =>json_encode($shortIds)])->where(['phone'=>['>','0']])->select(false);
-            Log::log($count2);
+            $count = Db::table($table)->where(['shortlink_id' =>json_encode($shortIds)])->where(['phone'=>['>',0]])->count();
             if ($count > 0) {
-                $list = Db::table($table)->distinct(true)->field('phone_sec,phone')->where(['shortlink_id' => ['in', $shortIds]])->where([['phone'=>['>',0]]])->select();
+                $list = Db::table($table)->distinct(true)->field('phone_sec,phone')->where(['shortlink_id' => json_encode($shortIds)])->where([['phone'=>['>',0]]])->select();
                 foreach ($list as $user) {
-                    Log::log('4');
                     $gwcontent = substr($user['phone'],0,7);
                     $carrierContent = isset($carrier[$gwcontent]) ? $carrier[$gwcontent] : 4;
                     $provinceContent = isset($province[$gwcontent]) ? $province[$gwcontent] : '00';
