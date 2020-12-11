@@ -551,15 +551,13 @@ class TaskSend extends Backend
         foreach ($month_arr as $month) {
             Log::log('3');
             $table = 'sms_send_data.sms_click_log_' . $month;
-            $count4 = Db::table($table)->select(false);
-            Log::log($count4);
-            $count1 = Db::table($table)->where(['phone','>','0'])->count(false);
+            $count1 = Db::table($table)->where(['phone','>','0'])->select(false);
             Log::log($count1);
-            $count3 = Db::table($table)->where(['phone'=>['>','0']])->count(false);
+            $count3 = Db::table($table)->where(['phone'=>['>','0']])->select(false);
             Log::log($count3);
-            $count = Db::table($table)->where(['shortlink_id' =>$shortIds])->count(false);
+            $count = Db::table($table)->where(['shortlink_id' =>$shortIds])->select(false);
             Log::log($count);
-            $count2 = Db::table($table)->where(['shortlink_id' =>$shortIds])->where(['phone','>','0'])->count(false);
+            $count2 = Db::table($table)->where(['shortlink_id' =>$shortIds])->where(['phone','>','0'])->select(false);
             Log::log($count2);
             if ($count > 0) {
                 $list = Db::table($table)->distinct(true)->field('phone_sec,phone')->where(['shortlink_id' => ['in', $shortIds]])->where([['phone'=>['>',0]]])->select();
