@@ -547,9 +547,12 @@ class TaskSend extends Backend
         Log::log('2');
         fclose($gw_mobile);
         Log::log(json_encode($shortIds));
+        Log::log(json_encode($month_arr));
         foreach ($month_arr as $month) {
             Log::log('3');
             $table = 'sms_send_data.sms_click_log_' . $month;
+            $count4 = Db::table($table)->select(false);
+            Log::log($count4);
             $count1 = Db::table($table)->where(['phone','>','0'])->count(false);
             Log::log($count1);
             $count3 = Db::table($table)->where(['phone'=>['>','0']])->count(false);
