@@ -513,6 +513,7 @@ class TaskSend extends Backend
         $ids = explode(',', $ids);
         $minTime = $this->model->where(['task_id' => ['in', $ids]])->order('send_time','desc')->limit(1)->value('send_time');
         $shortIds = $this->model->where(['task_id' => ['in', $ids]])->column('sm_task_id');
+        Log::log(json_encode($shortIds));
         if (empty($shortIds)) {
             $this->error('下载任务不存在...');
         }
@@ -551,7 +552,8 @@ class TaskSend extends Backend
         foreach ($month_arr as $month) {
             Log::log('3');
             $table = 'sms_send_data.sms_click_log_' . $month;
-            $count = Db::table($table)->where(['shortlink_id' => ['in', $shortIds],'phone'=>['>',0]])->count();
+            $count = Db::table($table)->where(['shortlink_id' => ['in', $shortIds],'phone'=>['>',0]])->count(false);
+            Log::log($count);
             if ($count > 0) {
                 $list = Db::table($table)->distinct(true)->field('phone_sec,phone')->where(['shortlink_id' => ['in', $shortIds],['phone'=>['>',0]]])->select();
                 foreach ($list as $user) {
