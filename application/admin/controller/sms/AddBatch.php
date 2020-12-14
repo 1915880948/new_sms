@@ -127,9 +127,10 @@ class AddBatch extends Backend
                 //短信文案
                 $sendTasks['sms_content'] = trim($currentSheet->getCellByColumnAndRow(7, $currentRow)->getValue());
                 $sendTime = trim($currentSheet->getCellByColumnAndRow(8, $currentRow)->getValue());
-                $sendTasks['send_time'] = gmdate('Y-m-d H:i',intval(($sendTime - 25569) * 3600 * 24));
                 if ($sendTime == "=NOW()"){
                     $sendTasks['send_time'] = date('Y-m-d H:i');
+                }else{
+                    $sendTasks['send_time'] = gmdate('Y-m-d H:i',intval(($sendTime - 25569) * 3600 * 24));
                 }
                 $sms_gate_id = trim($currentSheet->getCellByColumnAndRow(9, $currentRow)->getValue());
                 $smsGates = explode('-',$sms_gate_id);
@@ -161,8 +162,8 @@ class AddBatch extends Backend
                     $linkShortLastID = $linkShortModel->max('id');
                     $nextId = $linkShortLastID + 1;
                     $transfer_link = 'http://' . $domain . '/link.php?id=' . $nextId;
-                    //$apiUrl = "http://".Env::get('sms_short.host')."/short.php?key=68598736&dm=" . $domain_short . '&url=' . rawurlencode($transfer_link);
-                    $apiUrl = "http://".Env::get('sms_short.host')."/short.php?key=68598741&dm=" . $domain_short . '&url=' . rawurlencode($transfer_link);
+                    $apiUrl = "http://".Env::get('sms_short.host')."/short.php?key=68598736&dm=" . $domain_short . '&url=' . rawurlencode($transfer_link);
+                    //$apiUrl = "http://".Env::get('sms_short.host')."/short.php?key=68598741&dm=" . $domain_short . '&url=' . rawurlencode($transfer_link);
                     //$apiUrl = 'http://crm.test.com/short.php?key=68598741&dm=' . $domain_short . '&url=' . rawurlencode($transfer_link);
                     $shortLinkResult = httpRequest($apiUrl, 'GET');
                     $shortLinkResult = json_decode($shortLinkResult, true);
@@ -292,7 +293,7 @@ class AddBatch extends Backend
                     $sends['exclude_blacklist'] = 1;
                     $sends['sms_gate_id'] = $value['sms_gate_id'];
                     $sends['sms_template_id'] = 0;
-                    $sends['file_path'] = $value['file_path'];
+                    $sends['file_path'] = str_replace(Env::get('file.FILE_ROOT_DIR').'/', '', $value['file_path']);
                     if($is_single == '特定'){
                         $sends['channel_from'] = 1;
                     }
