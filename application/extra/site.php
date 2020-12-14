@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'name' => '数鸣数据--短信平台',
+  'name' => '信天翁--短信平台',
   'beian' => '',
   'cdnurl' => '',
   'version' => '1.0.1',
