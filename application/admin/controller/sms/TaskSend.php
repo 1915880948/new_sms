@@ -158,9 +158,11 @@ class TaskSend extends Backend
             $params['company'] = $link['company_name'];
             $params['bank'] = $link['bank_name'];
             $params['business'] = $link['business_name'];
+            $params['channel_id'] = $link['channel_id'];
             if( $params['link_from'] == 1 && !$params['file_path']){ // 0:未知 1:内部 2:外部
                 $this->error('发送文件必须上传！');
             }
+            $params['file_path'] = trim($params['file_path'],Env::get('file.FILE_ROOT_DIR'));
             // 设置短信类型及初始状态
             switch ($params['channel_from'] ){
                 case 0: $params['status'] = 3;break;
@@ -205,7 +207,7 @@ class TaskSend extends Backend
         //$linkShort = $linkShortModel->get($row['sm_task_id']);
         $spList = $spModel->field('id,sp_no,sp_name,remote_account,price')->select();
         $attachmentModel = new Attachment();
-        $file_name = $attachmentModel->where('url',$row['file_path'])->value('extparam');
+        $file_name = $attachmentModel->where('url',Env::get('file.FILE_ROOT_DIR').$row['file_path'])->value('extparam');
         $file_name = json_decode($file_name,true);
         $row['file_name'] = $file_name['name'];
         $adminIds = $this->getDataLimitAdminIds();
@@ -222,11 +224,10 @@ class TaskSend extends Backend
             if ($params) {
                 $params = $this->preExcludeFields($params);
             }
-            if( $params['link_from'] == 1){ // 0:未知 1:内部 2:外部
-                if( !$params['file_path'] ){
-                    $this->error('发送文件必须上传！');
-                }
+            if( $params['link_from'] == 1 &&  !$params['file_path']){ // 0:未知 1:内部 2:外部
+                $this->error('发送文件必须上传！');
             }
+            $params['file_path'] = trim($params['file_path'],Env::get('file.FILE_ROOT_DIR'));
             $sp = $spModel->get($params['sms_gate_id']);
             if( !$sp ){
                 $this->error('通道不存在！！');

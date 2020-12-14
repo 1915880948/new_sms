@@ -44,8 +44,11 @@ class Test extends Command
 //        Log::log($obj['channel']);
 //        $output->writeln('success!!');
 
-        $list =  Db::table('fa_config')->where(['id'=>['>',17],'type'=>['=','1']])->select();
-        print_r( $list );
+//        $list =  Db::table('fa_config')->where(['id'=>['>',17],'type'=>['=','1']])->select();
+//        print_r( $list );
+
+        $str = '';
+        print_r( trim($str,'/shuming/'));
     }
     //加密
     public function en($str) {
