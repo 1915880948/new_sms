@@ -304,6 +304,7 @@ class AddBatch extends Backend
                     $sends['company'] = $basecomList['company_name'];
                     $sends['bank'] = $basecomList['bank_name'];
                     $sends['business'] = $basecomList['business_name'];
+                    $sends['channel_id'] = $basecomList['channel_id'];
                     //根据所选通道确认价格
                     $sends['price'] = $price = Db::table("channel_pricex")->alias('p')
                         ->join(['sms_sp_info'=>'s'], 'p.SP_ID=s.remote_account')->where("s.id",$sends['sms_gate_id'])->value('p.PRICEX');
