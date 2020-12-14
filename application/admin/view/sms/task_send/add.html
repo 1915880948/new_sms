@@ -32,14 +32,12 @@
         </div>
     </div>
     {/if}
-    {if $channel_from == 1}
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Channel_from')}:</label>
         <div class="col-xs-12 col-sm-8">
-            {:build_radios('row[channel_from]',['0'=>'未知','1'=>'动态短信','2'=>'实时短信'],$channel_from)}
+            {:build_radios('row[channel_from]',['0'=>'常规','1'=>'特定','3'=>'单点','4'=>'外部'],$channel_from)}
         </div>
     </div>
-    {/if}
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Title')}:</label>
         <div class="col-xs-12 col-sm-8">

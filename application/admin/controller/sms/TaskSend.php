@@ -89,8 +89,7 @@ class TaskSend extends Backend
         $this->request->filter(['strip_tags']);
         if ($this->request->isAjax()) {
             $params = $this->request->get();
-            $myWhere['dynamic_shortlink'] = 0;
-            $myWhere['status'] = [['<>',7],['<>',8],'and'];
+            $myWhere['channel_from'] = 0;
             if ($this->request->request('keyField')) {
                 return $this->selectpage();
             }
@@ -132,7 +131,7 @@ class TaskSend extends Backend
     {
         $short_link_id = $this->request->get('ids');
         $link_from = $this->request->get('link_from');
-        $channel_from = $this->request->get('channel_from'); // 0: 1:特定 2:实时
+        $channel_from = (int)$this->request->get('channel_from'); // 0常规，1特定，2实时，3单点，4外部
         $spModel = new Sp();
         $linkShortModel = new \app\admin\model\sms\LinkShort();
         $linkShort = $linkShortModel->get($short_link_id);
@@ -159,12 +158,18 @@ class TaskSend extends Backend
             $params['company'] = $link['company_name'];
             $params['bank'] = $link['bank_name'];
             $params['business'] = $link['business_name'];
-            if( $params['link_from'] == 1){ // 0:未知 1:内部 2:外部
-                if( !$params['file_path'] ){
-                    $this->error('发送文件必须上传！');
-                }
-
+            if( $params['link_from'] == 1 && !$params['file_path']){ // 0:未知 1:内部 2:外部
+                $this->error('发送文件必须上传！');
             }
+            // 设置短信类型及初始状态
+            switch ($params['channel_from'] ){
+                case 0: $params['status'] = 3;break;
+                case 1: $params['status'] = 1;break;
+                case 2: $params['status'] = 5;break;
+                case 3: $params['status'] = 1;break;
+                case 4: $params['status'] = 8;break;
+            }
+
             $params['sms_content'] = preg_replace($this->pattern, $params['shortlink'], $params['sms_content']);
             $params['sms_content'] = trim($params['sms_content']);
             $params['creator'] = $this->auth->getUserInfo()['username'];
