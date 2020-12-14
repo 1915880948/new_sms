@@ -170,24 +170,38 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     {field: 'operate', title: __('Operate'), table: $("#short"), events: Table.api.events.operate,
                         buttons: [{
                             name: 'click',
-                            //text: '发送短信',
-                            title: '发送短信',
+                            title: '常规短信',
+                            extend: 'data-toggle="tooltip"',
+                            icon: 'fa fa-paper-plane',
+                            classname: 'btn btn-primary btn-xs btn-click',
+                            click:function(data,row){
+                                Fast.api.open('sms/task_send/add?link_from=1&channel_from=0&ids='+row.id);
+                            },
+                        },{
+                            name: 'click',
+                            title: '特定短信',
                             extend: 'data-toggle="tooltip"',
                             icon: 'fa fa-paper-plane',
                             classname: 'btn btn-info btn-xs btn-click',
                             click:function(data,row){
-                                console.log(row);
-                                //Layer.alert('暂不支持此处发送短信。。');
-                                //location.href = 'sms/task_send/add?link_form=1&ref=addtabs';
-                                Fast.api.open('sms/task_send/add?link_from=1&ids='+row.id);
+                                Fast.api.open('sms/task_send/add?link_from=1&channel_from=1&ids='+row.id);
                             },
                         },{
-                            title: '外部发送',
+                            name: 'click',
+                            title: '单点短信',
+                            extend: 'data-toggle="tooltip"',
+                            icon: 'fa fa-paper-plane',
+                            classname: 'btn btn-success btn-xs btn-click',
+                            click:function(data,row){
+                                Fast.api.open('sms/task_send/add?link_from=1&channel_from=3&ids='+row.id);
+                            },
+                        },{
+                            title: '外部短信',
                             extend: 'data-toggle="tooltip"',
                             icon: 'fa fa-paper-plane',
                             classname: 'btn btn-danger btn-xs btn-click',
                             click:function(data,row){
-                                Fast.api.open('sms/task_send/add?link_from=2&ids='+row.id);
+                                Fast.api.open('sms/task_send/add?link_from=2&channel_from=4&ids='+row.id);
                             },
                         }],
                         formatter: Table.api.formatter.operate

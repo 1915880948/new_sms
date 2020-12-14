@@ -29,9 +29,7 @@ class Given extends Backend
         $this->request->filter(['strip_tags']);
         if ($this->request->isAjax()) {
             $params = $this->request->get();
-            $myWhere['dynamic_shortlink'] = ['>',0];
-            $myWhere['status'] = [['<>',7],['<>',8],'and'];
-            $myWhere['channel_from'] = ['=',1];
+            $myWhere['channel_from'] = 1;
             if ($this->request->request('keyField')) {
                 return $this->selectpage();
             }

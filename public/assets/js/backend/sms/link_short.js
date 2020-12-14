@@ -62,18 +62,31 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate,
                             buttons: [{
                                 name: 'detail',
-                                //text: '发送短信',
-                                title: '发送短信',
+                                title: '常规短信',
+                                extend: 'data-toggle="tooltip"',
+                                icon: 'fa fa-paper-plane',
+                                classname: 'btn btn-primary btn-xs btn-detail btn-dialog',
+                                url: 'sms/task_send/add?link_from=1&channel_from=0'
+                            },{
+                                name: 'detail',
+                                title: '特定短信',
                                 extend: 'data-toggle="tooltip"',
                                 icon: 'fa fa-paper-plane',
                                 classname: 'btn btn-info btn-xs btn-detail btn-dialog',
-                                url: 'sms/task_send/add?link_from=1'
+                                url: 'sms/task_send/add?link_from=1&channel_from=1'
+                            },{
+                                name: 'detail',
+                                title: '单点短信',
+                                extend: 'data-toggle="tooltip"',
+                                icon: 'fa fa-paper-plane',
+                                classname: 'btn btn-success btn-xs btn-detail btn-dialog',
+                                url: 'sms/task_send/add?link_from=1&channel_from=3'
                             },{
                                 title: '外部发送',
                                 extend: 'data-toggle="tooltip"',
                                 icon: 'fa fa-paper-plane',
                                 classname: 'btn btn-danger btn-xs btn-detail btn-dialog',
-                                url: 'sms/task_send/add?link_from=2'
+                                url: 'sms/task_send/add?link_from=2&channel_from=4'
                             }],
                             formatter: Table.api.formatter.operate
                         }

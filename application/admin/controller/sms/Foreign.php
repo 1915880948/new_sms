@@ -28,7 +28,8 @@ class Foreign extends Backend
         //设置过滤方法
         $this->request->filter(['strip_tags']);
         if ($this->request->isAjax()) {
-            $myWhere['link_from'] = 2;
+            $myWhere['channel_from'] = 4;
+            //$myWhere['link_from'] = 2;
             if ($this->request->request('keyField')) {
                 return $this->selectpage();
             }
