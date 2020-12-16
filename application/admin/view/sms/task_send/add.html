@@ -38,6 +38,14 @@
             {:build_radios('row[channel_from]',['0'=>'常规','1'=>'特定','3'=>'单点','4'=>'外部'],$channel_from)}
         </div>
     </div>
+    {if $channel_from==1}
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Encrypt')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_radios('row[encrypt]',['0'=>'不加密','1'=>'AES加密'],0)}
+        </div>
+    </div>
+    {/if}
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Title')}:</label>
         <div class="col-xs-12 col-sm-8">
