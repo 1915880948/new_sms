@@ -294,6 +294,11 @@ class AddBatch extends Backend
                     $sends['sms_gate_id'] = $value['sms_gate_id'];
                     $sends['sms_template_id'] = 0;
                     $sends['file_path'] = str_replace(Env::get('file.FILE_ROOT_DIR').'/', '', $value['file_path']);
+                    switch ($is_single){
+                        case '特定': $sends['channel_from'] = 1;break;
+                        case '是': $sends['channel_from'] = 3;break;
+                        default: $sends['channel_from'] = 0;
+                    }
                     if($is_single == '特定'){
                         $sends['channel_from'] = 1;
                     }

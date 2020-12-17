@@ -30,6 +30,9 @@ class Foreign extends Backend
         if ($this->request->isAjax()) {
             $myWhere['channel_from'] = 4;
             //$myWhere['link_from'] = 2;
+            if (!$this->auth->isSuperAdmin()) {
+                $myWhere['creator'] = $this->auth->getUserInfo()['username'];
+            }
             if ($this->request->request('keyField')) {
                 return $this->selectpage();
             }

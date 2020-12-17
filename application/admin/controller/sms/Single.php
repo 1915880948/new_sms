@@ -30,6 +30,9 @@ class Single extends Backend
         if ($this->request->isAjax()) {
             $params = $this->request->get();
             $myWhere['channel_from'] = 3;
+            if (!$this->auth->isSuperAdmin()) {
+                $myWhere['creator'] = $this->auth->getUserInfo()['username'];
+            }
             if ($this->request->request('keyField')) {
                 return $this->selectpage();
             }

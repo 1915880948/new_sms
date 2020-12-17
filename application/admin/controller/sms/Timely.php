@@ -29,6 +29,9 @@ class Timely extends Backend
         $this->request->filter(['strip_tags']);
         if ($this->request->isAjax()) {
             $myWhere['channel_from'] = 2;
+            if (!$this->auth->isSuperAdmin()) {
+                $myWhere['creator'] = $this->auth->getUserInfo()['username'];
+            }
             if ($this->request->request('keyField')) {
                 return $this->selectpage();
             }
