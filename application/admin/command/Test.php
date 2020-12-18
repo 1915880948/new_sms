@@ -9,6 +9,7 @@
 namespace app\admin\command;
 
 
+use app\admin\model\access\Lable;
 use Predis\Client;
 use think\console\Command;
 use think\console\Input;
@@ -47,8 +48,28 @@ class Test extends Command
 //        $list =  Db::table('fa_config')->where(['id'=>['>',17],'type'=>['=','1']])->select();
 //        print_r( $list );
 
-        $str = '';
-        print_r( trim($str,'/shuming/'));
+
+        $db_config2 = [
+        'type'            => Env::get('database2.type', 'mysql'),
+        // 服务器地址
+        'hostname'        => Env::get('database2.hostname', '127.0.0.1'),
+        // 数据库名
+        'database'        => Env::get('database2.database', 'fastadmin'),
+        // 用户名
+        'username'        => Env::get('database2.username', 'root'),
+        // 密码
+        'password'        => Env::get('database2.password', 'root'),
+        // 端口
+        'hostport'        => Env::get('database2.hostport', '3306'),
+        // 数据库编码默认采用utf8
+        'charset'     => 'utf8',
+        // 数据库表前缀
+        'prefix'      => '',
+    ];
+        $model = new Lable();
+
+        $row = $model->select();
+        print_r( $row );
     }
     //加密
     public function en($str) {

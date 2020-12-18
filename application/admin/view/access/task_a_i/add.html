@@ -1,0 +1,118 @@
+<form id="add-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Business_no')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-business_no" class="form-control" name="row[business_no]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Source_data_num')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-source_data_num" class="form-control" name="row[source_data_num]" type="number">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-status" class="form-control" name="row[status]" type="number" value="1">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Source_no')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-source_no" class="form-control" name="row[source_no]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Dpis')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <textarea id="c-dpis" class="form-control " rows="5" name="row[dpis]" cols="50"></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Start_date')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-start_date" class="form-control" name="row[start_date]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('End_date')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-end_date" class="form-control" name="row[end_date]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Batchs')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <textarea id="c-batchs" class="form-control " rows="5" name="row[batchs]" cols="50"></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Start_batch')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-start_batch" class="form-control" name="row[start_batch]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Source_output_name')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-source_output_name" class="form-control" name="row[source_output_name]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Ai_output_name')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-ai_output_name" class="form-control" name="row[ai_output_name]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Source_path')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-source_path" class="form-control" name="row[source_path]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Ai_path')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-ai_path" class="form-control" name="row[ai_path]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Auc')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-auc" class="form-control" name="row[auc]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Auc_path')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-auc_path" class="form-control" name="row[auc_path]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Remark')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <textarea id="c-remark" class="form-control " rows="5" name="row[remark]" cols="50"></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Source_start_time')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-source_start_time" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[source_start_time]" type="text" value="{:date('Y-m-d H:i:s')}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Source_end_time')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-source_end_time" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[source_end_time]" type="text" value="{:date('Y-m-d H:i:s')}">
+        </div>
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

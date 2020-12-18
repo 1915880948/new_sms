@@ -280,7 +280,7 @@ return [
         //API接口地址
         'api_url'               => 'https://api.fastadmin.net',
     ],
-
+    'db2' => require_once('database2.php'),
     'redis' => [
         'host' => Env::get('redis.host', '127.0.0.1'),
         'port' => Env::get('redis.port','6379'),
