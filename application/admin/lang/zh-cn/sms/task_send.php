@@ -48,4 +48,5 @@ return [
     'Phone_path'          => '空号文件',
     'Finish_time'         => '完成时间',
     'Sp_name'             => '通道名称',
+    'Encrypt'             => '加密方式',
 ];

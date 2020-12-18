@@ -64,6 +64,7 @@ class Link extends Backend
                 $params['company_name'] = $this->company[$params['company_id']];
                 $params['bank_name'] = $this->bank[$params['bank_id']];
                 $params['business_name'] = $this->business[$params['business_id']];
+                $params['creator'] = $this->auth->getUserInfo()['username'];
                 $result = false;
                 Db::startTrans();
                 try {
@@ -120,6 +121,7 @@ class Link extends Backend
                 $params['company_name'] = $this->company[$params['company_id']];
                 $params['bank_name'] = $this->bank[$params['bank_id']];
                 $params['business_name'] = $this->business[$params['business_id']];
+                $params['creator'] = $this->auth->getUserInfo()['username'];
                 $result = false;
                 Db::startTrans();
                 try {
