@@ -90,11 +90,12 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form','jstree'], function ($
                                 title: '下载',
                                 extend: 'data-toggle="tooltip"',
                                 icon: 'fa fa-download',
-                                classname: 'btn btn-danger btn-xs btn-click',
-                                click:function(data,row){
+                                classname: 'btn btn-danger btn-xs  btn-download',
+                                url:'access/task_fetch/download',
+                                // click:function(data,row){
                                     //console.log(row);
-                                    Fast.api.open('access/task_fetch/download?ids='+row.id);
-                                },
+                                    // Fast.api.open('access/task_fetch/download?ids='+row.id);
+                                // },
                             }],
                             formatter: Table.api.formatter.operate
                         }
