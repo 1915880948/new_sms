@@ -15,7 +15,8 @@ use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 class Income extends Backend
 {
     protected $typeList = [
-        "1" =>'得保',
+        "1" =>'守护保',
+        "2" =>'得保',
     ];
     
     /**
@@ -28,7 +29,8 @@ class Income extends Backend
     {
         parent::_initialize();
         $this->model = new \app\admin\model\plot\Income;
-        $this->detailModel = new \app\admin\model\plot\Debaodetail;
+        $this->debaoDetailModel = new \app\admin\model\plot\Debaodetail;
+        $this->shouhubaoDetailModel = new \app\admin\model\plot\Shouhubaodetail;
 
     }
     
@@ -125,7 +127,12 @@ class Income extends Backend
                 $incomes['create_time'] = date("Y-m-d H:i:s");
                 //保存数据
                 $this->model->save($incomes);
-                $result = $this->detailModel->saveAll($insert);
+                if ($params['type'] == 1){
+                    $result = $this->shouhubaoDetailModel->saveAll($insert);
+                }else{
+                    $result = $this->debaoDetailModel->saveAll($insert);
+                }
+
                 Db::commit();
             } catch (ValidateException $e) {
                 Db::rollback();
@@ -153,8 +160,14 @@ class Income extends Backend
         $offset  = $this->request->get("offset");
         $limit   = $this->request->get("limit");
         if( $id ){
-            $rows = $this->detailModel->where('bank_id',$id)->order('id','desc')->limit($offset,$limit)->select();
-            $total = $this->detailModel->where('bank_id',$id)->order('id','desc')->count();
+            $type = $this->model->where('id',$id)->value('type');
+            if ($type == 1) {
+                $rows = $this->shouhubaoDetailModel->where('bank_id', $id)->order('id', 'desc')->limit($offset, $limit)->select();
+                $total = $this->shouhubaoDetailModel->where('bank_id', $id)->order('id', 'desc')->count();
+            }else{
+                $rows = $this->debaoDetailModel->where('bank_id', $id)->order('id', 'desc')->limit($offset, $limit)->select();
+                $total = $this->debaoDetailModel->where('bank_id', $id)->order('id', 'desc')->count();
+            }
 
             return json(['total'=>$total,"rows"=>$rows]);
 

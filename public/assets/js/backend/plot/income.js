@@ -28,7 +28,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     [
                         {checkbox: true},
                         {field: 'id', title: __('Id'),operate:false},
-                        {field: 'type', title: __('Type'),formatter: Table.api.formatter.status,searchList:{1:'得保'}},
+                        {field: 'type', title: __('Type'),formatter: Table.api.formatter.status,searchList:{1:'守护保',2:'得保'}},
                         {field: 'num', title: __('Num'),operate:false},
                         {field: 'file_name', title: __('File_name'),operate:'like'},
                         {field: 'creator', title: __('Creator')},
