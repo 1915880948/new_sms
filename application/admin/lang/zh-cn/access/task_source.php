@@ -14,6 +14,7 @@ return [
     'File_path'     => '导入发送文件路径',
     'Before_price'  => '数据行数单价',
     'Last_price'    => '入库行数单价',
+    'cost_num'      => '数据行数',
     'Create_time'   => '创建时间',
     'Paydays'       => '账期',
     'Remark'        => '备注',

@@ -29,8 +29,11 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'bank_name', title: __('Bank_name')},
                         {field: 'city_id', title: __('City_id')},
                         {field: 'city_name', title: __('City_name')},
-                        {field: 'province_id', title: __('Province_id')},
-                        {field: 'status', title: __('Status')},
+                        // {field: 'province_id', title: __('Province_id')},
+                        {field: 'status', title: __('Status'),
+                            formatter: Table.api.formatter.normal,
+                            searchList:{1:'正常',0:'删除'}
+                        },
                         {field: 'create_time', title: __('Create_time'), operate:'RANGE', addclass:'datetimerange'},
                         {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]
