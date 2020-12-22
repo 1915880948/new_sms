@@ -768,25 +768,20 @@ class TaskSend extends Backend
         $this->error("失败！！", null, ['status' => $status]);
     }
 
-    // 开启
+    // 开始发送
     public function start($ids){
         $taskSend = $this->model->get($ids);
         if( !$taskSend ){
             $this->error('发送任务不存在');
         }
-        if( !in_array($taskSend['status'],[1,2,3,6]) ){
-            $this->error('该任务不能停止。');
-        }
-        if ( $taskSend['dynamic_shortlink']) {
-            $status = 1;
-        } else {
-            $status = 3;
+        if( $taskSend['status'] != 10 ){
+            $this->error('状态必须为“短链生成完毕”的任务才能开始发送。');
         }
 
-        $result = $this->model->save(['status'=>$status,'update_time'=>date('Y-m-d H:i:s')],['task_id'=>$taskSend['task_id']]);
+        $result = $this->model->save(['status'=>3,'update_time'=>date('Y-m-d H:i:s')],['task_id'=>$taskSend['task_id']]);
         if( $result ){
-            $this->success("成功！！", null, ['status' => $status]);
+            $this->success("成功！！", null, ['status' => 1]);
         }
-        $this->error("失败！！", null, ['status' => $status]);
+        $this->error("失败！！", null, ['status' => '']);
     }
 }

@@ -196,13 +196,13 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                     Layer.alert(ret.msg);
                                     return false;
                                 }
-                            },/*{
+                            },{
                                 name:'ajax',
-                                title: '开始任务',
+                                title: '开始发送',
                                 extend: 'data-toggle="tooltip"',
                                 icon: 'fa fa-play',
                                 classname: 'btn btn-info btn-xs btn-ajax',
-                                confirm: '确认开始任务？',
+                                confirm: '确认开始发送？',
                                 url: 'sms/task_send/start',
                                 success: function (data, ret) {
                                     //console.log(ret);
@@ -215,7 +215,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                     Layer.alert(ret.msg);
                                     return false;
                                 }
-                            }*/],
+                            }],
                             // formatter:function (value,row,index) {
                             //     var table = this.table;
                             //     // 操作配置
