@@ -30,7 +30,7 @@ class Timely extends Backend
         if ($this->request->isAjax()) {
             $myWhere['channel_from'] = 2;
             if (!$this->auth->isSuperAdmin()) {
-                $myWhere['creator'] = $this->auth->getUserInfo()['username'];
+                $myWhere['creator'] = ['in',$this->auth->getChildrenAdminUsername() ];
             }
             if ($this->request->request('keyField')) {
                 return $this->selectpage();

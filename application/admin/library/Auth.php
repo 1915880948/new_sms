@@ -529,4 +529,10 @@ class Auth extends \fast\Auth
     {
         return $this->_error ? __($this->_error) : '';
     }
+
+    public function getChildrenAdminUsername($withself = true){
+        $childrenAdminIds = $this->getChildrenAdminIds($withself);
+        $childrenAdminUsername =  (new Admin())->where(['id'=>['in',$childrenAdminIds]])->column('username');
+        return $childrenAdminUsername;
+    }
 }

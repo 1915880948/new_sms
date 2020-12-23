@@ -31,7 +31,7 @@ class Foreign extends Backend
             $myWhere['channel_from'] = 4;
             //$myWhere['link_from'] = 2;
             if (!$this->auth->isSuperAdmin()) {
-                $myWhere['creator'] = $this->auth->getUserInfo()['username'];
+                $myWhere['creator'] = ['in',$this->auth->getChildrenAdminUsername() ];
             }
             if ($this->request->request('keyField')) {
                 return $this->selectpage();

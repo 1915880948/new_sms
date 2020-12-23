@@ -37,7 +37,7 @@ class LinkShort extends Backend
     public function index()
     {
         $link_id = $this->request->get('link_id');
-        //print_r( $link_id ); die;
+        //print_r( $this->auth->getChildrenAdminUsername() ); die;
         //设置过滤方法
         $this->request->filter(['strip_tags']);
         if ($this->request->isAjax()) {
@@ -45,14 +45,18 @@ class LinkShort extends Backend
             if ($this->request->request('keyField')) {
                 return $this->selectpage();
             }
+            $myWhere = [];
+            if( !$this->auth->isSuperAdmin() ){
+                $myWhere['creator'] = ['in',$this->auth->getChildrenAdminUsername() ];
+            }
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
             $total = $this->model
-                ->where($where)
+                ->where($where)->where($myWhere)
                 ->order($sort, $order)
                 ->count();
 
             $list = $this->model
-                ->where($where)
+                ->where($where)->where($myWhere)
                 ->order($sort, $order)
                 ->limit($offset, $limit)
                 ->select();

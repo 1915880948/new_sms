@@ -91,7 +91,7 @@ class TaskSend extends Backend
             $params = $this->request->get();
             $myWhere['channel_from'] = 0;
             if (!$this->auth->isSuperAdmin()) {
-                $myWhere['creator'] = $this->auth->getUserInfo()['username'];
+                $myWhere['creator'] = ['in',$this->auth->getChildrenAdminUsername() ];
             }
             if ($this->request->request('keyField')) {
                 return $this->selectpage();
