@@ -211,10 +211,10 @@ class AddBatch extends Backend
                                 $lphone[] = $evalue;
                             }
                             $sends["phone_path"] = date('Y-m-d') . '/phone' . time() . rand(100, 999) . '.txt';
-                            if (!is_dir(Env::get('file.FILE_ROOT_DIR') . date('Y-m-d'))) {
-                                @mkdir(Env::get('file.FILE_ROOT_DIR') . date('Y-m-d'));
+                            if (!is_dir(Env::get('file.FILE_ROOT_DIR') . '/' . date('Y-m-d'))) {
+                                @mkdir(Env::get('file.FILE_ROOT_DIR') . '/' . date('Y-m-d'));
                             }
-                            $phonefile = fopen(Env::get('file.FILE_ROOT_DIR') . $sends['phone_path'], 'w') or die("Unable to open file!");
+                            $phonefile = fopen(Env::get('file.FILE_ROOT_DIR'). '/' . $sends['phone_path'], 'w') or die("Unable to open file!");
                             fwrite($phonefile, implode("\n", $lphone));
                             fclose($phonefile);
                         }
