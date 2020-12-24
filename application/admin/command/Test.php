@@ -68,7 +68,7 @@ class Test extends Command
     ];
         $model = new Lable();
 
-        $row = $model->select();
+        $row = $model->value('site');
         print_r( $row );
     }
     //加密
