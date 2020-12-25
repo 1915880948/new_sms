@@ -11,7 +11,7 @@ return [
     'Business'            => '业务',
     'Exclude_recent_sent' => '是否过滤最近发送过的',
     'Exclude_blacklist'   => '是否过滤黑名单',
-    'Channel_id'          => '渠道链接ID',
+    'Channel_id'          => '渠道',
     'Data_id'             => '数据模型ID',
     'Data_pack_no'        => '数据拆包号',
     'Send_limit'          => '发送上限限制,0表示不限制',

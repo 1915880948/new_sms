@@ -50,6 +50,20 @@
         </div>
     </div>
     <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Channel_from')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_radios('row[channel_from]',['0'=>'常规','1'=>'特定','3'=>'单点','4'=>'外部'],$row.channel_from)}
+        </div>
+    </div>
+    {if $row.channel_from==1}
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Encrypt')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_radios('row[encrypt]',['0'=>'不加密','1'=>'AES加密'],$row.encrypt)}
+        </div>
+    </div>
+    {/if}
+    <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Sms_gate_id')}:</label>
         <div class="col-xs-12 col-sm-8">
             <select class="selectpicker" data-live-search="true" name="row[sms_gate_id]" data-rule="required">

@@ -83,6 +83,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'company', title: __('Company')},
                         {field: 'bank', title: __('Bank')},
                         {field: 'business', title: __('Business')},
+                        {field: 'channel_id', title: __('Channel_id')},
                         {field: 'sp_name', title: __('Sp_name')},
                         {field: 'task_num', title: __('Task_num'),operate:false},
                         {field: 'total_send', title: __('Total_send'),operate:false},

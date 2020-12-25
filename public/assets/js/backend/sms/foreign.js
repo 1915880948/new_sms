@@ -73,6 +73,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'company', title: __('Company')},
                         {field: 'bank', title: __('Bank')},
                         {field: 'business', title: __('Business')},
+                        {field: 'channel_id', title: __('Channel_id')},
                         {field: 'sp_name', title: __('Sp_name')},
                         // {field: 'create_time', title: __('Create_time'), operate:'RANGE', addclass:'datetimerange'},
                         // {field: 'update_time', title: __('Update_time'), operate:'RANGE', addclass:'datetimerange', formatter: Table.api.formatter.datetime},
@@ -115,7 +116,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
 
                         },
                         {field: 'send_time', title: __('Send_time'), operate:'RANGE', addclass:'datetimerange'},
-                        {field: 'finish_time', title: __('Finish_time'), operate:'RANGE', addclass:'datetimerange'},
+                        {field: 'finish_time', title: __('Finish_time'), operate:'RANGE', addclass:'datetimerange',visible: false},
 
                         {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]

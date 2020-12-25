@@ -48,6 +48,28 @@ class TaskSend extends Backend
                 //"18" =>'4a6.cn',
                 "19" =>'j0q.cn',
     ];
+    protected $shortDomainArr = [
+        0=>"j0q",
+        1=>"u9t",
+        2=>"x0e",
+        3=>"q9e",
+        4=>"d0e",
+        5=>"7d0",
+        6=>"o8d",
+        7=>"0i4",
+        8=>"q4f",
+        9=>"g0c",
+        10=>"z0k",
+        11=>"q0r",
+        12=>"n0x",
+        13=>"h0e",
+        14=>"o4c",
+        15=>"9oj",
+        16=>"5oj",
+        17=>"vo4",
+        18=>"4a6",
+        19=>"j0q",
+    ];
     protected $statusArr = [
         1 => '待生成短链',
         2 => '生成动态短链中',
@@ -178,6 +200,7 @@ class TaskSend extends Backend
             $params['sms_content'] = preg_replace($this->pattern, $params['shortlink'], $params['sms_content']);
             $params['sms_content'] = trim($params['sms_content']);
             $params['creator'] = $this->auth->getUserInfo()['username'];
+            $params['create_time'] = date('YmdHis');
             //根据所选通道确认价格
             $price = Db::table("channel_pricex")->alias('p')
                 ->join(['sms_sp_info'=>'s'], 'p.SP_ID=s.remote_account')->where("s.id",$params['sms_gate_id'])->value('p.PRICEX');
@@ -589,10 +612,34 @@ class TaskSend extends Backend
             $linkModel = new \app\admin\model\sms\Link();
             $linkShortModel = new \app\admin\model\sms\LinkShort();
             $linkShort = $linkShortModel->get($params['sm_task_id']);
-            $link = $linkModel->get($linkShort['link_id']);
-            $params['company'] = $link['company_name'];
-            $params['bank'] = $link['bank_name'];
-            $params['business'] = $link['business_name'];
+
+
+            $linkShortLastID = $linkShortModel->max('id');
+            $transfer_link =  'http://cca.smget.co/link.php?id='.($linkShortLastID+1);
+            $apiUrl = "http://".Env::get('sms_short.host')."/short.php?key=68598736&dm=" . trim($this->shortDomainArr[$params['dynamic_shortlink']]) . '&url=' . rawurlencode($transfer_link);
+            $shortLinkResult = httpRequest($apiUrl, 'GET');
+            $shortLinkResult = json_decode($shortLinkResult, true);
+            if (empty($shortLinkResult['data'][0])) {
+                return json(['data'=>['msg'=>'短链生成失败，请稍后重试..']]);
+            }
+            $linkInfo = $linkModel->where("channel_id = '$row[channel_id]'")->find();
+            //$this->error(__('No Results were found'));
+            $result = $linkShortModel->save([
+                'remark'        => $params['title'],
+                'link_id'       => $linkInfo['id'],
+                'business_link' => $linkInfo['link'],
+                'transfer_link' => $transfer_link,
+                'short_link'    => $shortLinkResult['data'][0]['short_url'],
+                'creator'       => $this->auth->getUserInfo()['username'],
+                'create_time'   => date('Y-m-d H:i:s'),
+            ]);
+
+
+            //$link = $linkModel->get($linkShort['link_id']);
+            $params['company'] = $linkInfo['company_name'];
+            $params['bank'] = $linkInfo['bank_name'];
+            $params['business'] = $linkInfo['business_name'];
+            $params['channel_id'] = $linkInfo['channel_id'];
             if( $params['link_from'] == 1){ // 0:未知 1:内部 2:外部
                 if( !$params['file_path'] ){
                     $this->error('发送文件必须上传！');
@@ -608,6 +655,8 @@ class TaskSend extends Backend
             $params['sms_content'] = preg_replace($this->pattern, $params['shortlink'], $params['sms_content']);
             $params['sms_content'] = trim($params['sms_content']);
             $params['creator'] = $this->auth->getUserInfo()['username'];
+            $params['create_time'] = date('YmdHis');
+            $params['shortlink'] = $shortLinkResult['data'][0]['short_url'];
             //根据所选通道确认价格
             $price = Db::table("channel_pricex")->alias('p')
                 ->join(['sms_sp_info'=>'s'], 'p.SP_ID=s.remote_account')->where("s.id",$params['sms_gate_id'])->value('p.PRICEX');
