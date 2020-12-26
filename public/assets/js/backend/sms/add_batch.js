@@ -60,9 +60,10 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload'], function (
             
             // 给表单绑定事件
             Form.api.bindevent($("#update-form"), function () {
-                $("input[name='row[password]']").val('');
+                /*$("input[name='row[password]']").val('');
                 var url = Backend.api.cdnurl($("#c-avatar").val());
-                top.window.$(".user-panel .image img,.user-menu > a > img,.user-header > img").prop("src", url);
+                top.window.$(".user-panel .image img,.user-menu > a > img,.user-header > img").prop("src", url);*/
+                window.location.reload();
                 return true;
             });
         },

@@ -6,7 +6,7 @@ return [
     'url_html_suffix'        => '',
     'controller_auto_search' => true,
     'domainList'             => [
-            "z0k"=>'z0k.cn',
+//          "z0k"=>'z0k.cn',
             "n0x"=>'n0x.cn(游戏专用)',
             "h0e"=>'h0e.cn(短信内容无http://)',
             "9oj"=>'9oj.cn',

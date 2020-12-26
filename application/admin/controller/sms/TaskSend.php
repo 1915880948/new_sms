@@ -37,7 +37,7 @@ class TaskSend extends Backend
                 //"7" =>'0i4.cn(左浩然|马蓉蓉)',
                 //"8" =>'q4f.cn(姜子文)',
                 //"9" =>'g0c.cn(王古锋)',
-                "10" =>'z0k.cn',
+                //"10" =>'z0k.cn',
                 //"11" => 'q0r.cn',
                 "12" => 'n0x.cn(游戏专用)',
                 "13" => 'h0e.cn(短信内容无http://)',
@@ -652,11 +652,19 @@ class TaskSend extends Backend
             if( $sp['status'] == 3 && !$params['sms_template_id'] ){//如果是http通道，template_id必填
                 $this->error('http通道，必须选择短信模板！！');
             }
+            $params['shortlink'] = $shortLinkResult['data'][0]['short_url'];
             $params['sms_content'] = preg_replace($this->pattern, $params['shortlink'], $params['sms_content']);
             $params['sms_content'] = trim($params['sms_content']);
             $params['creator'] = $this->auth->getUserInfo()['username'];
             $params['create_time'] = date('YmdHis');
-            $params['shortlink'] = $shortLinkResult['data'][0]['short_url'];
+            // 设置短信类型及初始状态
+            switch ($params['channel_from'] ){
+                case 0: $params['status'] = 3;break;
+                case 1: $params['status'] = 1;break;
+                case 2: $params['status'] = 5;break;
+                case 3: $params['status'] = 1;break;
+                case 4: $params['status'] = 8;break;
+            }
             //根据所选通道确认价格
             $price = Db::table("channel_pricex")->alias('p')
                 ->join(['sms_sp_info'=>'s'], 'p.SP_ID=s.remote_account')->where("s.id",$params['sms_gate_id'])->value('p.PRICEX');
@@ -706,7 +714,7 @@ class TaskSend extends Backend
             foreach ($dates as $date) {
                 $tableName = 'sms_report_' . $date;
                 $condition = ['TABLE_SCHEMA' => 'sms_send_data', 'TABLE_NAME' => $tableName];
-                $tableCount = $db->table('INFORMATION_SCHEMA.TABLES')->where($condition)->count();
+                $tableCount = $db::table('INFORMATION_SCHEMA.TABLES')->where($condition)->count();
                 if ($tableCount) {
                     $tableNames[] = $tableName;
                 }
@@ -714,14 +722,14 @@ class TaskSend extends Backend
             foreach ($tableNames as $tableName) {
                 $table = 'sms_send_data.' . $tableName;
                 $where = 'task_id = ' . $row['task_id'] . ' and status in (2, 4, 5, 6)';
-                $reCount = $db->table($table)->where($where)->count();
+                $reCount = $db::table($table)->where($where)->count();
                 $totalCount += $reCount;
                 if ($reCount > 0) {
                     $file_path = date('Y-m-d') . '/' . $totalCount . time() . rand(100, 999) . 're.txt';
-                    if (!is_dir(Env::get('file.FILE_ROOT_DIR') . date('Y-m-d'))) {
-                        @mkdir(Env::get('file.FILE_ROOT_DIR') . date('Y-m-d'));
+                    if (!is_dir(Env::get('file.FILE_ROOT_DIR') .'/'. date('Y-m-d'))) {
+                        @mkdir(Env::get('file.FILE_ROOT_DIR') .'/'. date('Y-m-d'));
                     }
-                    $file = fopen(Env::get('file.FILE_ROOT_DIR') . $file_path, 'w') or die("Unable to open file!");
+                    $file = fopen(Env::get('file.FILE_ROOT_DIR') .'/'. $file_path, 'w') or die("Unable to open file!");
                     $r = 10000; //每次最多取1万,方便手机号加密
                     $pages = ceil($reCount / $r);
                     $total = $reCount;
@@ -732,7 +740,7 @@ class TaskSend extends Backend
                         if ($limit > $total) {
                             $limit = $total;
                         }
-                        $list = $db->table($table)->where($where)->field('phone')->limit($start, $limit)->select();
+                        $list = $db::table($table)->where($where)->field('phone')->limit($start, $limit)->select();
                         foreach ($list as $user) {
                             $phone[] = $user['phone'];
                         }
@@ -750,7 +758,7 @@ class TaskSend extends Backend
             foreach ($dates as $date) {
                 $tableName = 'sms_send_log_' . $date;
                 $condition = ['TABLE_SCHEMA' => 'sms_send_data', 'TABLE_NAME' => $tableName];
-                $tableCount = $db->table('INFORMATION_SCHEMA.TABLES')->where($condition)->count();
+                $tableCount = $db::table('INFORMATION_SCHEMA.TABLES')->where($condition)->count();
                 if ($tableCount) {
                     $tableNames[] = $tableName;
                 }
@@ -758,14 +766,14 @@ class TaskSend extends Backend
             foreach ($tableNames as $tableName) {
                 $table = 'sms_send_data.' . $tableName;
                 $where = 'task_id = ' . $row['task_id'] . ' and sp_seq = "9999" ';
-                $seCount = $db->table($table)->where($where)->count();
+                $seCount = $db::table($table)->where($where)->count();
                 $totalCount += $seCount;
                 if ($seCount > 0) {
                     $file_path = date('Y-m-d') . '/' . $totalCount . time() . rand(100, 999) . 'send.txt';
-                    if (!is_dir(Env::get('file.FILE_ROOT_DIR') . date('Y-m-d'))) {
-                        @mkdir(Env::get('file.FILE_ROOT_DIR') . date('Y-m-d'));
+                    if (!is_dir(Env::get('file.FILE_ROOT_DIR') .'/'. date('Y-m-d'))) {
+                        @mkdir(Env::get('file.FILE_ROOT_DIR') .'/'. date('Y-m-d'));
                     }
-                    $file = fopen(Env::get('file.FILE_ROOT_DIR') . $file_path, 'w') or die("Unable to open file!");
+                    $file = fopen(Env::get('file.FILE_ROOT_DIR') .'/'. $file_path, 'w') or die("Unable to open file!");
                     $r = 10000; //每次最多取1万,方便加密
                     $pages = ceil($seCount / $r);
                     $total = $seCount;
@@ -776,7 +784,7 @@ class TaskSend extends Backend
                         if ($limit > $total) {
                             $limit = $total;
                         }
-                        $list = $db->table($table)->where($where)->field('phone')->limit($start, $limit)->select();
+                        $list = $db::table($table)->where($where)->field('phone')->limit($start, $limit)->select();
                         foreach ($list as $user) {
                             $phone[] = $user['phone'];
                         }
@@ -791,6 +799,74 @@ class TaskSend extends Backend
             if ($totalCount < 1){
                 $this->error('经查，最近三天没有需要复发的失败短信。','sms/link_short/index');
             }
+            $params = $this->request->post("row/a");
+            if ($params) {
+                $params = $this->preExcludeFields($params);
+            }
+            $linkModel = new \app\admin\model\sms\Link();
+            $linkShortModel = new \app\admin\model\sms\LinkShort();
+            $linkShort = $linkShortModel->get($params['sm_task_id']);
+
+
+            $linkShortLastID = $linkShortModel->max('id');
+            $transfer_link =  'http://cca.smget.co/link.php?id='.($linkShortLastID+1);
+            $apiUrl = "http://".Env::get('sms_short.host')."/short.php?key=68598736&dm=" . trim($this->shortDomainArr[$params['dynamic_shortlink']]) . '&url=' . rawurlencode($transfer_link);
+            $shortLinkResult = httpRequest($apiUrl, 'GET');
+            $shortLinkResult = json_decode($shortLinkResult, true);
+            if (empty($shortLinkResult['data'][0])) {
+                return json(['data'=>['msg'=>'短链生成失败，请稍后重试..']]);
+            }
+            $linkInfo = $linkModel->where("channel_id = '$row[channel_id]'")->find();
+            //$this->error(__('No Results were found'));
+            $result = $linkShortModel->save([
+                'remark'        => $params['title'],
+                'link_id'       => $linkInfo['id'],
+                'business_link' => $linkInfo['link'],
+                'transfer_link' => $transfer_link,
+                'short_link'    => $shortLinkResult['data'][0]['short_url'],
+                'creator'       => $this->auth->getUserInfo()['username'],
+                'create_time'   => date('Y-m-d H:i:s'),
+            ]);
+
+
+            //$link = $linkModel->get($linkShort['link_id']);
+            $params['company'] = $linkInfo['company_name'];
+            $params['bank'] = $linkInfo['bank_name'];
+            $params['business'] = $linkInfo['business_name'];
+            $params['channel_id'] = $linkInfo['channel_id'];
+            if( $params['link_from'] == 1){ // 0:未知 1:内部 2:外部
+                $params['file_path'] = implode(',',$file_paths);
+            }
+            $sp = $spModel->get($params['sms_gate_id']);
+            if( !$sp ){
+                $this->error('通道不存在！！');
+            }
+            if( $sp['status'] == 3 && !$params['sms_template_id'] ){//如果是http通道，template_id必填
+                $this->error('http通道，必须选择短信模板！！');
+            }
+            $params['shortlink'] = $shortLinkResult['data'][0]['short_url'];
+            $params['sms_content'] = preg_replace($this->pattern, $params['shortlink'], $params['sms_content']);
+            $params['sms_content'] = trim($params['sms_content']);
+            $params['creator'] = $this->auth->getUserInfo()['username'];
+            $params['create_time'] = date('YmdHis');
+            // 设置短信类型及初始状态
+            switch ($params['channel_from'] ){
+                case 0: $params['status'] = 3;break;
+                case 1: $params['status'] = 1;break;
+                case 2: $params['status'] = 5;break;
+                case 3: $params['status'] = 1;break;
+                case 4: $params['status'] = 8;break;
+            }
+            //根据所选通道确认价格
+            $price = Db::table("channel_pricex")->alias('p')
+                ->join(['sms_sp_info'=>'s'], 'p.SP_ID=s.remote_account')->where("s.id",$params['sms_gate_id'])->value('p.PRICEX');
+            $params['price'] = $price;
+            $result = $this->model->save($params);
+            $linkShortModel->save(['task_send_num'=>$linkShort['task_send_num']+1],['id'=>$linkShort['id']]);
+            if( !$result ){
+                $this->success('复发任务创建失败！！');
+            }
+            $this->success('复发任务创建成功！！');
         }
 
         $this->assign('domainList',$this->domainList);
