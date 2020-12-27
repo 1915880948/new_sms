@@ -16,6 +16,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     given_url: 'task_send/clickDownload',
                     stop_url: 'sms/task_send/stop',
                     start_url: 'sms/task_send/start',
+                    startall_url: 'task_send/startAll',
                     table: 'sms_task_send',
                 }
             });
@@ -64,6 +65,19 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 Layer.confirm('你确定点击下载选中的'+ids.length+'项吗？', {icon: 3, title: __('Warning'), offset: 100, shadeClose: true},
                     function (index) {
                         window.location.href = options.extend.given_url+"?ids="+ids;
+                        Layer.close(index);
+                    }
+                );
+            });
+            // 批量开始发送任务
+            $(document).on("click", ".btn-all_start", function () {
+                var _this = this;
+                //Bootstrap-table配置
+                var options = table.bootstrapTable('getOptions');
+                var ids = Table.api.selectedids(table);
+                Layer.confirm('你确定开始发送选中的'+ids.length+'项吗？', {icon: 3, title: __('Warning'), offset: 100, shadeClose: true},
+                    function (index) {
+                        window.location.href = options.extend.startall_url+"?ids="+ids;
                         Layer.close(index);
                     }
                 );
@@ -129,6 +143,14 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         // {field: 'total_num', title: __('Total_num')},
                         {field: 'total_send', title: __('Total_send'),operate:false},
                         {field: 'total_receive', title: __('Total_receive'),operate:false,sortable:true},
+                        {field: 'failed_num', title: __('Failed_num'),operate:false},
+                        {field: '', title: __('成功率'),operate:false,formatter:function (value,row,index) {
+                                if( row.total_receive >0 ){
+                                    return ( row.total_receive/row.total_send*100).toFixed(2)+'%';
+                                }else {
+                                    return 0+'%';
+                                }
+                            }},
                         {field: 'total_click', title: __('Total_click'),operate:false,sortable:true},
                         {field: '', title: __('点击率'),operate:false,formatter:function (value,row,index) {
                                 if( row.total_receive >0 ){
@@ -138,7 +160,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                 }
                             }},
                         // {field: 'sp_num', title: __('Sp_num')},
-                        {field: 'failed_num', title: __('Failed_num'),operate:false},
                         // {field: 'retry_status', title: __('Retry_status')},
                         {field: 'price', title: __('成本'),operate:false,formatter:function (value,row,index) {
                                 return (row.total_receive*row.price).toFixed(2);

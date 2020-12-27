@@ -909,4 +909,33 @@ class TaskSend extends Backend
         }
         $this->error("失败！！", null, ['status' => '']);
     }
+
+    //批量点击开始发送短信
+    public function startAll($ids) {
+        if (empty($ids)) {
+            $this->error('未选择任何项');
+        }
+
+        $ids = explode(',', $ids);
+        $tasks = $this->model->where(['task_id' => ['in', $ids]])->select();
+
+        if (empty($tasks)) {
+            $this->error('下载任务不存在...');
+        }
+        $num = 0;
+        foreach ($tasks as $task) {
+            if ($task['status'] != 10) {
+                continue;
+            }
+            $data['task_id'] = $task['task_id'];
+            $data['status'] = 3;
+            $data['update_time'] = date('Y-m-d H:i:s');
+            $list[] = $data;
+            $num++;
+        }
+        if ($num>0){
+            $res = $this->model->saveAll($list);
+        }
+        $this->success('成功开始发送'.$num.'条任务');
+    }
 }

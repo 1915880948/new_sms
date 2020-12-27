@@ -88,6 +88,14 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'task_num', title: __('Task_num'),operate:false},
                         {field: 'total_send', title: __('Total_send'),operate:false},
                         {field: 'total_receive', title: __('Total_receive'),operate:false,sortable:true},
+                        {field: 'failed_num', title: __('Failed_num'),operate:false},
+                        {field: '', title: __('成功率'),operate:false,formatter:function (value,row,index) {
+                                if( row.total_receive >0 ){
+                                    return ( row.total_receive/row.total_send*100).toFixed(2)+'%';
+                                }else {
+                                    return 0+'%';
+                                }
+                            }},
                         {field: 'total_click', title: __('Total_click'),operate:false,sortable:true},
                         {field: '', title: __('点击率'),operate:false,formatter:function (value,row,index) {
                                 if( row.total_receive >0 ){
@@ -96,7 +104,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                     return 0+'%';
                                 }
                             }},
-                        {field: 'failed_num', title: __('Failed_num'),operate:false},
                         {field: 'price', title: __('成本'),operate:false,formatter:function (value,row,index) {
                                 return (row.total_receive*row.price).toFixed(2);
                             }},
