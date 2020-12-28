@@ -106,7 +106,7 @@ class AddBatch extends Backend
                 $filetmps = explode(',',$filetmp);
                 $fileCount = count($filetmps);
                 for ($j=0;$j<$fileCount;$j++){
-                    if ($files[$filetmps[$j]]) {
+                    if (isset($files[$filetmps[$j]])) {
                         $filetmpname[] = $files[$filetmps[$j]];
                     }
                 }
