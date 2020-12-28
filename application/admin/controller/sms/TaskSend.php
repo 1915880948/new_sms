@@ -205,7 +205,6 @@ class TaskSend extends Backend
             $price = Db::table("channel_pricex")->alias('p')
                 ->join(['sms_sp_info'=>'s'], 'p.SP_ID=s.remote_account')->where("s.id",$params['sms_gate_id'])->value('p.PRICEX');
             $params['price'] = $price;
-            $params['status'] = 1;
             $result = $this->model->save($params);
             $linkShortModel->save(['task_send_num'=>$linkShort['task_send_num']+1],['id'=>$linkShort['id']]);
             if( !$result ){
