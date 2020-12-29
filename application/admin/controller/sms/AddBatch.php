@@ -93,7 +93,7 @@ class AddBatch extends Backend
                 }
                 //短链域名
                 $sendTasks['domain_short'] = trim($currentSheet->getCellByColumnAndRow(3, $currentRow)->getValue());
-                if($sendTasks['domain_short'] !='n0x' && $sendTasks['domain_short'] !='h0e' && $sendTasks['domain_short'] !='9oj' && $sendTasks['domain_short'] !='5oj' && $sendTasks['domain_short'] !='vo4' && $sendTasks['domain_short'] !='j0q') {
+                if($sendTasks['domain_short'] !='n0x' && $sendTasks['domain_short'] !='h0e' && $sendTasks['domain_short'] !='9oj' && $sendTasks['domain_short'] !='5oj' && $sendTasks['domain_short'] !='vo4' && $sendTasks['domain_short'] !='j0q' && $sendTasks['domain_short'] !='p0o' && $sendTasks['domain_short'] !='b4m' && $sendTasks['domain_short'] !='h8r' && $sendTasks['domain_short'] !='7j0' && $sendTasks['domain_short'] !='4g3' && $sendTasks['domain_short'] !='j0l') {
                     $errorMsg .= "第{$currentRow}行短链域名不存在<br/>";
                     continue;
                 }
@@ -119,7 +119,7 @@ class AddBatch extends Backend
                 $sendTasks['is_single'] = trim($currentSheet->getCellByColumnAndRow(5, $currentRow)->getValue());
                 if ($sendTasks['is_single'] == '是' || $sendTasks['is_single'] == '特定'){
                     $sendTasks['dynamic_shortlink'] = trim($currentSheet->getCellByColumnAndRow(6, $currentRow)->getValue());
-                    if($sendTasks['domain_short'] !='n0x' && $sendTasks['domain_short'] !='h0e' && $sendTasks['domain_short'] !='9oj' && $sendTasks['domain_short'] !='5oj' && $sendTasks['domain_short'] !='vo4' && $sendTasks['domain_short'] !='j0q') {
+                    if($sendTasks['domain_short'] !='n0x' && $sendTasks['domain_short'] !='h0e' && $sendTasks['domain_short'] !='9oj' && $sendTasks['domain_short'] !='5oj' && $sendTasks['domain_short'] !='vo4' && $sendTasks['domain_short'] !='j0q' && $sendTasks['domain_short'] !='p0o' && $sendTasks['domain_short'] !='b4m' && $sendTasks['domain_short'] !='h8r' && $sendTasks['domain_short'] !='7j0' && $sendTasks['domain_short'] !='4g3' && $sendTasks['domain_short'] !='j0l') {
                         $errorMsg .= "第{$currentRow}行单点域名不存在<br/>";
                         continue;
                     }
@@ -224,40 +224,31 @@ class AddBatch extends Backend
                     if ($is_single == '是' || $is_single == '特定') {
                         $sends['status'] = 1;
                         $dynamic_shortlink = $value['dynamic_shortlink'];
-                        if ($dynamic_shortlink == 'd0e') {
-                            $sends['dynamic_shortlink'] = 4;
-                        } elseif ($dynamic_shortlink == '7d0') {
-                            $sends['dynamic_shortlink'] = 5;
-                        } elseif ($dynamic_shortlink == 'o8d') {
-                            $sends['dynamic_shortlink'] = 6;
-                        } elseif ($dynamic_shortlink == '0i4') {
-                            $sends['dynamic_shortlink'] = 7;
-                        } elseif ($dynamic_shortlink == 'q4f') {
-                            $sends['dynamic_shortlink'] = 8;
-                        } elseif ($dynamic_shortlink == 'g0c') {
-                            $sends['dynamic_shortlink'] = 9;
-                        } elseif ($dynamic_shortlink == 'z0k') {
-                            $sends['dynamic_shortlink'] = 10;
-                        } elseif ($dynamic_shortlink == 'q0r') {
-                            $sends['dynamic_shortlink'] = 11;
-                        } elseif ($dynamic_shortlink == 'n0x') {
-                            $sends['dynamic_shortlink'] = 12;
-                        } elseif ($dynamic_shortlink == 'h0e') {
-                            $sends['dynamic_shortlink'] = 13;
-                        } elseif ($dynamic_shortlink == 'o4c') {
-                            $sends['dynamic_shortlink'] = 14;
-                        } elseif ($dynamic_shortlink == '9oj') {
-                            $sends['dynamic_shortlink'] = 15;
-                        } elseif ($dynamic_shortlink == '5oj') {
-                            $sends['dynamic_shortlink'] = 16;
-                        } elseif ($dynamic_shortlink == 'vo4') {
-                            $sends['dynamic_shortlink'] = 17;
-                        } elseif ($dynamic_shortlink == '4a6') {
-                            $sends['dynamic_shortlink'] = 18;
-                        } elseif ($dynamic_shortlink == 'j0q') {
-                            $sends['dynamic_shortlink'] = 19;
-                        } else {
-                            $sends['dynamic_shortlink'] = 3;
+                        // 设置单点短链
+                        switch ($dynamic_shortlink){
+                            case 'd0e': $sends['dynamic_shortlink'] = 4;break;
+                            case '7d0': $sends['dynamic_shortlink'] = 5;break;
+                            case 'o8d': $sends['dynamic_shortlink'] = 6;break;
+                            case '0i4': $sends['dynamic_shortlink'] = 7;break;
+                            case 'q4f': $sends['dynamic_shortlink'] = 8;break;
+                            case 'g0c': $sends['dynamic_shortlink'] = 9;break;
+                            case 'z0k': $sends['dynamic_shortlink'] = 10;break;
+                            case 'q0r': $sends['dynamic_shortlink'] = 11;break;
+                            case 'n0x': $sends['dynamic_shortlink'] = 12;break;
+                            case 'h0e': $sends['dynamic_shortlink'] = 13;break;
+                            case 'o4c': $sends['dynamic_shortlink'] = 14;break;
+                            case '9oj': $sends['dynamic_shortlink'] = 15;break;
+                            case '5oj': $sends['dynamic_shortlink'] = 16;break;
+                            case 'vo4': $sends['dynamic_shortlink'] = 17;break;
+                            case '4a6': $sends['dynamic_shortlink'] = 18;break;
+                            case 'j0q': $sends['dynamic_shortlink'] = 19;break;
+                            case 'p0o': $sends['dynamic_shortlink'] = 20;break;
+                            case 'b4m': $sends['dynamic_shortlink'] = 21;break;
+                            case 'h8r': $sends['dynamic_shortlink'] = 22;break;
+                            case '7j0': $sends['dynamic_shortlink'] = 23;break;
+                            case '4g3': $sends['dynamic_shortlink'] = 24;break;
+                            case 'j0l': $sends['dynamic_shortlink'] = 25;break;
+                            default: $sends['dynamic_shortlink'] = 3;
                         }
                     } else {
                         $sends['status'] = 3;
