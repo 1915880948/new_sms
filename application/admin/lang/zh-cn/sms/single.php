@@ -46,6 +46,12 @@ return [
     'File_path'           => '导入发送文件路径',
     'Remark'              => '备注',
     'Phone_path'          => '导入空号文件',
+    'Is_space'            => '是否空号',
     'Finish_time'         => '完成时间',
     'Sp_name'             => '通道名称',
+    'SpaceCheck'          => '空号检测',
+    'Total'               => '总数',
+    'Success'             => '成功数',
+    'Error'               => '失败数',
+    'Unkown'              => '未知数',
 ];

@@ -8,6 +8,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     index_url: 'sms/single/index' + location.search,
                     add_url: 'sms/task_send/add?channel_from=3&link_from=1',
                     edit_url: 'sms/task_send/edit',
+                    check_url: 'sms/single/check',
                     //del_url: 'sms/task_send/del',
                     multi_url: 'sms/task_send/multi',
                     filter_url: 'sms/single/index?is_filter=',
@@ -70,6 +71,20 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     }
                 );
             });
+            //批量空号检测
+            $(document).on("click", ".btn-check", function () {
+                var _this = this;
+                //Bootstrap-table配置
+                var options = table.bootstrapTable('getOptions');
+                var ids = Table.api.selectedids(table);
+                //Layer.confirm('你确定空号检测选中的'+ids.length+'项吗？', {icon: 3, title: __('Warning'), offset: 100, shadeClose: true},
+                    //function (index) {
+                        Fast.api.open(options.extend.check_url+"?ids="+ids, '空号检测', $(this).data() || {});
+                        /*window.location.href = options.extend.check_url+"?ids="+ids;
+                        Layer.close(index);*/
+                    //}
+                //);
+            });
             //在普通搜索渲染后
             table.on('post-common-search.bs.table', function (event, table) {
                 var form = $("form", table.$commonsearch);
@@ -98,22 +113,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                             // cellStyle: cellStyle(),
                             // formatter: paramsMatter,
                         },
-                        // {field: 'exclude_recent_sent', title: __('Exclude_recent_sent')},
-                        // {field: 'exclude_blacklist', title: __('Exclude_blacklist')},
-                        // {field: 'channel_id', title: __('Channel_id')},
-                        // {field: 'data_id', title: __('Data_id')},
-                        // {field: 'data_pack_no', title: __('Data_pack_no')},
-                        // {field: 'send_limit', title: __('Send_limit')},
-                        // {field: 'sms_gate_id', title: __('Sms_gate_id')},
-                        // {field: 'retry_on_failure', title: __('Retry_on_failure')},
-                        // {field: 'retry_sms_gate_id', title: __('Retry_sms_gate_id')},
-                        // {field: 'retry_limit_minute', title: __('Retry_limit_minute')},
-                        // {field: 'sms_template_id', title: __('Sms_template_id')},
-                        // {field: 'sms_content', title: __('Sms_content')},
-                        // {field: 'link', title: __('Link')},
-                        // {field: 'transfer_link', title: __('Transfer_link')},
-                        // {field: 'dynamic_shortlink', title: __('Dynamic_shortlink')},
-                        // {field: 'shortlink', title: __('Shortlink')},
                         {field: 'link_from', title: __('Link_from'),
                             formatter: Table.api.formatter.normal,
                             searchList:{0:'未知',1:'内部',2:'外部'},visible: false
@@ -170,9 +169,9 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                 18: '写入发送队列中',
                                 19: '通道连接异常',},
                         },
+                        {field: 'phone_path', title: __('Is_space'),formatter:function(value){if(value){return '是';}else{return '否';}},visible: false},
                         {field: 'send_time', title: __('Send_time'), operate:'RANGE', addclass:'datetimerange'},
                         {field: 'finish_time', title: __('Finish_time'), operate:'RANGE', addclass:'datetimerange',visible: false},
-
                         {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate,
                             buttons: [{
                                 name: 'click',
@@ -237,6 +236,20 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                     Layer.alert(ret.msg);
                                     return false;
                                 }
+                            },{
+                                title: '空号检测',
+                                extend: 'data-toggle="tooltip"',
+                                icon: 'fa fa-link',
+                                classname: 'btn btn-info btn-xs btn-dialog ',
+                                url:'sms/single/check',
+                                // callback:function (data) {
+                                //     console.log(data);//控制输出回调数据
+                                // }
+                                // click: function (e, data) {
+                                //     //Layer.alert("点击按钮执行的事件");
+                                //     //location.href = '/admin.php/sms/link_short/index?link_id='+data.ids+'&ref=addtabs';
+                                //     Fast.api.open('sms/link_short/index?link_id='+data.ids, '生成短链', $(this).data() || {});
+                                // },
                             }],
                             // formatter:function (value,row,index) {
                             //     var table = this.table;
@@ -600,6 +613,41 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 return false;
             });
 
+        },
+        check:function () {
+            $(document).on("click", ".btn-refresh", function () {
+                $("#check").bootstrapTable('refresh',{});
+            });
+            var checktable = $("#check");
+            checktable.bootstrapTable({
+                url:"sms/single/check?ids="+Fast.api.query('ids'),
+                extend: {
+                    index_url: "sms/single/check?ids="+Fast.api.query('ids'),
+                    table: '',
+                },
+                search: false,                       //1.快捷搜索框,设置成false隐藏
+                showToggle: false,                  //2.列表和视图切换
+                showColumns: false,                 //3.字段显示
+                showExport: false,                  //4.导出按钮
+                commonSearch: false,                //5.通用搜索框
+                pagination: true,                   //6.是否显示分页条
+                // onlyInfoPagination: true,           //7.只显示总数据数
+                // showHeader: false,                  //8.是否显示列头
+                // paginationVAlign: 'top',            //9.指定分页条垂直位置
+                // showRefresh:false,
+                sidePagination:'server',
+                pageSize:20,
+                pageList:[20,50,100,'all'],
+                columns: [
+                    {field: 'id', title: __('Id'),operate:false,visible: false},
+                    {field: 'task_id', title: __('Task_id')},
+                    {field: 'total', title: __('Total'),},
+                    {field: 'success', title: __('Success'),operate:false},
+                    {field: 'error', title: __('Error')},
+                    {field: 'unkown', title: __('Unkown')},
+                ]
+            });
+            Controller.api.bindevent(checktable);
         },
     };
     return Controller;
