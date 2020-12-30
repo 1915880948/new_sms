@@ -281,6 +281,9 @@ return [
         'api_url'               => 'https://api.fastadmin.net',
     ],
     'db2' => require_once('database2.php'),
+    'db3' => require_once('database3.php'),
+//    'db4' => 'mysql://root:p3temp_S@rr-hp3i1j70yk48201l4xo.mysql.huhehaote.rds.aliyuncs.com',
+    'db4' => require_once('database4.php'),
     'redis' => [
         'host' => Env::get('redis.host', '127.0.0.1'),
         'port' => Env::get('redis.port','6379'),

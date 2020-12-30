@@ -18,6 +18,7 @@ return [
     'app\admin\command\Addon',
     'app\admin\command\Api',
     'app\admin\command\Test',
+    'app\admin\command\BackupSendData',
 
     'app\admin\command\ShortLinkAdd',
     'app\admin\command\AutoSend',
