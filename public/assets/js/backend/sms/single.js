@@ -14,6 +14,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     filter_url: 'sms/single/index?is_filter=',
                     failed_url: 'task_send/failedDownload',
                     success_url: 'task_send/successDownload',
+                    click_url: 'task_send/clickDownload',
                     stop_url: 'sms/task_send/stop',
                     start_url: 'sms/task_send/start',
                     startall_url: 'task_send/startAll',
@@ -54,6 +55,17 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 Layer.confirm('你确定成功下载选中的'+ids.length+'项吗？', {icon: 3, title: __('Warning'), offset: 100, shadeClose: true},
                     function (index) {
                         window.location.href = options.extend.success_url+"?ids="+ids;
+                        Layer.close(index);
+                    }
+                );
+            });
+            // 点击下载
+            $(document).on("click", ".btn-click_download", function () {
+                var options = table.bootstrapTable('getOptions');
+                var ids = Table.api.selectedids(table);
+                Layer.confirm('你确定点击下载选中的'+ids.length+'项吗？', {icon: 3, title: __('Warning'), offset: 100, shadeClose: true},
+                    function (index) {
+                        window.location.href = options.extend.click_url+"?ids="+ids;
                         Layer.close(index);
                     }
                 );

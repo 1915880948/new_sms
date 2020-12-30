@@ -9,11 +9,12 @@
                         <a href="javascript:;" class="btn btn-primary btn-refresh" title="{:__('Refresh')}" ><i class="fa fa-refresh"></i> </a>
                         <a href="javascript:;" class="btn btn-success btn-add {:$auth->check('sms/task_send/add')?'':'hide'}" title="{:__('Add')}" ><i class="fa fa-plus"></i> {:__('Add')}</a>
                         <a href="javascript:;" class="btn btn-success btn-edit btn-disabled disabled {:$auth->check('sms/task_send/edit')?'':'hide'}" title="{:__('Edit')}" ><i class="fa fa-pencil"></i> {:__('Edit')}</a>
-                        <a href="javascript:;" class="btn btn-success btn-check btn-disabled disabled {:$auth->check('sms/single/check')?'':'hide'}" title="{:__('SpaceCheck')}" ><i class="fa fa-space-shuttle"></i> {:__('SpaceCheck')}</a>
 <!--                        <a href="javascript:;" class="btn btn-danger btn-del btn-disabled disabled {:$auth->check('sms/task_send/del')?'':'hide'}" title="{:__('Delete')}" ><i class="fa fa-trash"></i> {:__('Delete')}</a>-->
                         <a href="javascript:;" class="btn btn-warning btn-filter" title="过滤空记录" ><i class="fa fa-hourglass-start"></i> 过滤空记录</a>
+                        <a href="javascript:;" class="btn btn-success btn-check btn-disabled disabled {:$auth->check('sms/single/check')?'':'hide'}" title="{:__('SpaceCheck')}" ><i class="fa fa-space-shuttle"></i> {:__('SpaceCheck')}</a>
 <!--                        <a href="javascript:;" class="btn btn-danger btn-filed_download btn-disabled disabled" title="失败下载" ><i class="fa fa-download"></i> 失败下载</a>-->
                         <a href="javascript:;" class="btn btn-success btn-success_download btn-disabled disabled" title="成功下载" ><i class="fa fa-download"></i> 成功下载</a>
+                        <a href="javascript:;" class="btn btn-info btn-click_download btn-disabled disabled" title="点击下载" ><i class="fa fa-download"></i> 点击下载</a>
                         <a href="javascript:;" class="btn btn-success btn-all_start btn-disabled disabled" title="开始发送" ><i class="fa fa-play"></i> 开始发送</a>
 
                     </div>
