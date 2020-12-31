@@ -759,12 +759,11 @@ class TaskSend extends Backend
                             $phone[] = $user['phone'];
                         }
                         $total -= $limit;
-                        fwrite($file, implode("\n", $phone));
-                        fclose($file);
-                        unset($phone);
-                        $file_paths[] = $file_path;
                     }
-
+                    fwrite($file, implode("\n", $phone));
+                    fclose($file);
+                    unset($phone);
+                    $file_paths[] = $file_path;
                 }
             }
             $tableNames = [];
