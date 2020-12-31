@@ -597,6 +597,7 @@ class TaskSend extends Backend
             if ($count > 0) {
                 $list = Db::table($table)->distinct(true)->field('phone_sec,phone')->where(['shortlink_id' => ['in',implode(',',$shortIds)]])->where([['phone'=>['>',0]]])->select();
                 foreach ($list as $user) {
+                    Log::log($user);
                     $gwcontent = substr($user['phone'],0,7);
                     $carrierContent = isset($carrier[$gwcontent]) ? $carrier[$gwcontent] : 4;
                     $provinceContent = isset($province[$gwcontent]) ? $province[$gwcontent] : '00';
