@@ -90,6 +90,13 @@
                             </select>
                         </div>
                         <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">{:__('Encrypt')}:</label>
+                            <select name="row[encrypt]" class="selectpicker" data-live-search="true">
+                                <option value="0" selected>请选择</option>
+                                <option value="1">AES加密</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <button type="submit" class="btn btn-success">{:__('Submit')}</button>
                             <button type="reset" class="btn btn-default">{:__('Reset')}</button>
                         </div>

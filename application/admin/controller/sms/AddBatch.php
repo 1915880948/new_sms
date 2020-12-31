@@ -280,6 +280,7 @@ class AddBatch extends Backend
                     $sends['data_id'] = 0;
                     $sends['shortlink'] = $shortLinkResult['data']['shortlink'];
                     $sends['link_from'] = $params['link_from'];
+                    $sends['encrypt'] = $params['encrypt'];
                     $sends['exclude_blacklist'] = 1;
                     $sends['sms_gate_id'] = $value['sms_gate_id'];
                     $sends['sms_template_id'] = 0;

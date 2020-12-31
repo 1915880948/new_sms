@@ -15,4 +15,5 @@ return [
     'Upload'                                      => '上传短信文件(txt)',
     'Upload Excel'                                => '上传短信任务(xlsx)',
     'Linkfrom'                                    => '链接来源',
+    'Encrypt'                                     => '加密方式',
 ];
