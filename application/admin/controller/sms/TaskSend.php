@@ -52,7 +52,6 @@ class TaskSend extends Backend
                 "22" =>'h8r.cn',
                 "23" =>'7j0.cn',
                 "24" =>'4g3.cn',
-                "25" =>'j0l.cn',
     ];
     protected $shortDomainArr = [
         0=>"j0q",
@@ -80,7 +79,6 @@ class TaskSend extends Backend
         22=>"h8r",
         23=>"7j0",
         24=>"4g3",
-        25=>"j0l",
     ];
     protected $statusArr = [
         1 => '待生成短链',
