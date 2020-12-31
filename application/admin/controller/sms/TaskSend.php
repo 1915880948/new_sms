@@ -590,9 +590,12 @@ class TaskSend extends Backend
         fclose($gw_mobile);
         foreach ($month_arr as $month) {
             $table = 'sms_send_data.sms_click_log_' . $month;
-            $count = Db::table($table)->where(['shortlink_id' =>json_encode($shortIds)])->where(['phone'=>['>',0]])->count();
+            Log::log( implode(',',$shortIds));
+            Log::log( json_encode($shortIds) );
+            $count = Db::table($table)->where(['shortlink_id' =>['in',implode(',',$shortIds)]])->where(['phone'=>['>',0]])->count();
+            Log::log($count);
             if ($count > 0) {
-                $list = Db::table($table)->distinct(true)->field('phone_sec,phone')->where(['shortlink_id' => json_encode($shortIds)])->where([['phone'=>['>',0]]])->select();
+                $list = Db::table($table)->distinct(true)->field('phone_sec,phone')->where(['shortlink_id' => ['in',implode(',',$shortIds)]])->where([['phone'=>['>',0]]])->select();
                 foreach ($list as $user) {
                     $gwcontent = substr($user['phone'],0,7);
                     $carrierContent = isset($carrier[$gwcontent]) ? $carrier[$gwcontent] : 4;
