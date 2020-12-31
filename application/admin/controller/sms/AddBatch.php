@@ -93,7 +93,7 @@ class AddBatch extends Backend
                 }
                 //短链域名
                 $sendTasks['domain_short'] = trim($currentSheet->getCellByColumnAndRow(3, $currentRow)->getValue());
-                if($sendTasks['domain_short'] !='n0x' && $sendTasks['domain_short'] !='h0e' && $sendTasks['domain_short'] !='9oj' && $sendTasks['domain_short'] !='5oj' && $sendTasks['domain_short'] !='vo4' && $sendTasks['domain_short'] !='j0q' && $sendTasks['domain_short'] !='p0o' && $sendTasks['domain_short'] !='b4m' && $sendTasks['domain_short'] !='h8r' && $sendTasks['domain_short'] !='7j0' && $sendTasks['domain_short'] !='4g3' && $sendTasks['domain_short'] !='j0l') {
+                if($sendTasks['domain_short'] !='n0x' && $sendTasks['domain_short'] !='h0e' && $sendTasks['domain_short'] !='9oj' && $sendTasks['domain_short'] !='5oj' && $sendTasks['domain_short'] !='vo4' && $sendTasks['domain_short'] !='j0q' && $sendTasks['domain_short'] !='p0o' && $sendTasks['domain_short'] !='b4m' && $sendTasks['domain_short'] !='h8r' && $sendTasks['domain_short'] !='7j0' && $sendTasks['domain_short'] !='4g3') {
                     $errorMsg .= "第{$currentRow}行短链域名不存在<br/>";
                     continue;
                 }
@@ -119,7 +119,7 @@ class AddBatch extends Backend
                 $sendTasks['is_single'] = trim($currentSheet->getCellByColumnAndRow(5, $currentRow)->getValue());
                 if ($sendTasks['is_single'] == '是' || $sendTasks['is_single'] == '特定'){
                     $sendTasks['dynamic_shortlink'] = trim($currentSheet->getCellByColumnAndRow(6, $currentRow)->getValue());
-                    if($sendTasks['domain_short'] !='n0x' && $sendTasks['domain_short'] !='h0e' && $sendTasks['domain_short'] !='9oj' && $sendTasks['domain_short'] !='5oj' && $sendTasks['domain_short'] !='vo4' && $sendTasks['domain_short'] !='j0q' && $sendTasks['domain_short'] !='p0o' && $sendTasks['domain_short'] !='b4m' && $sendTasks['domain_short'] !='h8r' && $sendTasks['domain_short'] !='7j0' && $sendTasks['domain_short'] !='4g3' && $sendTasks['domain_short'] !='j0l') {
+                    if($sendTasks['domain_short'] !='n0x' && $sendTasks['domain_short'] !='h0e' && $sendTasks['domain_short'] !='9oj' && $sendTasks['domain_short'] !='5oj' && $sendTasks['domain_short'] !='vo4' && $sendTasks['domain_short'] !='j0q' && $sendTasks['domain_short'] !='p0o' && $sendTasks['domain_short'] !='b4m' && $sendTasks['domain_short'] !='h8r' && $sendTasks['domain_short'] !='7j0' && $sendTasks['domain_short'] !='4g3') {
                         $errorMsg .= "第{$currentRow}行单点域名不存在<br/>";
                         continue;
                     }
@@ -247,7 +247,6 @@ class AddBatch extends Backend
                             case 'h8r': $sends['dynamic_shortlink'] = 22;break;
                             case '7j0': $sends['dynamic_shortlink'] = 23;break;
                             case '4g3': $sends['dynamic_shortlink'] = 24;break;
-                            case 'j0l': $sends['dynamic_shortlink'] = 25;break;
                             default: $sends['dynamic_shortlink'] = 3;
                         }
                     } else {
@@ -271,7 +270,7 @@ class AddBatch extends Backend
                         //$data['sms_content'] = str_replace([" ", "\n", "\r", "\t"], '', $data['sms_content'], $more_len);
 
                         $sms_content_len = mb_strlen($sends['sms_content'], 'UTF-8');
-                        if ($sms_content_len > 70) {
+                        if ($sms_content_len > 77) {
                             continue;
                         }
                     }

@@ -18,7 +18,6 @@ return [
             "h8r" =>'h8r.cn',
             "7j0" =>'7j0.cn',
             "4g3" =>'4g3.cn',
-            "j0l" =>'j0l.cn',
 //        "x0e" => 'x0e.cn',
 //        "u9t" => 'u9t.cn',
 //        "d0e" => 'd0e.cn(傅晓妹)',
