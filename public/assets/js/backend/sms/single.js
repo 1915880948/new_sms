@@ -64,9 +64,9 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 var options = table.bootstrapTable('getOptions');
                 var ids = Table.api.selectedids(table);
                 //Layer.confirm('你确定点击下载选中的'+ids.length+'项吗？', {icon: 3, title: __('Warning'), offset: 100, shadeClose: true},
-                Layer.confirm('<h4>你确定点击下载以下项吗？</h4><div style="margin-left: -20px; width: 300px;"><textarea  cols="3" style="width:290px;height:90px;border-radius:5px;" >'+ids.join(',')+'</textarea></div>', {icon: 3, title: __('Warning'), offset: 100, shadeClose: true},
+                Layer.confirm('<h4>你确定点击下载以下项吗？</h4><div style="margin-left: -20px; width: 300px;"><textarea id="txt-Ids" cols="3" style="width:290px;height:90px;border-radius:5px;" >'+ids.join(',')+'</textarea></div>', {icon: 3, title: __('Warning'), offset: 100, shadeClose: true},
                     function (index) {
-                        window.location.href = options.extend.click_url+"?ids="+ids;
+                        window.location.href = options.extend.click_url+"?ids="+$("#txt-Ids").val();
                         Layer.close(index);
                     }
                 );
