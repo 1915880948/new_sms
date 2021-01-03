@@ -48,6 +48,7 @@ class AddBatch extends Backend
             $files = $file_paths = [];
             $file_names = explode("\r\n", $params['file_name']);
             $file_paths = explode(',', $params['file_path']);
+            $txtNum = count($file_paths);
             foreach ($file_names as $k => $file_name) {
                 if ($file_name) {
                     if (!empty($file_paths[$k]) && !in_array($file_paths[$k], $files)) {
@@ -72,7 +73,7 @@ class AddBatch extends Backend
             $allColumn = $currentSheet->getHighestDataColumn(); //取得最大的列号
             $allRow = $currentSheet->getHighestRow(); //取得一共有多少行
             //$maxColumnNumber = Coordinate::columnIndexFromString($allColumn);
-            $num = 0;
+            $num = $ntxtNum = 0;
             $errorMsg = '';
             $contents = [];
             for ($currentRow  = 2; $currentRow <= $allRow; $currentRow++) {
@@ -105,6 +106,7 @@ class AddBatch extends Backend
                 $filetmp = trim($currentSheet->getCellByColumnAndRow(10, $currentRow)->getValue());
                 $filetmps = explode(',',$filetmp);
                 $fileCount = count($filetmps);
+                $ntxtNum += $fileCount;
                 for ($j=0;$j<$fileCount;$j++){
                     if (isset($files[$filetmps[$j]])) {
                         $filetmpname[] = $files[$filetmps[$j]];
@@ -143,6 +145,7 @@ class AddBatch extends Backend
                 $sendTasks['phone_space'] = trim($currentSheet->getCellByColumnAndRow(11, $currentRow)->getValue());
                 $contents[] = $sendTasks;
             }
+            if ($txtNum != $ntxtNum) $errorMsg .= "上传的txt文件个数与excel中不同";
             if ($errorMsg) {
                 $this->error($errorMsg);
             }
