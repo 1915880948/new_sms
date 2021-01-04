@@ -21,6 +21,7 @@ require.config({
         'adminlte': 'adminlte',
         'bootstrap-table-commonsearch': 'bootstrap-table-commonsearch',
         'bootstrap-table-template': 'bootstrap-table-template',
+        'bootstrap-table-fixed-columns': 'bootstrap-table-fixed-columns',
         //
         // 以下的包从bower的libs目录加载
         'jquery': '../libs/jquery/dist/jquery.min',
@@ -89,6 +90,10 @@ require.config({
             exports: '$.fn.bootstrapTable.defaults'
         },
         'bootstrap-table-jumpto': {
+            deps: ['bootstrap-table'],
+            exports: '$.fn.bootstrapTable.defaults'
+        },
+        'bootstrap-table-fixed-columns': {
             deps: ['bootstrap-table'],
             exports: '$.fn.bootstrapTable.defaults'
         },

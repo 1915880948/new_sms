@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefined, Backend, Table, Form) {
+define(['jquery', 'bootstrap', 'backend', 'table', 'form','bootstrap-table-fixed-columns'], function ($, undefined, Backend, Table, Form) {
 
     var Controller = {
         index: function () {
@@ -118,6 +118,12 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 // onlyInfoPagination: true,           //7.只显示总数据数
                 // showHeader: false,                  //8.是否显示列头
                 // paginationVAlign: 'top',            //9.指定分页条垂直位置
+
+                // $fixedHeaderColumns:true,
+
+                fixedColumns: true,//固定列
+                fixedNumber:2,//固定前两列
+
                 columns: [
                     [
                         {checkbox: true},
