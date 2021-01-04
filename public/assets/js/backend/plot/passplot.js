@@ -35,7 +35,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {checkbox: true},
                         {field: 'sp_no', title: __('Sp_no'),operate:false},
                         {field: 'chanel_no', title: __('Chanel_no'), operate: 'like'},
-                        {field: 'days', title: __('Days')},
+                        {field: 'days', title: __('Days'),formatter: Table.api.formatter.date, operate: '', type: 'date', addclass: 'datetimepicker', data: 'data-date-format="YYYY-MM-DD"'},
                         {field: 'total_num', title: __('Total_num'),operate:false},
                         {field: 'num', title: __('Num'),operate:false},
                         {field: 'dis_num', title: __('Dis_num'),operate:false},
