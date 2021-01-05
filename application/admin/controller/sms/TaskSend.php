@@ -666,6 +666,7 @@ class TaskSend extends Backend
             if( $sp['status'] == 3 && !$params['sms_template_id'] ){//如果是http通道，template_id必填
                 $this->error('http通道，必须选择短信模板！！');
             }
+            $params['sm_task_id'] = $linkShortLastID+1;
             $params['shortlink'] = $shortLinkResult['data'][0]['short_url'];
             $params['sms_content'] = preg_replace($this->pattern, $params['shortlink'], $params['sms_content']);
             $params['sms_content'] = trim($params['sms_content']);
@@ -857,6 +858,7 @@ class TaskSend extends Backend
             if( $sp['status'] == 3 && !$params['sms_template_id'] ){//如果是http通道，template_id必填
                 $this->error('http通道，必须选择短信模板！！');
             }
+            $params['sm_task_id'] = $linkShortLastID+1;
             $params['shortlink'] = $shortLinkResult['data'][0]['short_url'];
             $params['sms_content'] = preg_replace($this->pattern, $params['shortlink'], $params['sms_content']);
             $params['sms_content'] = trim($params['sms_content']);
