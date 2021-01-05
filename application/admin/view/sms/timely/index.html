@@ -10,7 +10,9 @@
                         <a href="javascript:;" class="btn btn-success btn-list {:$auth->check('sms/timely/list')?'':'hide'}" title="{:__('Config')}" ><i class="fa fa-gear"></i> {:__('Config')}</a>
                         <!--                        <a href="javascript:;" class="btn btn-success btn-edit btn-disabled disabled {:$auth->check('sms/timely/edit')?'':'hide'}" title="{:__('Edit')}" ><i class="fa fa-pencil"></i> {:__('Edit')}</a>-->
                         <!--                        <a href="javascript:;" class="btn btn-danger btn-del btn-disabled disabled {:$auth->check('sms/timely/del')?'':'hide'}" title="{:__('Delete')}" ><i class="fa fa-trash"></i> {:__('Delete')}</a>-->
-
+                        <!--                        <a href="javascript:;" class="btn btn-danger btn-filed_download btn-disabled disabled" title="失败下载" ><i class="fa fa-download"></i> 失败下载</a>-->
+                        <a href="javascript:;" class="btn btn-success btn-success_download btn-disabled disabled" title="成功下载" ><i class="fa fa-download"></i> 成功下载</a>
+                        <a href="javascript:;" class="btn btn-info btn-click_download btn-disabled disabled" title="点击下载" ><i class="fa fa-download"></i> 点击下载</a>
                     </div>
                     <table id="table" class="table table-striped table-bordered table-hover table-nowrap"
                            data-operate-edit="{:$auth->check('sms/timely/edit')}"

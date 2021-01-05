@@ -17,6 +17,9 @@ class Income extends Backend
     protected $typeList = [
         "1" =>'守护保',
         "2" =>'得保',
+        "3" =>'豪斯莱广发',
+        "4" =>'麦星广发',
+        "5" =>'顺风车',
     ];
     
     /**
@@ -31,6 +34,9 @@ class Income extends Backend
         $this->model = new \app\admin\model\plot\Income;
         $this->debaoDetailModel = new \app\admin\model\plot\Debaodetail;
         $this->shouhubaoDetailModel = new \app\admin\model\plot\Shouhubaodetail;
+        $this->hslgfDetailModel = new \app\admin\model\plot\Hslgfdetail;
+        $this->mxgfDetailModel = new \app\admin\model\plot\Mxgfdetail;
+        $this->sfcDetailModel = new \app\admin\model\plot\Sfcdetail;
 
     }
     
@@ -100,18 +106,61 @@ class Income extends Backend
             $allRow = $currentSheet->getHighestRow(); //取得一共有多少行
             //$maxColumnNumber = Coordinate::columnIndexFromString($allColumn);
             for ($currentRow  = 2; $currentRow <= $allRow; $currentRow++) {
-                $channel         = trim($currentSheet->getCellByColumnAndRow(2, $currentRow)->getValue());
-                $enter_time     = trim($currentSheet->getCellByColumnAndRow(3, $currentRow)->getValue());
+                if ($params['type'] == 1 || $params['type'] == 2) {
+                    $channel = trim($currentSheet->getCellByColumnAndRow(2, $currentRow)->getValue());
+                    $enter_time = trim($currentSheet->getCellByColumnAndRow(3, $currentRow)->getValue());
 
-                if( empty($channel) )  break;
-                if( empty($enter_time) )  break;
-                $values = [
-                    'channel'    => $channel,
-                    'enter_time'  => $enter_time,
-                    'bank_id'          => $bank_id,
-                    'creator'       => $creator,
-                    'create_time'   => date('Y-m-d H:i:s'),
-                ];
+                    if (empty($channel)) continue;
+                    if (empty($enter_time)) continue;
+                    $values = [
+                        'channel' => $channel,
+                        'enter_time' => $enter_time,
+                        'bank_id' => $bank_id,
+                        'creator' => $creator,
+                        'create_time' => date('Y-m-d H:i:s'),
+                    ];
+                }elseif ($params['type'] == 3 || $params['type'] == 4){
+                    $channel = trim($currentSheet->getCellByColumnAndRow(2, $currentRow)->getValue());
+                    $enter_time = trim($currentSheet->getCellByColumnAndRow(1, $currentRow)->getValue());
+                    if (is_numeric($enter_time)){
+                        $enter_time = gmdate('Y-m-d H:i',intval(($enter_time - 25569) * 3600 * 24));
+                    }
+                    $import_num = trim($currentSheet->getCellByColumnAndRow(3, $currentRow)->getValue());
+                    $approved_num = trim($currentSheet->getCellByColumnAndRow(4, $currentRow)->getValue());
+
+                    if (empty($channel)) continue;
+                    if (empty($enter_time)) continue;
+                    $values = [
+                        'channel' => $channel,
+                        'enter_time' => $enter_time,
+                        'import_num' => $import_num,
+                        'approved_num' => $approved_num,
+                        'bank_id' => $bank_id,
+                        'creator' => $creator,
+                        'create_time' => date('Y-m-d H:i:s'),
+                    ];
+                }else{
+                    $channel = trim($currentSheet->getCellByColumnAndRow(5, $currentRow)->getValue());
+                    $collect_time = trim($currentSheet->getCellByColumnAndRow(2, $currentRow)->getValue());
+                    if (is_numeric($collect_time)){
+                        $collect_time = gmdate('Y-m-d H:i',intval(($collect_time - 25569) * 3600 * 24));
+                    }
+                    $auth_time = trim($currentSheet->getCellByColumnAndRow(3, $currentRow)->getValue());
+                    if (is_numeric($auth_time)){
+                        $auth_time = gmdate('Y-m-d H:i',intval(($auth_time - 25569) * 3600 * 24));
+                    }
+                    if (empty($channel) || $channel == "(NULL)") continue;
+                    if (empty($collect_time) || $collect_time == "(NULL)") continue;
+                    if (empty($auth_time) || $auth_time == "(NULL)") $auth_time = null;
+                    $values = [
+                        'channel' => $channel,
+                        'collect_time' => $collect_time,
+                        'auth_time' => $auth_time,
+                        'bank_id' => $bank_id,
+                        'creator' => $creator,
+                        'create_time' => date('Y-m-d H:i:s'),
+                    ];
+                }
                 $insert[] = $values;
                 $num ++;
             }
@@ -129,10 +178,23 @@ class Income extends Backend
                 $this->model->save($incomes);
                 if ($params['type'] == 1){
                     $result = $this->shouhubaoDetailModel->saveAll($insert);
-                }else{
+                }elseif ($params['type'] == 2){
                     $result = $this->debaoDetailModel->saveAll($insert);
+                }elseif ($params['type'] == 3){
+                    $result = $this->hslgfDetailModel->saveAll($insert);
+                }elseif ($params['type'] == 4){
+                    $result = $this->mxgfDetailModel->saveAll($insert);
+                }else{
+                    Db::query("truncate sms_sfc_income_detail");
+                    $inum = 100;//每次导入条数
+                    $limit = ceil($num/$inum);
+                    for($i=1;$i<=$limit;$i++){
+                        $offset=($i-1)*$inum;
+                        $data=array_slice($insert,$offset,$inum);
+                        $result=Db::table('sms_sfc_income_detail')->insertAll($data);
+                    }
+                    //$result = $this->sfcDetailModel->saveAll($insert);
                 }
-
                 Db::commit();
             } catch (ValidateException $e) {
                 Db::rollback();

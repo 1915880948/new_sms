@@ -28,6 +28,9 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     edit_url: 'sms/timely/config',
                     del_url: 'sms/timely/del',
                     multi_url: 'sms/timely/config',
+                    failed_url: 'task_send/failedDownload',
+                    success_url: 'task_send/successDownload',
+                    click_url: 'task_send/clickDownload',
                     table: 'sms_task_send',
                 }
             });
@@ -45,6 +48,42 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
 
                 var url = options.extend.list_url;
                 Fast.api.open(url, __('Config'), $(this).data() || {});
+            });
+
+            $(document).on("click", ".btn-filed_download", function () {
+                var _this = this;
+                //Bootstrap-table配置
+                var options = table.bootstrapTable('getOptions');
+                var ids = Table.api.selectedids(table);
+                Layer.confirm('你确定失败下载选中的'+ids.length+'项吗？', {icon: 3, title: __('Warning'), offset: 100, shadeClose: true},
+                    function (index) {
+                        window.location.href = options.extend.failed_url+"?ids="+ids;
+                        Layer.close(index);
+                    }
+                );
+            });
+            // 成功下载
+            $(document).on("click", ".btn-success_download", function () {
+                var options = table.bootstrapTable('getOptions');
+                var ids = Table.api.selectedids(table);
+                Layer.confirm('你确定成功下载选中的'+ids.length+'项吗？', {icon: 3, title: __('Warning'), offset: 100, shadeClose: true},
+                    function (index) {
+                        window.location.href = options.extend.success_url+"?ids="+ids;
+                        Layer.close(index);
+                    }
+                );
+            });
+            // 点击下载
+            $(document).on("click", ".btn-click_download", function () {
+                var options = table.bootstrapTable('getOptions');
+                var ids = Table.api.selectedids(table);
+                //Layer.confirm('你确定点击下载选中的'+ids.length+'项吗？', {icon: 3, title: __('Warning'), offset: 100, shadeClose: true},
+                Layer.confirm('<h4>你确定点击下载以下项吗？</h4><div style="margin-left: -20px; width: 300px;"><textarea id="txt-Ids" cols="3" style="width:290px;height:90px;border-radius:5px;" >'+ids.join(',')+'</textarea></div>', {icon: 3, title: __('Warning'), offset: 100, shadeClose: true},
+                    function (index) {
+                        window.location.href = options.extend.click_url+"?ids="+$("#txt-Ids").val();
+                        Layer.close(index);
+                    }
+                );
             });
 
             //在普通搜索渲染后
