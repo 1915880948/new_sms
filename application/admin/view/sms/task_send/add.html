@@ -46,6 +46,15 @@
         </div>
     </div>
     {/if}
+    {if $link_from==1}
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Dynamic_shortlink')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_select('row[dynamic_shortlink]',$domainList,'',['class'=>'form-control selectpicker','data-live-search'=>'true'])}
+            <span class="check-tips">（选择后每个用户收到的短链各不相同，可针对每个用户记录是否点击，比较消耗服务器性能）</span>
+        </div>
+    </div>
+    {/if}
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Title')}:</label>
         <div class="col-xs-12 col-sm-8">
@@ -91,15 +100,6 @@
             </div>
         </div>
     </div>
-    {if $link_from==1}
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Dynamic_shortlink')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            {:build_select('row[dynamic_shortlink]',$domainList,'',['class'=>'form-control selectpicker','data-live-search'=>'true'])}
-            <span class="check-tips">（选择后每个用户收到的短链各不相同，可针对每个用户记录是否点击，比较消耗服务器性能）</span>
-        </div>
-    </div>
-    {/if}
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Exclude_blacklist')}:</label>
         <div class="col-xs-12 col-sm-8">
