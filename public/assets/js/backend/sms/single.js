@@ -121,8 +121,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form','bootstrap-table-fixed
 
                 // $fixedHeaderColumns:true,
 
-                fixedColumns: true,//固定列
-                fixedNumber:2,//固定前两列
+                // fixedColumns: true,//固定列
+                // fixedNumber:2,//固定前两列
 
                 columns: [
                     [
