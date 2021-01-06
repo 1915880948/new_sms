@@ -525,12 +525,9 @@ class TaskSend extends Backend
                         $endata = json_decode($endata,true);
                         foreach ($endata['data'] as $key=>$value){
                             $gwcontent = substr($key,0,7);
-                            $carrierContent = $carrier[$gwcontent];
-                            $provinceContent = $province[$gwcontent];
-                            $cityContent = $city[$gwcontent];
-                            $carrierContent = $carrierContent ? $carrierContent : 4;
-                            $provinceContent = $provinceContent ? $provinceContent : '00';
-                            $cityContent = $cityContent ? $cityContent : '000';
+                            $carrierContent = isset($carrier[$gwcontent])?$carrier[$gwcontent]:4;
+                            $provinceContent = isset($province[$gwcontent])?$province[$gwcontent]:'00';
+                            $cityContent = isset($city[$gwcontent])?$city[$gwcontent]:'000';
                             $enContent = $carrierContent.$provinceContent.$cityContent.'00'.$value;
                             echo $enContent . "\n";
                         }
