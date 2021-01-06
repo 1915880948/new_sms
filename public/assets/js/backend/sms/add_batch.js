@@ -42,7 +42,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload'], function (
                 //这里进行后续操作
                 console.log(data.row);
                 let file_json = JSON.parse(data.row.extparam);
-                $("#textarea").val($("#textarea").val()+file_json.name+"\n")
+                $("#textarea").val($("#textarea").val()+file_json.name+"\n");
+                $("#files_list").val($("#files_list").val()+file_json.name+","+data.row.url+"|");
                 //$("input[name='file_name']").val(file_json.name);
                 /*var url = Backend.api.cdnurl(data.url);
                 $(".profile-user-img").prop("src", url);

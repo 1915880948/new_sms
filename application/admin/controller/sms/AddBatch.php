@@ -46,13 +46,16 @@ class AddBatch extends Backend
                 $this->error('请上传任务');
             }
             $files = $file_paths = [];
-            $file_names = explode("\r\n", $params['file_name']);
-            $file_paths = explode(',', $params['file_path']);
-            $txtNum = count($file_paths);
-            foreach ($file_names as $k => $file_name) {
+            $files_list = rtrim($params['files_list'],"|");
+            $files_list = explode('|', $files_list);
+            $txtNum = count($files_list);
+            foreach ($files_list as $file_list) {
+                $filelists = explode(",",$file_list);
+                $file_name = md5(trim($filelists[0]));
+                $file_path = $filelists[1];
                 if ($file_name) {
-                    if (!empty($file_paths[$k]) && !in_array($file_paths[$k], $files)) {
-                        $files[$file_name] = $file_paths[$k];
+                    if (!empty($file_path) && !in_array($file_path, $files)) {
+                        $files[$file_name] = $file_path;
                     }
                 }
             }
@@ -108,8 +111,9 @@ class AddBatch extends Backend
                 $fileCount = count($filetmps);
                 $ntxtNum += $fileCount;
                 for ($j=0;$j<$fileCount;$j++){
-                    if (isset($files[$filetmps[$j]])) {
-                        $filetmpname[] = $files[$filetmps[$j]];
+                    $efilename = md5(trim($filetmps[$j]));
+                    if (isset($files[$efilename])) {
+                        $filetmpname[] = $files[$efilename];
                     }
                 }
                 $sendTasks['file_path'] = implode(',', $filetmpname);
