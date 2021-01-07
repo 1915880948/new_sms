@@ -1,0 +1,88 @@
+<form id="add-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Source_task_id')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-source_task_id" data-rule="required" data-source="source/task/index" class="form-control selectpage" name="row[source_task_id]" type="text" value="">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Url_no')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-url_no" data-rule="required" class="form-control" name="row[url_no]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Num_total')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-num_total" data-rule="required" class="form-control" name="row[num_total]" type="number" value="0">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Original_num')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-original_num" class="form-control" name="row[original_num]" type="number">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Num_30day_new')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-num_30day_new" class="form-control" name="row[num_30day_new]" type="number">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Filter_city_num')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-filter_city_num" class="form-control" name="row[filter_city_num]" type="number">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Not_filter_rule_num')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-not_filter_rule_num" class="form-control" name="row[not_filter_rule_num]" type="number">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Threshold_before_num')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-threshold_before_num" class="form-control" name="row[threshold_before_num]" type="number">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Threshold_after_num')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-threshold_after_num" class="form-control" name="row[threshold_after_num]" type="number">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Limit_output_before_num')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-limit_output_before_num" class="form-control" name="row[limit_output_before_num]" type="number">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Create_time')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-create_time" data-rule="required" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[create_time]" type="text" value="{:date('Y-m-d H:i:s')}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Isnormal')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-isnormal" class="form-control" name="row[isnormal]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Cost')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-cost" class="form-control" name="row[cost]" type="text">
+        </div>
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

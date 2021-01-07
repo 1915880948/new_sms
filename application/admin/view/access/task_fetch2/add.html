@@ -1,0 +1,109 @@
+<form id="add-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+<!--    <div class="form-group">-->
+<!--        <label class="control-label col-xs-12 col-sm-2">{:__('模型')}:</label>-->
+<!--        <div class="col-xs-12 col-sm-8">-->
+<!--            {:build_select('row[mod]',$modList,'',['id'=>'c-mod','class'=>'form-control selectpicker','data-live-search'=>'true','data-rule'=>'required'])}-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="form-group">-->
+<!--        <label class="control-label col-xs-12 col-sm-2">{:__('时间区间')}:</label>-->
+<!--        <div class="col-xs-12 col-sm-8">-->
+<!--            <div class="col-xs-6 col-sm-6">-->
+<!--                <input id="c-start_time" class="form-control datetimepicker" data-date-format="YYYY-MM-DD" data-use-current="true" name="row[start_time]" type="text" value="{:date('Y-m-d')}">-->
+<!--            </div>-->
+<!--            <div class="col-xs-6 col-sm-6">-->
+<!--                <input id="c-end_time" class="form-control datetimepicker" data-date-format="YYYY-MM-DD" data-use-current="true" name="row[end_time]" type="text" value="{:date('Y-m-d')}">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Batchs')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="col-xs-12 col-sm-10">
+                <textarea id="c-batchs" class="form-control" rows="3" name="row[batchs]"  data-rule="required"></textarea>
+            </div>
+            <div class="col-xs-2 col-sm-2">
+                <div class="input-group-addon no-border no-padding">
+                    <span><button type="button" id="fachoose-batchs" class="btn btn-primary fachoose-batchs" data-input-id="batchs" data-mimetype="txt" data-multiple="true"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Url_nos')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="col-xs-12 col-sm-10">
+                <textarea id="c-url_nos" class="form-control" rows="3" name="row[url_nos]" data-rule="required"></textarea>
+            </div>
+            <div class="col-xs-2 col-sm-2">
+                <div class="input-group-addon no-border no-padding">
+                    <span><button type="button" id="fachoose-url_nos" class="btn btn-primary fachoose-url_nos" data-input-id="url_nos" data-mimetype="txt" data-multiple="true"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Min_num')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-min_num" class="form-control" name="row[min_num]" type="number" min="0">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Max_num')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-max_num" class="form-control" name="row[max_num]" type="number" min="0">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Region')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <textarea id="c-region" class="form-control" rows="3" name="row[region]" ></textarea>
+            <div class="col-xs-6 col-sm-6">
+                <button type="button" class="btn btn-info button_tree">{:__('地域')}</button>
+                <button type="button" class="btn btn-default button_tree_visible">{:__('显示/隐藏')}</button>
+<!--                <span class="text-muted"><input type="checkbox" name="" id="checkall" /> <label for="checkall"><small>{:__('Check all')}</small></label></span>-->
+<!--                <span class="text-muted"><input type="checkbox" name="" id="expandall" /> <label for="expandall"><small>{:__('Expand all')}</small></label></span>-->
+
+                <div id="treeview"></div>
+            </div>
+            <div class="col-xs-6 col-sm-6">
+                {:build_select('bank_area',$bankAreasList,'',['class'=>'form-control selectpicker','data-live-search'=>'true'])}
+            </div>
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Black')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_select('row[black]',$blackList,'',['class'=>'form-control selectpicker','data-live-search'=>'true','data-rule'=>'required'])}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Out_type')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_radios('row[out_type]',$outTypeList,0)}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Create_time')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-create_time" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[create_time]" type="text" value="{:date('Y-m-d H:i:s')}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Remark')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-remark" class="form-control" name="row[remark]" type="text">
+        </div>
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

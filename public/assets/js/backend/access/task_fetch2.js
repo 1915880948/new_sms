@@ -22,13 +22,13 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form','jstree'], function ($
             Table.api.init({
                 extend: {
                     index_url: 'access/task_fetch/index' + location.search,
-                    add_url: 'access/task_fetch/add',
+                    add_url: 'access/task_fetch2/add',
                     //edit_url: 'access/task_fetch/edit',
                     //del_url: 'access/task_fetch/del',
-                    import_url: 'access/task_fetch/import',
-                    // download_beach_url: 'access/task_fetch/download_beach',
-                    // deal2_url: 'access/task_fetch/deal2',
-                    // download_beach2_url: 'access/task_fetch/download_beach2',
+                    import_url: 'access/task_fetch2/import',
+                    download_beach_url: 'task_fetch/downloadBatch',
+                    deal2_url: 'access/task_fetch/deal2',
+                    download_beach2_url: 'task_fetch/downloadBatch2',
                     multi_url: 'access/task_fetch/multi',
                     table: 'sms_fetch_task',
                 }
@@ -45,6 +45,40 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form','jstree'], function ($
                 var toolbar = $(options.toolbar, parenttable);
 
                 Fast.api.open(options.extend.import_url, __('批量导入'), $(this).data() || {});
+            });
+            // 打包下载
+            $(document).on("click", ".btn-download", function () {
+                var options = table.bootstrapTable('getOptions');
+                var ids = Table.api.selectedids(table);
+                Layer.confirm('<h4>你确定打包下载以下项吗？</h4><div>'+ids.join(',')+'</div>', {icon: 3, title: __('Warning'), offset: 100, shadeClose: true},
+                    function (index) {
+                        window.location.href = options.extend.download_beach_url+"?ids="+ids;
+                        Layer.close(index);
+                    }
+                );
+            });
+            // 二次处理
+            $(document).on("click", ".btn-deal2", function () {
+                var options = table.bootstrapTable('getOptions');
+                var ids = Table.api.selectedids(table);
+                Layer.confirm('<h4>你确定二次处理以下项吗？</h4><div>'+ids.join(',')+'</div>', {icon: 3, title: __('Warning'), offset: 100, shadeClose: true},
+                    function (index) {
+                        //Fast.config.openArea = ['1200px','600px'];
+                        Fast.api.open(options.extend.deal2_url+'?ids='+ids, '二次处理：'+ids, $(this).data() || {});
+                        Layer.close(index);
+                    }
+                );
+            });
+            // 二次处理下载
+            $(document).on("click", ".btn-download2", function () {
+                var options = table.bootstrapTable('getOptions');
+                var ids = Table.api.selectedids(table);
+                Layer.confirm('<h4>你确定二次处理下载以下项吗？</h4><div>'+ids.join(',')+'</div>', {icon: 3, title: __('Warning'), offset: 100, shadeClose: true},
+                    function (index) {
+                        window.location.href = options.extend.download_beach2_url+"?ids="+ids;
+                        Layer.close(index);
+                    }
+                );
             });
 
             // 初始化表格
@@ -107,10 +141,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form','jstree'], function ($
                                 icon: 'fa fa-download',
                                 classname: 'btn btn-danger btn-xs  btn-download',
                                 url:'access/task_fetch/download',
-                                // click:function(data,row){
-                                    //console.log(row);
-                                    // Fast.api.open('access/task_fetch/download?ids='+row.id);
-                                // },
                             }],
                             formatter: Table.api.formatter.operate
                         }
@@ -160,13 +190,19 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form','jstree'], function ($
                 });
                 return false;
             });
-            // 选择标签编号
+            // 选择URL模型编号
             $(document).on("click", "#fachoose-url_nos", function () {
                 var that = this;
+                var batch_ids = $("#c-batchs").val();
+                if( !batch_ids ){
+                    Toastr.error('请先选择批次号！！！');
+                    return false;
+                }
                 var multiple = $(this).data("multiple") ? $(this).data("multiple") : false;
                 var mimetype = $(this).data("mimetype") ? $(this).data("mimetype") : '';
-                parent.Fast.api.open("access/lable/select?element_id=" + $(this).attr("id") + "&multiple=" + multiple + "&mimetype=" + mimetype , __('Choose'), {
+                parent.Fast.api.open("data_in/task_source_detail/select?element_id=" + $(this).attr("id") + "&multiple=" + multiple + "&mimetype=" + mimetype+'&batch_ids='+batch_ids , __('Choose'), {
                     callback: function (data) {
+                        console.log(data);
                         var button = $("#" + $(that).attr("id"));
                         var maxcount = $(button).data("maxcount");
                         var input_id = $(button).data("input-id") ? $(button).data("input-id") : "";
@@ -302,47 +338,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form','jstree'], function ($
 
             Controller.api.bindevent();
         },
-        // download_beach:function () {
-        //
-        //     Controller.api.bindevent();
-        // },
-        deal2:function () {
-            // 选择需过滤的历史文件:
-            $(document).on("click", "#fachoose-filter_history_ids", function () {
-                var that = this;
-                var multiple = $(this).data("multiple") ? $(this).data("multiple") : false;
-                var mimetype = $(this).data("mimetype") ? $(this).data("mimetype") : '';
-                parent.Fast.api.open("filter_history/select?element_id=" + $(this).attr("id") + "&multiple=" + multiple + "&mimetype=" + mimetype, __('Choose'), {
-                    callback: function (data) {
-                        var button = $("#" + $(that).attr("id"));
-                        var maxcount = $(button).data("maxcount");
-                        var input_id = $(button).data("input-id") ? $(button).data("input-id") : "";
-                        maxcount = typeof maxcount !== "undefined" ? maxcount : 0;
-                        if (input_id && data.multiple) {
-                            var selectArr = [];
-                            var inputObj = $("#" + input_id);
-                            var value = $.trim(inputObj.val());
-                            if (value !== "") {
-                                selectArr.push(inputObj.val());
-                            }
-                            selectArr.push(data.select_arr);
-                            var result = selectArr.join("|");
-                            //inputObj.val(result).trigger("change").trigger("validate");
-                            $("#c-" + input_id).val(result).trigger("change").trigger("validate");
-                        } else {
-                            $("#c-" + input_id).val(data.row.task_id).trigger("change").trigger("validate");
-                        }
-                    }
-                });
-                return false;
-            });
 
-            Controller.api.bindevent();
-        },
-        // download_beach2:function () {
-        //
-        //     Controller.api.bindevent();
-        // },
     };
     return Controller;
 });

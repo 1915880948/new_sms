@@ -4,21 +4,18 @@ namespace app\admin\controller\access;
 
 use app\admin\model\access\basic\InfoBankArea;
 use app\admin\model\basic\Company;
-use app\admin\model\basic2\FilterBlack;
-use app\admin\model\basic2\ProvinceCityCode;
 use app\common\controller\Backend;
 use PhpOffice\PhpSpreadsheet\Reader\Xls;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use think\Config;
 use think\Env;
-use think\Log;
 
 /**
  * 取数任务管理
  *
  * @icon fa fa-circle-o
  */
-class TaskFetch extends Backend
+class TaskFetch2 extends Backend
 {
     protected $relationSearch = true;
     /**
@@ -55,40 +52,6 @@ class TaskFetch extends Backend
         1 => '云海出数形式',
         2 => 'AI出数形式',
     ];
-    //全局黑名单
-    private $blackAllArr = [
-        1 => '全局黑名单',
-        17=> '回T黑名单',
-    ];
-    //分开业务黑名单库
-    private $blackNewArr = [
-        2 => '游戏黑名单',
-        10 => '保险黑名单',
-        11 => '信用卡黑名单',
-        18 => '恒丰银行黑名单',
-        19 => '新广发黑名单',
-        21 => '保险通道黑名单',
-    ];
-    //疑似库
-    private $distrustArr = [
-        3 => '中信疑似库',
-        4 => '兴业疑似库',
-        5 => '民生疑似库',
-        6 => '平安疑似库',
-        7 => '广发疑似库',
-        16=> '民生疑似库小',
-    ];
-    //敏感库
-    private $sensitiveArr = [
-        8 => 'u2传奇不敏感用户',
-        9 => 'TY+TL不敏感库',
-        12 => '多次发送不点击用户',
-        13 => '保险不敏感库',
-        14 => '信用卡大于等于2',
-        15 => '信用卡大于等于3',
-        20 => 'CCI投保用户',
-    ];
-
     public function _initialize()
     {
         parent::_initialize();
@@ -101,7 +64,7 @@ class TaskFetch extends Backend
      * 需要将application/admin/library/traits/Backend.php中对应的方法复制到当前控制器,然后进行修改
      */
 
-    // 数据出库--标签
+    // 数据出库
     public function add()
     {
         if( $this->request->isPost() ){
@@ -127,6 +90,7 @@ class TaskFetch extends Backend
         return  $this->view->fetch();
     }
 
+    // 暂时不用
     public function edit($ids = null)
     {
         $row = $this->model->get($ids);
@@ -139,7 +103,7 @@ class TaskFetch extends Backend
         $this->view->assign("statusList", $this->statusList);
         return $this->view->fetch();
     }
-
+    // 暂时不用
     public function detail($ids=null){
         $row = $this->model->get($ids);
         if (!$row) {
@@ -154,7 +118,7 @@ class TaskFetch extends Backend
         $this->view->assign("outTypeList", $this->outTypeList);
         return $this->view->fetch();
     }
-
+    // 暂时不用
     public function download($ids=null){
         $row = $this->model->get($ids);
         if (!$row) {
@@ -201,10 +165,9 @@ class TaskFetch extends Backend
 
         fclose($fp);
 
-
     }
 
-    // 根据标签编号导入
+    // 根据URL模型编号导入
     public function import()
     {
         if( $this->request->isPost() ){
@@ -226,7 +189,7 @@ class TaskFetch extends Backend
                 $this->error(__('Unknown data format'));
             }
             $taskSourceModel = new \app\admin\model\data_in\TaskSource();
-            $labelModel = new \app\admin\model\access\Lable();
+            $taskSourceDetailModel = new \app\admin\model\data_in\TaskSourceDetail();
             $insert = [];
             $currentSheet = $PHPExcel->getSheet(0);  //读取文件中的第一个工作表
             $allColumn = $currentSheet->getHighestDataColumn(); //取得最大的列号
@@ -257,7 +220,10 @@ class TaskFetch extends Backend
                     $batchRowError[] = $currentRow;
                     continue;
                 }
-                $urlCount = $labelModel->where(['code' => ['in',explode('|', $values['url_nos'])]])->count();
+                $urlCount = $taskSourceDetailModel->where([
+                    'source_task_id' => ['in',explode('|', $values['batchs'])],
+                    'url_no' => ['in',explode('|', $values['url_nos'])]
+                ])->count();
                 if( !$urlCount ){
                     continue;
                 }
@@ -278,156 +244,4 @@ class TaskFetch extends Backend
         return  $this->view->fetch();
     }
 
-    // 打包下载
-    public function downloadBatch($ids){
-        if( !$ids ){
-            $this->error('缺少参数：ids');
-        }
-        $rows = $this->model->where(['id'=>['in',$ids]])->select();
-        foreach ( $rows as $item){
-            if( $item['status'] < 3){
-                $this->error('未出库完毕，ID:'.$item['id']);
-            }
-        }
-        $zipname = 'result-' . str_replace(',','-',$ids).'-'.time() . '.zip'; //最终生成的文件名
-        $filepath = Env::get('file.UPLOAD_BIG_DOWNLOAD') . 'hu_output/' . $zipname;
-        if (file_exists($filepath)) {
-            unlink($filepath);
-        }
-        //重新生成文件
-        $zip = new \ZipArchive();
-
-        if ($zip->open($filepath, \ZipArchive::CREATE) === TRUE) {
-            //print_r($zip);die;
-            foreach ($rows as $val) {
-                if (file_exists(Env::get('file.UPLOAD_BIG_DOWNLOAD') . 'tian_output/models' . $val['id'] . '.txt')) {
-                    $zip->addFile(Env::get('file.UPLOAD_BIG_DOWNLOAD') . 'tian_output/models' . $val['id'] . '.txt', $val['remark'] . "-" . $val['total_num'] . '条.txt');
-                }
-            }
-            $zip->close();//关闭
-            if (!file_exists($filepath)) {
-                $this->error('无法找到文件');//即使创建，仍有可能失败
-            }
-            //下载zip包，下载完删除压缩数据
-            header("Content-Type: application/zip");
-            header("Content-Transfer-Encoding: Binary");
-            header("Content-Length: " . filesize($filepath));
-            header("Content-Disposition: attachment; filename=" . $zipname);
-            readfile($filepath);
-            unlink($filepath);
-            ob_flush();
-            flush();
-            exit;
-        }
-        $this->error('无法打开文件，或者文件创建失败');
-    }
-
-    // 二次处理
-    public function deal2($ids){
-
-        if( $this->request->isPost() ){
-            $params = $this->request->post('row/a');
-            $rows = $this->model->where(['id'=>['in',$params['ids']]])->select();
-            $blackNames = [];
-            if ( !empty($params['black']) )  $blackNames[] = $params['black'] . "/*";
-            if ( !empty($params['all_black']) ) $blackNames[] = $params['all_black'] . "/*";
-            if ( !empty($params['distrust']) ) $blackNames[] = $params['distrust'] . "/*";
-            if ( !empty($params['sensitive']) ) $blackNames[] = $params['sensitive'] . "/*";
-            if ( !empty($params['filter_history_ids']) ) {
-                $blackName = explode(',', $params['filter_history_ids']);
-                foreach ($blackName as $v) {
-                    $blackName_n[] = "b/" . $v;
-                }
-                $blackNames[] = implode(',', $blackName_n);
-            }
-            $params['black_name'] = implode(',', $blackNames);
-            if (empty($params['black_name'])) { //没有选择就选默认无用的
-                $params['black_name'] = "0/*";
-            }
-            $params['bank_city_codes'] = "全国";
-            if( !empty($params['region']) ){
-                $provinceCityCodeModel = new ProvinceCityCode();
-                $bank_city_codes = $provinceCityCodeModel->where(['city'=>['in',str_replace('|',',',$params['region'])]])->column('city_code');
-                $params['bank_city_codes'] = implode('|', $bank_city_codes);
-            }
-            $params['status'] = 1;
-            //$params['bank'] = 0;
-            $params['creator'] =  $this->auth->getUserInfo()['username'];
-            $params['create_time'] = date('Y-m-d H:i:s');
-            $filterBlackModel = new FilterBlack();
-            unset($params['ids']);
-            unset($params['filter_history_ids']);
-            foreach ($rows as $item){
-                if( $item['status'] <3 )  continue;
-                $params['num'] = $item['total_num'];
-                $params['output_pid_task_id'] = $item['id'];
-                $rs = $filterBlackModel->insertGetId($params);
-                //Log::log('$filterBlackModel----->id:'.$rs);
-                $abc = copy(Env::get('file.UPLOAD_BIG_DOWNLOAD') . "tian_output/models" . $item['id'] . ".txt", Env::get('file.UPLOAD_BLACK_DOWNLOAD') . "need_filter_file/" . $rs);
-                $filterBlackModel->save(array('file_name' => $rs),['id'=>$rs]);
-                $this->model->save(array('status' => 4),['id'=>$item['id']]);
-            }
-            $this->success('二次处理成功');
-        }
-
-        //取有覆盖地域的银行数据
-        $bankAreasList = (new InfoBankArea())->where(['status'=>1])->field('distinct bank_id, bank_name')->select();
-        $bankAreasList = array_combine(array_column($bankAreasList,'bank_id'),array_column($bankAreasList,'bank_name'));
-        //array_unshift($bankAreasList,'请选择');
-
-
-        $this->assign('ids', $ids);
-        $this->view->assign("bankAreasList", $bankAreasList);
-
-        $this->assign('blackAllArr', $this->blackAllArr);
-        $this->assign('blackNewArr', $this->blackNewArr);
-        $this->assign('distrustArr', $this->distrustArr);
-        $this->assign('sensitiveArr', $this->sensitiveArr);
-        return $this->view->fetch();
-    }
-
-    // 二次处理下载
-    public function downloadBatch2($ids){
-        if (empty($ids)) {
-            $this->error('请选择需要批量下载的任务');
-        }
-
-        $rows =  $this->model->where(['id'=>['in',$ids]])->select();
-        foreach ($rows as $data) {
-            if ($data['status'] != 5) {
-                $this->error('请确认所选择的任务已全部二次出库完毕');
-            }
-        }
-        $zipname = 'result-' .str_replace(',','-',$ids).'-'. time() . '.zip'; //最终生成的文件名
-        $filepath = Env::get('file.UPLOAD_BIG_DOWNLOAD') . 'hu_output/' . $zipname;
-        if (file_exists($filepath)) {
-            unlink($filepath);
-        }
-        //重新生成文件
-        $zip = new \ZipArchive();
-        if ($zip->open($filepath, \ZipArchive::CREATE) !== TRUE) {
-            $this->error('无法打开文件，或者文件创建失败');
-        }
-        $filterBlackModel = new FilterBlack();
-        foreach ($rows as $val) {
-            $black_id = $filterBlackModel->where("output_pid_task_id",$val['id'])->order('id','desc')->value('id');
-            if (file_exists(Env::get('file.UPLOAD_BLACK_DOWNLOAD') . 'result/' . $black_id . '.txt')) {
-                $zip->addFile(Env::get('file.UPLOAD_BLACK_DOWNLOAD') . 'result/' . $black_id . '.txt', $val['remark'] . "-" . $val['total_num'] . "-" . $val['two_total_num'] . '.txt');
-            }
-        }
-        $zip->close();//关闭
-        if (!file_exists($filepath)) {
-            $this->error('无法找到文件');//即使创建，仍有可能失败
-        }
-        //下载zip包，下载完删除压缩数据
-        header("Content-Type: application/zip");
-        header("Content-Transfer-Encoding: Binary");
-        header("Content-Length: " . filesize($filepath));
-        header("Content-Disposition: attachment; filename=" . $zipname);
-        readfile($filepath);
-        unlink($filepath);
-        ob_flush();
-        flush();
-        exit;
-    }
 }

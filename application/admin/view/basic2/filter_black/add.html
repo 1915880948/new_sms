@@ -1,0 +1,118 @@
+<form id="add-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('End_time')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-end_time" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[end_time]" type="text" value="{:date('Y-m-d H:i:s')}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Total_num')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-total_num" class="form-control" name="row[total_num]" type="number">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Num')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-num" class="form-control" name="row[num]" type="number">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Create_time')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-create_time" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[create_time]" type="text" value="{:date('Y-m-d H:i:s')}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Creator')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-creator" class="form-control" name="row[creator]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('File_name')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-file_name" class="form-control" name="row[file_name]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Black_name')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-black_name" class="form-control" name="row[black_name]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Source_name')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-source_name" class="form-control" name="row[source_name]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Black')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-black" class="form-control" name="row[black]" type="text" value="0">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Phone_manufacturer')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-phone_manufacturer" data-rule="required" class="form-control" name="row[phone_manufacturer]" type="number" value="-1">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('All_black')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-all_black" class="form-control" name="row[all_black]" type="text" value="0">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Bank')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-bank" class="form-control" name="row[bank]" type="number">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Bank_city_codes')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-bank_city_codes" data-rule="required" class="form-control" name="row[bank_city_codes]" type="text" value="全国">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-status" class="form-control" name="row[status]" type="number" value="1">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Distrust')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-distrust" class="form-control" name="row[distrust]" type="text" value="0">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Sensitive')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-sensitive" class="form-control" name="row[sensitive]" type="text" value="0">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Region')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-region" class="form-control" name="row[region]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Output_pid_task_id')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-output_pid_task_id" data-rule="required" data-source="output/pid/task/index" class="form-control selectpage" name="row[output_pid_task_id]" type="text" value="">
+        </div>
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

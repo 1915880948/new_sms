@@ -1,6 +1,6 @@
 <?php
 
-namespace app\admin\model\access;
+namespace app\admin\model\data_in;
 
 use think\Model;
 

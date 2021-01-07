@@ -4,7 +4,7 @@ return [
     'Id'          => 'ID',
     'Carrier'     => '运营商',
     'Batchs'      => '入库批次号',
-    'Url_nos'     => '标签编号',
+    'Url_nos'     => 'URL模型编号',
     'Out_type'    => '出库类型',
     'Min_num'     => '最小次数',
     'Max_num'     => '最大次数',
