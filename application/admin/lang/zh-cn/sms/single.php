@@ -54,4 +54,11 @@ return [
     'Success'             => '成功数',
     'Error'               => '失败数',
     'Unkown'              => '未知数',
+    'Shortlink_id'        => '短链ID',
+    'Phone_sec'           => '密文手机号',
+    'Ip'                  => 'IP',
+    'Rrovince_name'       => 'IP省份',
+    'City_name'           => 'IP城市',
+    'Phone_model'         => '手机型号',
+    'Click_time'          => '点击时间',
 ];

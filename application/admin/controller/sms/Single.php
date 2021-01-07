@@ -193,4 +193,33 @@ class Single extends Backend
         return $this->view->fetch();
     }
 
+    //点击列表
+    public function clicklist($ids)
+    {
+        if ($this->request->isAjax()) {
+            list($where, $sort, $order, $offset, $limit) = $this->buildparams();
+            $where = " where 1=1 ";
+            if ($ids > 0) {
+                $where .= " AND shortlink_id='{$ids}'";
+            }
+
+            $month = date('Ym');
+            $preMonth = date('Ym', strtotime('-1 month'));
+
+            $sql = "select * from sms_send_data.sms_click_log_{$month} {$where} union 
+				select * from sms_send_data.sms_click_log_{$preMonth} {$where}";
+
+            $countSql = 'select count(1) total from (' . $sql . ') a';
+            $totalCount = Db::query($countSql);
+            $totalCount = intval($totalCount[0]['total']);
+
+            if ($totalCount > 0) {
+                $sql .= ' order by click_time desc limit ' . $offset . ', ' . $limit;
+                $list = Db::query($sql);
+            }
+
+            return json(['total'=>$totalCount,"rows"=>$list]);
+        }
+        return $this->view->fetch();
+    }
 }

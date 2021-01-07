@@ -9,6 +9,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form','bootstrap-table-fixed
                     add_url: 'sms/task_send/add?channel_from=3&link_from=1',
                     edit_url: 'sms/task_send/edit',
                     check_url: 'sms/single/check',
+                    clicklist_url: 'sms/single/clicklist',
                     //del_url: 'sms/task_send/del',
                     multi_url: 'sms/task_send/multi',
                     filter_url: 'sms/single/index?is_filter=',
@@ -157,7 +158,11 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form','bootstrap-table-fixed
                                     return 0+'%';
                                 }
                             }},
-                        {field: 'total_click', title: __('Total_click'),operate:false,sortable:true},
+                        {field: 'total_click', title: __('Total_click'),formatter:function(value,row){
+                                var url="sms/single/clicklist?ids="+row.sm_task_id;
+                                var str='<a href="'+url+'" class="btn btn-xs btn-dialog" title="点击列表" data-table-id="table" data-area=["90%","90%"]><i class="fa fa-message"></i> '+value+'</a>';
+                                return str;
+                            },operate:false,sortable:true},
                         {field: '', title: __('点击率'),operate:false,formatter:function (value,row,index) {
                                 if( row.total_receive >0 ){
                                     return ( row.total_click/row.total_receive*100).toFixed(2)+'%';
@@ -664,6 +669,43 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form','bootstrap-table-fixed
                     {field: 'success', title: __('Success'),operate:false},
                     {field: 'error', title: __('Error')},
                     {field: 'unkown', title: __('Unkown')},
+                ]
+            });
+            Controller.api.bindevent(checktable);
+        },
+        clicklist:function () {
+            $(document).on("click", ".btn-refresh", function () {
+                $("#clicklist").bootstrapTable('refresh',{});
+            });
+            var clicklist = $("#clicklist");
+            clicklist.bootstrapTable({
+                url:"sms/single/clicklist?ids="+Fast.api.query('ids'),
+                extend: {
+                    index_url: "sms/single/clicklist?ids="+Fast.api.query('ids'),
+                    table: '',
+                },
+                search: false,                       //1.快捷搜索框,设置成false隐藏
+                showToggle: false,                  //2.列表和视图切换
+                showColumns: false,                 //3.字段显示
+                showExport: false,                  //4.导出按钮
+                commonSearch: false,                //5.通用搜索框
+                pagination: true,                   //6.是否显示分页条
+                // onlyInfoPagination: true,           //7.只显示总数据数
+                // showHeader: false,                  //8.是否显示列头
+                // paginationVAlign: 'top',            //9.指定分页条垂直位置
+                // showRefresh:false,
+                sidePagination:'server',
+                pageSize:20,
+                pageList:[20,50,100,'all'],
+                columns: [
+                    {field: 'id', title: __('Id'),operate:false,visible: false},
+                    {field: 'shortlink_id', title: __('Shortlink_id')},
+                    {field: 'phone_sec', title: __('Phone_sec'),},
+                    {field: 'ip', title: __('Ip'),operate:false},
+                    {field: 'province_name', title: __('Rrovince_name')},
+                    {field: 'city_name', title: __('City_name')},
+                    {field: 'phone_model', title: __('Phone_model')},
+                    {field: 'click_time', title: __('Click_time')},
                 ]
             });
             Controller.api.bindevent(checktable);

@@ -65,6 +65,7 @@ class Link extends Backend
                 $params['bank_name'] = $this->bank[$params['bank_id']];
                 $params['business_name'] = $this->business[$params['business_id']];
                 $params['creator'] = $this->auth->getUserInfo()['username'];
+                $params['create_time'] = date("Y-m-d H:i:s");
                 $result = false;
                 Db::startTrans();
                 try {
