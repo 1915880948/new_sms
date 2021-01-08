@@ -1,113 +1,24 @@
 <form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+    <div class="form-group">
+        <label class="control-label col-xs-2 col-sm-2">{:__('Auc')}:</label>
+        <div class="col-xs-10 col-sm-8">
+            <input id="c-auc" class="form-control" name="row[auc]" type="text" data-rule="required" value="{$row.auc|htmlentities}">
+        </div>
+    </div>
 
     <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Business_no')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-business_no" class="form-control" name="row[business_no]" type="text" value="{$row.business_no|htmlentities}">
+        <label class="control-label col-xs-2 col-sm-2">{:__('Content')}:</label>
+        <div class="col-xs-10 col-sm-8">
+            <textarea id="c-content" class="form-control " rows="5" name="row[content]" cols="50">{$row.content|htmlentities}</textarea>
         </div>
     </div>
     <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Source_data_num')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-source_data_num" class="form-control" name="row[source_data_num]" type="number" value="{$row.source_data_num|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-status" class="form-control" name="row[status]" type="number" value="{$row.status|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Source_no')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-source_no" class="form-control" name="row[source_no]" type="text" value="{$row.source_no|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Dpis')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <textarea id="c-dpis" class="form-control " rows="5" name="row[dpis]" cols="50">{$row.dpis|htmlentities}</textarea>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Start_date')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-start_date" class="form-control" name="row[start_date]" type="text" value="{$row.start_date|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('End_date')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-end_date" class="form-control" name="row[end_date]" type="text" value="{$row.end_date|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Batchs')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <textarea id="c-batchs" class="form-control " rows="5" name="row[batchs]" cols="50">{$row.batchs|htmlentities}</textarea>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Start_batch')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-start_batch" class="form-control" name="row[start_batch]" type="text" value="{$row.start_batch|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Source_output_name')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-source_output_name" class="form-control" name="row[source_output_name]" type="text" value="{$row.source_output_name|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Ai_output_name')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-ai_output_name" class="form-control" name="row[ai_output_name]" type="text" value="{$row.ai_output_name|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Source_path')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-source_path" class="form-control" name="row[source_path]" type="text" value="{$row.source_path|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Ai_path')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-ai_path" class="form-control" name="row[ai_path]" type="text" value="{$row.ai_path|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Auc')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-auc" class="form-control" name="row[auc]" type="text" value="{$row.auc|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Auc_path')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-auc_path" class="form-control" name="row[auc_path]" type="text" value="{$row.auc_path|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Remark')}:</label>
-        <div class="col-xs-12 col-sm-8">
+        <label class="control-label col-xs-2 col-sm-2">{:__('Remark')}:</label>
+        <div class="col-xs-10 col-sm-8">
             <textarea id="c-remark" class="form-control " rows="5" name="row[remark]" cols="50">{$row.remark|htmlentities}</textarea>
         </div>
     </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Source_start_time')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-source_start_time" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[source_start_time]" type="text" value="{$row.source_start_time}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Source_end_time')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-source_end_time" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[source_end_time]" type="text" value="{$row.source_end_time}">
-        </div>
-    </div>
+
     <div class="form-group layer-footer">
         <label class="control-label col-xs-12 col-sm-2"></label>
         <div class="col-xs-12 col-sm-8">
