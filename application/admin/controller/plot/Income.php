@@ -70,6 +70,8 @@ class Income extends Backend
     public function add()
     {
         if( $this->request->isPost() ){
+            set_time_limit(0);
+            ini_set('memory_limit', '512M');
             $params= $this->request->post('row/a');
             if( !$params['file_path'] ){
                 $this->error("文件必须上传");
@@ -210,6 +212,7 @@ class Income extends Backend
             if( !$result ){
                 $this->success('任务创建失败！！');
             }
+            unset($insert);
             $this->success('任务创建成功！！');
         }
         $this->assign('typeList',$this->typeList);
