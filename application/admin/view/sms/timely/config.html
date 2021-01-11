@@ -63,15 +63,15 @@
                 <div class="form-group">
                     <label class="control-label col-xs-12 col-sm-2 col-md-2	col-lg-2">自动状态：</label>
                     <div class="col-xs-12 col-sm-8 col-md-6 col-lg-6">
-                        <label class="radio-inline">
-                            <input type="radio" name="row[send_status]"  value="1" {$row.send_status==1?'checked':''}> 开启
-                        </label>
-                        <label class="radio-inline">
-                            <input type="radio" name="row[send_status]"  value="2" {$row.send_status==2?'checked':''}> 关闭
-                        </label>
+                        {:build_radios('row[send_status]',['1'=>'开启','2'=>'关闭'],$row.send_status)}
                     </div>
                 </div>
-
+                <div class="form-group">
+                    <label class="control-label col-xs-12 col-sm-2 col-md-2	col-lg-2">类型：</label>
+                    <div class="col-xs-12 col-sm-8 col-md-6 col-lg-6">
+                        {:build_checkboxs('row[timely_type][]',$typeArr,$row.timely_type)}
+                    </div>
+                </div>
                 <div class="form-group">
                     <div class="col-xs-12 col-sm-8 col-md-6 col-lg-6 col-lg-offset-1 col-xs-offset-1 col-md-offset-1">
                         <button type="submit" class="btn btn-success btn-embossed">{:__('OK')}</button>

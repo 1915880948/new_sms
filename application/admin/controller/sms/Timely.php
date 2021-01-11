@@ -17,6 +17,13 @@ use think\Env;
 
 class Timely extends Backend
 {
+    protected $typeArr = [
+        1=>'展示',
+        2=>'点击',
+        3=>'视频播放',
+        4=>'视频播放完',
+        5=>'视频有效播放',
+    ];
     public function _initialize()
     {
         parent::_initialize();
@@ -111,6 +118,7 @@ class Timely extends Backend
         if(  $this->request->isPost() ){
 
             $postData = $this->request->post('row/a');
+            //print_r($postData ); die;
             $link = (new \app\admin\model\sms\Link())->where('channel_id',trim($postData['channel_id']))->find();
             //根据所选通道确认价格
             $price = Db::table("channel_pricex")->alias('p')
@@ -131,6 +139,7 @@ class Timely extends Backend
                     'send_end_time' => $postData['send_end_time'],
                     'sms_content' => trim($postData['sms_content']),
                     'send_status' => $postData['send_status'],
+                    'timely_type' => implode(',',$postData['timely_type']),
                     'city' => $postData['city'],
                     'group' => $this->auth->getUserInfo()['username'], // 用于每天自动生成任务时，确定该配置文件的所有者
                 ]);
@@ -205,6 +214,7 @@ class Timely extends Backend
 
 
         $this->view->assign('row', $row);
+        $this->view->assign('typeArr', $this->typeArr);
         $this->view->assign('spList', $spList);
         $this->view->assign('domainList',$domainList);
 
