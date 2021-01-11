@@ -6,10 +6,10 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             Table.api.init({
                 extend: {
                     index_url: 'access/task_yunhai/index' + location.search,
-                    add_url: 'access/task_yunhai/add',
-                    edit_url: 'access/task_yunhai/edit',
-                    del_url: 'access/task_yunhai/del',
-                    multi_url: 'access/task_yunhai/multi',
+                    // add_url: 'access/task_yunhai/add',
+                    // edit_url: 'access/task_yunhai/edit',
+                    // del_url: 'access/task_yunhai/del',
+                    // multi_url: 'access/task_yunhai/multi',
                     table: 'sms_yunhai_task',
                 }
             });
@@ -28,12 +28,40 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'task_id', title: __('Task_id')},
                         {field: 'number', title: __('Number')},
                         {field: 'source_no', title: __('Source_no')},
-                        {field: 'status', title: __('Status')},
-                        {field: 'file_path', title: __('File_path')},
+                        {field: 'status', title: __('Status'),
+                            formatter: Table.api.formatter.normal,
+                            searchList:Config.statusArr
+                        },
+                        //{field: 'file_path', title: __('File_path')},
+                        {field: 'date', title: __('Date'), },
                         {field: 'create_time', title: __('Create_time'), operate:'RANGE', addclass:'datetimerange'},
                         {field: 'transfer_time', title: __('Transfer_time'), operate:'RANGE', addclass:'datetimerange'},
                         {field: 'remark', title: __('Remark')},
-                        {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
+                        {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate,
+                            buttons: [{
+                                name: 'ajax',
+                                title: '传输',
+                                classname: 'btn btn-xs btn-success btn-magic btn-ajax',
+                                icon: 'fa fa-random',
+                                confirm: '确认传输？',
+                                url: 'access/task_yunhai/transfer',
+                                success: function (data, ret) {
+                                    Toastr.success(ret.msg);
+                                },
+                                error: function (data, ret) {
+                                    console.log(data, ret);
+                                    Toastr.error(ret.msg);
+                                    return false;
+                                },
+                            },{
+                                name: 'click',
+                                title: '下载',
+                                extend: 'data-toggle="tooltip"',
+                                icon: 'fa fa-download',
+                                classname: 'btn btn-danger btn-xs  btn-download',
+                                url:'access/task_yunhai/download',
+                            }],
+                            formatter: Table.api.formatter.operate}
                     ]
                 ]
             });
@@ -51,7 +79,10 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             bindevent: function () {
                 Form.api.bindevent($("form[role=form]"));
             }
-        }
+        },
+        transfer:function () {
+            Controller.api.bindevent();
+        },
     };
     return Controller;
 });

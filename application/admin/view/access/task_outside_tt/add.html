@@ -1,12 +1,6 @@
 <form id="add-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
 
     <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-status" class="form-control" name="row[status]" type="number" value="1">
-        </div>
-    </div>
-    <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Channel')}:</label>
         <div class="col-xs-12 col-sm-8">
             <input id="c-channel" data-rule="required" class="form-control" name="row[channel]" type="text">
@@ -33,49 +27,13 @@
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Type')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-type" class="form-control" name="row[type]" type="text" value="1">
+            {:build_checkboxs('row[type]',[1=>'类型1',2=>'类型2',3=>'类型3',4=>'类型4',5=>'类型5',],'')}
         </div>
     </div>
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Is_idfa')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-is_idfa" data-rule="required" class="form-control" name="row[is_idfa]" type="number" value="0">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Total_number')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-total_number" class="form-control" name="row[total_number]" type="number" value="0">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Number')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-number" class="form-control" name="row[number]" type="number" value="0">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Source_no')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-source_no" class="form-control" name="row[source_no]" type="text" value="KUAISHOU">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Creator')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-creator" class="form-control" name="row[creator]" type="text">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Create_time')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-create_time" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[create_time]" type="text" value="{:date('Y-m-d H:i:s')}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('End_time')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-end_time" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[end_time]" type="text" value="{:date('Y-m-d H:i:s')}">
+            {:build_checkboxs('row[is_idfa]',[0=>'imei', 1=>'idfa'],0)}
         </div>
     </div>
     <div class="form-group layer-footer">

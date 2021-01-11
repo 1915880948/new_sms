@@ -37,18 +37,19 @@ class TaskOutsideTt extends Backend
         //设置过滤方法
         $this->request->filter(['strip_tags']);
         if ($this->request->isAjax()) {
+            $myWhere = ['source_no' => 'TOUTIAO'];
             //如果发送的来源是Selectpage，则转发到Selectpage
             if ($this->request->request('keyField')) {
                 return $this->selectpage();
             }
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
             $total = $this->model
-                ->where($where)
+                ->where($where)->where($myWhere)
                 ->order($sort, $order)
                 ->count();
 
             $list = $this->model
-                ->where($where)
+                ->where($where)->where($myWhere)
                 ->order($sort, $order)
                 ->limit($offset, $limit)
                 ->select();
@@ -60,5 +61,61 @@ class TaskOutsideTt extends Backend
         }
         return $this->view->fetch();
     }
+
+    public function add(){
+        if( $this->request->isPost() ){
+            $params = $this->request->post('row/a');
+            $params['source_no'] = 'TOUTIAO';
+            $params['creator'] = $this->auth->getUserInfo()['username'];
+            $params['create_time'] = date('Y-m-d H:i:s');
+            $result = $this->model->save($params);
+            if( $result ){
+                $this->success('添加成功！！');
+            }
+            $this->error('添加失败！！！');
+        }
+
+        return $this->view->fetch();
+    }
+
+    public function download($ids){
+        $row = $this->model->get($ids);
+
+        if ($row['status'] != 4) {
+            $this->error('当前出库未完成请稍后！！！');
+        }
+
+        $zipname = 'result-' . time() . '.zip'; //最终生成的文件名
+        $filepath =  '/shuming/upload/' . $zipname;
+        if (file_exists($filepath)) {
+            unlink($filepath);
+        }
+        //重新生成文件
+        $zip = new \ZipArchive();
+        if ($zip->open($filepath, \ZipArchive::CREATE) !== TRUE) {
+            $this->error('无法打开文件，或者文件创建失败');
+        }
+        $types = explode(",",$row['type']);
+        foreach ($types as $val) {
+            if (file_exists(C('file.FILE_ROOT_DIR') . 'outside_output/'.$ids. '/' . $val . '.txt')) {
+                $zip->addFile(C('file.FILE_ROOT_DIR') . 'outside_output/'.$ids. '/' . $val . '.txt', $val . '.txt');
+            }
+        }
+        $zip->close();//关闭
+        if (!file_exists($filepath)) {
+            $this->error('无法找到文件');//即使创建，仍有可能失败
+        }
+        //下载zip包，下载完删除压缩数据
+        header("Content-Type: application/zip");
+        header("Content-Transfer-Encoding: Binary");
+        header("Content-Length: " . filesize($filepath));
+        header("Content-Disposition: attachment; filename=" . $zipname);
+        readfile($filepath);
+        unlink($filepath);
+        ob_flush();
+        flush();
+
+    }
+
 
 }

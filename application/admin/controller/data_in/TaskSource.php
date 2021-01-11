@@ -104,5 +104,37 @@ class TaskSource extends Backend
 
     }
 
+    public function detail($ids=null){
+        $row = $this->model->get($ids);
+
+        if (empty($row) || $row['status'] == 4) {
+            $this->error('您查看的建模源任务不存在或已被删除。');
+        }
+
+        if( $this->request->isAjax() ){
+            $myWhere['source_task_id'] = $ids;
+            $detailModel = new \app\admin\model\data_in\TaskSourceDetail();
+            list($where, $sort, $order, $offset, $limit) = $this->buildparams();
+            $total = $detailModel
+                ->where($where)->where($myWhere)
+                ->order($sort, $order)
+                ->count();
+
+            $list = $detailModel
+                ->where($where)->where($myWhere)
+                ->order($sort, $order)
+                ->limit($offset, $limit)
+                ->select();
+
+            $list = collection($list)->toArray();
+            $result = array("total" => $total, "rows" => $list);
+
+            return json($result);
+
+        }
+
+        $this->assignconfig('row',$row);
+        return $this->view->fetch();
+    }
 
 }
