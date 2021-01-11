@@ -147,6 +147,8 @@ class AddBatch extends Backend
                     continue;
                 }
                 $sendTasks['phone_space'] = trim($currentSheet->getCellByColumnAndRow(11, $currentRow)->getValue());
+                //小号数量
+                $sendTasks['small'] = trim($currentSheet->getCellByColumnAndRow(12, $currentRow)->getValue());
                 $contents[] = $sendTasks;
             }
             if ($txtNum != $ntxtNum) $errorMsg .= "上传的txt文件个数与excel中不同";
@@ -225,6 +227,34 @@ class AddBatch extends Backend
                             fwrite($phonefile, implode("\n", $lphone));
                             fclose($phonefile);
                         }
+                    }
+                    //小号埋点
+                    if (!empty($value['small']) && $value['small']<=5){
+                        //根据文件标题选择运营商
+                        $titleList = explode("-",$remark);
+                        if ($titleList[3] == "SYD"){
+                            $pwhere = "card_type = '中国移动'";
+                        }elseif ($titleList[3] == "SLT"){
+                            $pwhere = "card_type = '中国联通'";
+                        }elseif ($titleList[3] == "SDX"){
+                            $pwhere = "card_type = '中国电信'";
+                        }else{
+                            $pwhere = "1=1";
+                        }
+                        $smallphones = Db::table('phone_small_info')->field('distinct phone')->where($pwhere)->orderRaw('rand()')->limit($value['small'])->select();
+                        if (!empty($smallphones)) {
+                            foreach ($smallphones as $smvalue) {
+                                $smalls[] = $smvalue['phone'];
+                            }
+                            $sends["small"] = date('Y-m-d') . '/small' . time() . rand(100, 999) . '.txt';
+                            if (!is_dir(Env::get('file.FILE_ROOT_DIR') . '/' . date('Y-m-d'))) {
+                                @mkdir(Env::get('file.FILE_ROOT_DIR') . '/' . date('Y-m-d'));
+                            }
+                            $smallfile = fopen(Env::get('file.FILE_ROOT_DIR') . '/' . $sends['small'], 'w') or die("Unable to open file!");
+                            fwrite($smallfile, implode("\n", $smalls));
+                            fclose($smallfile);
+                        }
+                        unset($smalls);
                     }
                     //是否单点
                     $is_single = $value['is_single'];

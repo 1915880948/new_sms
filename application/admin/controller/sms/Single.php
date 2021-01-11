@@ -74,6 +74,7 @@ class Single extends Backend
 
     //任务列表
     public function check($ids) {
+        $type = $this->request->get('type');
         $task_ids = $this->request->get('ids');
         if( $this->request->isAjax() ) {
             if (empty($ids)) {
@@ -81,27 +82,36 @@ class Single extends Backend
             }
             $ids = explode(',', $ids);
             $db = new Db();
-            $tasks = $this->model->field('task_id,send_time,finish_time,phone_path')->where(['task_id' => ['in', $ids]])->select();
+            $tasks = $this->model->field('task_id,send_time,finish_time,phone_path,small')->where(['task_id' => ['in', $ids]])->select();
             $tasks = collection($tasks)->toArray();
             if (empty($tasks)) {
                 $this->error('下载任务不存在...');
             }
             foreach ($tasks as $key => $task) {
-                if (empty($task['phone_path'])) {
-                    $this->error('发送任务(' . $task['task_id'] . ')空号内容不存在，无法进行空号检测');
+                if ($type == 1) {
+                    if (empty($task['phone_path'])) {
+                        $this->error('发送任务(' . $task['task_id'] . ')空号内容不存在，无法进行空号检测');
+                    }
+                }else{
+                    if (empty($task['small'])) {
+                        $this->error('发送任务(' . $task['task_id'] . ')小号内容不存在，无法进行小号检测');
+                    }
                 }
-
                 $timeone = date('Ymd', strtotime($task['send_time']));
                 $timetwo = date('Ymd', strtotime($task['send_time']) + 3600 * 24);
 
-                //读取空号手机号
-                $file_path = Env::get('file.FILE_ROOT_DIR') . '/' . $task['phone_path'];
+                //读取空|小号手机号
+                if ($type == 1) {
+                    $file_path = Env::get('file.FILE_ROOT_DIR') . '/' . $task['phone_path'];
+                }else{
+                    $file_path = Env::get('file.FILE_ROOT_DIR') . '/' . $task['small'];
+                }
                 if (!file_exists($file_path)) {
-                    $this->error('任务(' . $task['task_id'] . ')的上传空号文件不存在');
+                    $this->error('任务(' . $task['task_id'] . ')的上传文件不存在');
                 }
                 $file = fopen($file_path, 'r');
                 if (!$file) {
-                    $this->error('任务(' . $task['task_id'] . ')的上传空号文件' . $file_path . '打开失败');
+                    $this->error('任务(' . $task['task_id'] . ')的上传文件' . $file_path . '打开失败');
                 }
                 $tasks[$key]['task_id'] = $task['task_id'];
                 $tasks[$key]['total'] = 0;
