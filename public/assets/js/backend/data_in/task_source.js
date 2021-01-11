@@ -7,9 +7,9 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 extend: {
                     index_url: 'data_in/task_source/index' + location.search,
                     add_url: 'data_in/task_source/add',
-                    edit_url: 'data_in/task_source/edit',
-                    del_url: 'data_in/task_source/del',
-                    multi_url: 'data_in/task_source/multi',
+                    // edit_url: 'data_in/task_source/edit',
+                    // del_url: 'data_in/task_source/del',
+                    // multi_url: 'data_in/task_source/multi',
                     table: 'sms_source_task',
                 }
             });
@@ -46,7 +46,28 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'remark', title: __('Remark')},
                         // {field: 'handle', title: __('Handle')},
                         // {field: 'handle_remark', title: __('Handle_remark')},
-                        {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
+                        {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate,
+                            buttons: [{
+                                name: 'click',
+                                title: '详情',
+                                extend: 'data-toggle="tooltip"',
+                                icon: 'fa fa-align-justify',
+                                classname: 'btn btn-primary btn-xs btn-dialog',
+                                url:'data_in/task_source/detail',
+                                // click:function(data,row){
+                                //     Fast.api.open('data_in/task_source/detail?ids='+row.task_id,'详情----'+'ID：'+row.task_id);
+                                // },
+                            },{
+                                name: 'click',
+                                title: '详情分布',
+                                extend: 'data-toggle="tooltip"',
+                                icon: 'fa fa-list-ol',
+                                classname: 'btn btn-danger btn-xs  btn-click',
+                                click:function(data,row){
+                                    Fast.api.open('data_in/task_source/spread?ids='+row.task_id,'详情分布----'+'ID：'+row.task_id);
+                                },
+                            }],
+                            formatter: Table.api.formatter.operate}
                     ]
                 ]
             });
@@ -145,7 +166,59 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             bindevent: function () {
                 Form.api.bindevent($("form[role=form]"));
             }
-        }
+        },
+        detail:function () {
+            // 初始化表格参数配置
+            Table.api.init({
+                extend: {
+                    index_url: 'data_in/task_source/detail'+"?ids="+Config.row.task_id,
+                }
+            });
+            var table = $("#detail");
+
+            // 初始化表格
+            table.bootstrapTable({
+                url: $.fn.bootstrapTable.defaults.extend.index_url,
+                sortName: 'id',
+                showToggle: false,
+                //showExport: false,
+                columns: [
+                    [
+                        {checkbox: true},
+                        {field: 'task_id', title: __('Task_id')},
+                        {field: 'url_no', title: __('URL编号')},
+                        {field: 'industry', title: __('行业'), },
+                        {field: 'category', title: __('分类')},
+                        {field: 'name', title: __('名称'),},
+                        {field: 'class', title: __('部门'),},
+                        {field: 'num_total', title: __('总数据量'),},
+                        {field: 'original_num', title: __('原始数据量'),},
+                        {field: 'filter_city_num', title: __('规则过滤后'),},
+                        {field: 'not_filter_rule_num', title: __('规则过滤前'),},
+                        {field: 'threshold_before_num', title: __('阈值分割前'),},
+                        {field: 'threshold_after_num', title: __('阈值分割后'),},
+                        {field: 'limit_output_before_num', title: __('AI总数量'),},
+                        // {
+                        //     field: 'operate', title: __('Operate'), events: {
+                        //         'click .btn-chooseone': function (e, value, row, index) {
+                        //             var multiple = Backend.api.query('multiple');
+                        //             multiple = multiple == 'true' ? true : false;
+                        //             Fast.api.close({row: row, multiple: multiple});
+                        //         },
+                        //     }, formatter: function () {
+                        //         return '<a href="javascript:;" class="btn btn-danger btn-chooseone btn-xs"><i class="fa fa-check"></i> ' + __('Choose') + '</a>';
+                        //     }
+                        // }
+                    ]
+                ]
+            });
+
+            Controller.api.bindevent();
+        },
+        spread:function () {
+
+            Controller.api.bindevent();
+        },
     };
     return Controller;
 });
