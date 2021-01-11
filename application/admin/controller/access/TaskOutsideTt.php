@@ -65,10 +65,25 @@ class TaskOutsideTt extends Backend
     public function add(){
         if( $this->request->isPost() ){
             $params = $this->request->post('row/a');
+            //print_r($params );  die;
             $params['source_no'] = 'TOUTIAO';
+            $params['type'] = implode(',',$params['type']);
             $params['creator'] = $this->auth->getUserInfo()['username'];
             $params['create_time'] = date('Y-m-d H:i:s');
-            $result = $this->model->save($params);
+            $data = [] ;
+            foreach ( $params['is_idfa'] as $k=>$v){
+                $data[$k]['channel'] = $params['channel'];
+                $data[$k]['product'] = $params['product'];
+                $data[$k]['startdate'] = $params['startdate'];
+                $data[$k]['enddate'] = $params['enddate'];
+                $data[$k]['is_idfa'] = $v;
+                $data[$k]['source_no'] = $params['source_no'];
+                $data[$k]['type'] = $params['type'];
+                $data[$k]['creator'] = $params['creator'];
+                $data[$k]['create_time'] = $params['create_time'];
+
+            }
+            $result = $this->model->saveAll($data);
             if( $result ){
                 $this->success('添加成功！！');
             }

@@ -27,13 +27,13 @@
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Type')}:</label>
         <div class="col-xs-12 col-sm-8">
-            {:build_checkboxs('row[type]',[1=>'类型1',2=>'类型2',3=>'类型3',4=>'类型4',5=>'类型5',],'')}
+            {:build_checkboxs('row[type][]',[1=>'类型1',2=>'类型2',3=>'类型3',4=>'类型4',5=>'类型5',],1)}
         </div>
     </div>
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Is_idfa')}:</label>
         <div class="col-xs-12 col-sm-8">
-            {:build_checkboxs('row[is_idfa]',[0=>'imei', 1=>'idfa'],0)}
+            {:build_checkboxs('row[is_idfa][]',[0=>'imei', 1=>'idfa'],0)}
         </div>
     </div>
     <div class="form-group layer-footer">
