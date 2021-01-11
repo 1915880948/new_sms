@@ -93,10 +93,24 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form','bootstrap-table-fixed
                 var ids = Table.api.selectedids(table);
                 //Layer.confirm('你确定空号检测选中的'+ids.length+'项吗？', {icon: 3, title: __('Warning'), offset: 100, shadeClose: true},
                     //function (index) {
-                        Fast.api.open(options.extend.check_url+"?ids="+ids, '空号检测', $(this).data() || {});
+                        Fast.api.open(options.extend.check_url+"?type=1&ids="+ids, '空号检测', $(this).data() || {});
                         /*window.location.href = options.extend.check_url+"?ids="+ids;
                         Layer.close(index);*/
                     //}
+                //);
+            });
+            //批量小号检测
+            $(document).on("click", ".btn-small", function () {
+                var _this = this;
+                //Bootstrap-table配置
+                var options = table.bootstrapTable('getOptions');
+                var ids = Table.api.selectedids(table);
+                //Layer.confirm('你确定空号检测选中的'+ids.length+'项吗？', {icon: 3, title: __('Warning'), offset: 100, shadeClose: true},
+                //function (index) {
+                Fast.api.open(options.extend.check_url+"?type=2&ids="+ids, '小号检测', $(this).data() || {});
+                /*window.location.href = options.extend.check_url+"?ids="+ids;
+                Layer.close(index);*/
+                //}
                 //);
             });
             //在普通搜索渲染后
@@ -194,6 +208,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form','bootstrap-table-fixed
                                 19: '通道连接异常',},
                         },
                         {field: 'phone_path', title: __('Is_space'),formatter:function(value){if(value){return '是';}else{return '否';}},visible: false},
+                        {field: 'small', title: __('Is_small'),formatter:function(value){if(value){return '是';}else{return '否';}},visible: false},
                         {field: 'send_time', title: __('Send_time'), operate:'RANGE', addclass:'datetimerange'},
                         {field: 'finish_time', title: __('Finish_time'), operate:'RANGE', addclass:'datetimerange',visible: false},
                         {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate,
@@ -644,9 +659,9 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form','bootstrap-table-fixed
             });
             var checktable = $("#check");
             checktable.bootstrapTable({
-                url:"sms/single/check?ids="+Fast.api.query('ids'),
+                url:"sms/single/check?type="+Fast.api.query('type')+"&ids="+Fast.api.query('ids'),
                 extend: {
-                    index_url: "sms/single/check?ids="+Fast.api.query('ids'),
+                    index_url: "sms/single/check?type="+Fast.api.query('type')+"&ids="+Fast.api.query('ids'),
                     table: '',
                 },
                 search: false,                       //1.快捷搜索框,设置成false隐藏
