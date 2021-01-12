@@ -76,19 +76,19 @@ class AutoSend extends Command
             if( !in_array($index,$autoSendType )){
                 continue ;
             }
-            if( !isset($obj['type']) ){
-                Log::log($obj);
-            }
-            Log::log($config[$index]['timely_type'].'======>'.$obj['type']);
-            if( stripos($config[$index]['timely_type'],$obj['type']) === false ){
-                continue;
-            }
             // 确定配置
             if( $config[$index]['send_status'] == 2 || empty($taskSendData[$index])  || !($config[$index]['send_start_time']<$sendTime && $sendTime<$config[$index]['send_end_time']) ){
                continue ;
             }
             $imei = 'imei';
-            if( $obj['channel'] == 'za') $imei = 'imei2';
+            if( $obj['channel'] == 'za'){
+                $imei = 'imei2';
+            }
+            if( $obj['channel'] == 'sd'){
+                if( stripos($config[$index]['timely_type'],$obj['type']) === false ){
+                    continue;
+                }
+            }
             $phoneStr = $redis4->hget(substr($obj[$imei],0,6),substr($obj[$imei],6));
             if( $phoneStr ){
                 $phoneExplode = explode(',',$phoneStr);
