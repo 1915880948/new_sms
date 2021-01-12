@@ -76,9 +76,10 @@ class AutoSend extends Command
             if( !in_array($index,$autoSendType )){
                 continue ;
             }
-            //if( !in_array($obj['type'],explode(',',$config[$index]['timely_type']) )){
-            //    continue;
-            //}
+            Log::log($config[$index]['timely_type'].'======>'.$obj['type']);
+            if( stripos($config[$index]['timely_type'],$obj['type']) === false ){
+                continue;
+            }
             // 确定配置
             if( $config[$index]['send_status'] == 2 || empty($taskSendData[$index])  || !($config[$index]['send_start_time']<$sendTime && $sendTime<$config[$index]['send_end_time']) ){
                continue ;
