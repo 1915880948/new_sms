@@ -76,6 +76,9 @@ class AutoSend extends Command
             if( !in_array($index,$autoSendType )){
                 continue ;
             }
+            if( !isset($obj['type']) ){
+                Log::log($obj);
+            }
             Log::log($config[$index]['timely_type'].'======>'.$obj['type']);
             if( stripos($config[$index]['timely_type'],$obj['type']) === false ){
                 continue;
