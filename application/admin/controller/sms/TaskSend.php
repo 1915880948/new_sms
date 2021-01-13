@@ -27,7 +27,7 @@ class TaskSend extends Backend
      */
     protected $model = null;
     protected $domainList = [
-                '' =>'不使用动态短链',
+                '0' =>'不使用动态短链',
                 //"1" =>'u9t.cn',
                 //"2" =>'x0e.cn',
                 //"3" =>> 'q9e.cn',
