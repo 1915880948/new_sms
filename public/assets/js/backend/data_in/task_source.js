@@ -157,6 +157,11 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
         },
 
         add: function () {
+            $("#plupload-files").data("upload-success", function(data, ret){
+                let file_json = JSON.parse(data.row.extparam);
+                $("input[name='file_name']").val(file_json.name);
+            });
+
             Controller.api.bindevent();
         },
         edit: function () {
@@ -216,6 +221,52 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             Controller.api.bindevent();
         },
         spread:function () {
+            // 初始化表格参数配置
+            Table.api.init({
+                extend: {
+                    index_url: 'data_in/task_source/spread'+"?ids="+Config.row.task_id,
+                }
+            });
+            var table = $("#spread");
+            //在普通搜索渲染后
+            table.on('post-common-search.bs.table', function (event, table) {
+                var form = $("form", table.$commonsearch);
+                console.log(Config.row);
+                $("form input[name='task_id']").val(Config.row.task_id);
+            });
+
+            // 初始化表格
+            table.bootstrapTable({
+                url: $.fn.bootstrapTable.defaults.extend.index_url,
+                sortName: 'id',
+                showToggle: false,
+                //showExport: false,
+                columns: [
+                    [
+                        {checkbox: true},
+                        {field: 'days', title: __('时间')},
+                        {field: 'nickname', title: __('建模源'),
+                            formatter:Table.api.formatter.normal,
+                            searchList:Config.modList,
+                        },
+                        {field: 'task_id', title: __('批次号'), },
+                        {field: 'cost_num', title: __('数据行数'),operate:false},
+                        {field: 'number', title: __('入库行数'),operate:false},
+                        {field: 'cost', title: __('总成本'),operate:false},
+                        {field: 'bx', title: __('保险'),operate:false},
+                        {field: 'bxcost', title: __('保险成本'),operate:false},
+                        {field: 'yh', title: __('云海'),operate:false},
+                        {field: 'jr', title: __('金融'),operate:false},
+                        {field: 'jrcost', title: __('金融成本'),operate:false},
+                        {field: 'sfc', title: __('顺风车'),operate:false},
+                        {field: 'sfccost', title: __('顺风车成本'),operate:false},
+                        {field: 'yx', title: __('游戏'),operate:false},
+                        {field: 'yxcost', title: __('游戏成本'),operate:false},
+                        {field: 'qt', title: __('其他'),operate:false},
+                        {field: 'qtcost', title: __('其他成本'),operate:false},
+                    ]
+                ]
+            });
 
             Controller.api.bindevent();
         },
