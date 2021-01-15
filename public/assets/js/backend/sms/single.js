@@ -684,6 +684,17 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form','bootstrap-table-fixed
                     {field: 'success', title: __('Success'),operate:false},
                     {field: 'error', title: __('Error')},
                     {field: 'unkown', title: __('Unkown')},
+                    {field: 'operate', title: __('Operate'), table: checktable, events: Table.api.events.operate,
+                        buttons: [{
+                            name: 'click',
+                            title: '下载',
+                            extend: 'data-toggle="tooltip"',
+                            icon: 'fa fa-download',
+                            classname: 'btn btn-danger btn-xs  btn-download',
+                            url:'sms/single/export?type='+Fast.api.query('type')+"&task_id="+Fast.api.query('ids'),
+                        }],
+                        formatter: Table.api.formatter.operate
+                    }
                 ]
             });
             Controller.api.bindevent(checktable);
