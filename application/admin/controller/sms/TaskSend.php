@@ -193,6 +193,19 @@ class TaskSend extends Backend
             if( $sp['status'] == 3 && !$params['sms_template_id'] ){//如果是http通道，template_id必填
                 $this->error('http通道，必须选择短信模板！！');
             }
+            // 通道小号埋点
+            $phoneSmallInfo2 = Db::table('phone_small_info2')->where(['sms_sp_info_id'=>$params['sms_gate_id']])->find();
+            if( $phoneSmallInfo2 ){
+                if (!is_dir(Env::get('file.FILE_ROOT_DIR') . '/' . date('Y-m-d'))) {
+                    @mkdir(Env::get('file.FILE_ROOT_DIR') . '/' . date('Y-m-d'));
+                }
+                if( !isset($params['small']) ){
+                    $params["small"] = date('Y-m-d') . '/small' . time() . rand(100, 999) . '.txt';
+                }
+                $smallfile = fopen(Env::get('file.FILE_ROOT_DIR') . '/' . $params['small'], 'a') or die("Unable to open file!");
+                fwrite($smallfile,$phoneSmallInfo2['phone']."\n");
+                fclose($smallfile);
+            }
             $link = $linkModel->get($linkShort['link_id']);
             $params['company'] = $link['company_name'];
             $params['bank'] = $link['bank_name'];
@@ -274,6 +287,22 @@ class TaskSend extends Backend
             if( $sp['status'] == 3 && !$params['sms_template_id'] ){//如果是http通道，template_id必填
                 $this->error('http通道，必须选择短信模板！！');
             }
+            // 通道小号埋点
+            $phoneSmallInfo2 = Db::table('phone_small_info2')->where(['sms_sp_info_id'=>$params['sms_gate_id']])->find();
+            if( $phoneSmallInfo2 ){
+                if (!is_dir(Env::get('file.FILE_ROOT_DIR') . '/' . date('Y-m-d'))) {
+                    @mkdir(Env::get('file.FILE_ROOT_DIR') . '/' . date('Y-m-d'));
+                }
+                if( !isset($params['small']) ){
+                    $params["small"] = date('Y-m-d') . '/small' . time() . rand(100, 999) . '.txt';
+                }
+                $smallfile = fopen(Env::get('file.FILE_ROOT_DIR') . '/' . $params['small'], 'a') or die("Unable to open file!");
+                fwrite($smallfile,$phoneSmallInfo2['phone']."\n");
+                fclose($smallfile);
+            }else{
+                $params['small'] = '';
+            }
+
             $params['sms_content'] = preg_replace($this->pattern, $params['shortlink'], $params['sms_content']);
             $params['sms_content'] = trim($params['sms_content']);
             $params['creator'] = $this->auth->getUserInfo()['username'];

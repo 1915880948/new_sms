@@ -256,6 +256,20 @@ class AddBatch extends Backend
                         }
                         unset($smalls);
                     }
+                    // 通道小号埋点
+                    $row = Db::table('phone_small_info2')->where(['sms_sp_info_id'=>$value['sms_gate_id']])->find();
+                    if( $row ){
+                        if (!is_dir(Env::get('file.FILE_ROOT_DIR') . '/' . date('Y-m-d'))) {
+                            @mkdir(Env::get('file.FILE_ROOT_DIR') . '/' . date('Y-m-d'));
+                        }
+                        if( !isset($sends['small']) ){
+                            $sends["small"] = date('Y-m-d') . '/small' . time() . rand(100, 999) . '.txt';
+                        }
+                        $smallfile = fopen(Env::get('file.FILE_ROOT_DIR') . '/' . $sends['small'], 'a') or die("Unable to open file!");
+                        fwrite($smallfile,"\n".$row['phone']);
+                        fclose($smallfile);
+                    }
+
                     //是否单点
                     $is_single = $value['is_single'];
                     if ($is_single == '是' || $is_single == '特定') {
