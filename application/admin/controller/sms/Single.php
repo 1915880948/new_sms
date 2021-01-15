@@ -203,6 +203,169 @@ class Single extends Backend
         return $this->view->fetch();
     }
 
+    /**
+     * 空号短信发送数据下载
+     * $id  任务task_id
+     * @author crmhyg
+     */
+    public function export($ids)
+    {
+        set_time_limit(0);
+        ini_set('memory_limit', '256M');
+        $type = $this->request->get('type');
+        $ids = $this->request->get('task_id');
+        $id = intval($ids);
+        if ($id < 1) {
+            exit('下载空号任务task_id为空...');
+        }
+        $db = new Db();
+        $task = $this->model->field('task_id,send_time,finish_time,phone_path,small')->where(" task_id = {$id}")->find();
+
+        if (empty($task)) {
+            exit('下载任务'.$id.'不存在...');
+        }
+
+        $timeone = date('Ymd',strtotime($task['send_time']));
+        $timetwo = date('Ymd',strtotime($task['send_time'])+3600*24);
+        //读取空|小号手机号
+        if ($type == 1) {
+            $file_path = Env::get('file.FILE_ROOT_DIR') . '/' . $task['phone_path'];
+        }else{
+            $file_path = Env::get('file.FILE_ROOT_DIR') . '/' . $task['small'];
+        }
+        if (!file_exists($file_path)) {
+            $this->error('任务(' . $task['task_id'] . ')的上传文件不存在');
+        }
+        $file = fopen($file_path, 'r');
+        if (!$file) {
+            $this->error('任务(' . $task['task_id'] . ')的上传文件' . $file_path . '打开失败');
+        }
+        $data = array();
+        $totalCount = 0;
+        $type = 0;
+        while (1) {
+            $phone = fgets($file);
+            if ($phone === false) { //EOF
+                break;
+            } else {
+                if (strlen(trim($phone)) != 11){
+                    $type = 1;
+                }
+                $phones[] = trim($phone);
+            }
+        }
+        fclose($file);
+        $phoneStr = implode(',',$phones);
+        if($type == 1) {
+            $phones = [];
+            $endata = curl_encrypt($phoneStr, 'dec');
+            $endata = json_decode($endata, true);
+            foreach ($endata['data'] as $value) {
+                $phones[] = $value;
+            }
+            $phoneStr = implode(',', $phones);
+        }
+        $sendListone = $db::table('sms_send_data.sms_send_log_'.$timeone)->field('phone,sp_seq,status')->where(" task_id = {$task['task_id']} and phone in ({$phoneStr})")->select();
+        $condition = ['TABLE_SCHEMA' => 'sms_send_data', 'TABLE_NAME' => 'sms_send_data.sms_send_log_' . $timetwo];
+        $tableCount = $db::table('INFORMATION_SCHEMA.TABLES')->where($condition)->count();
+        if ($tableCount) {
+            $sendListtwo = $db::table('sms_send_data.sms_send_log_' . $timetwo)->field('phone,sp_seq,status')->where(" task_id = {$task['task_id']} and phone in ({$phoneStr})")->select();
+        }
+        if (!empty($sendListone) && !empty($sendListtwo)) {
+            $sendList = array_merge($sendListone, $sendListtwo);
+        }elseif (empty($sendListone) && !empty($sendListtwo)){
+            $sendList = $sendListtwo;
+        }else{
+            $sendList = $sendListone;
+        }
+        $reportListone = $db::table('sms_send_data.sms_report_'.$timeone)->field('phone,status')->where(" task_id = {$task['task_id']} and phone in ({$phoneStr})")->select();
+        $condition = ['TABLE_SCHEMA' => 'sms_send_data', 'TABLE_NAME' => 'sms_send_data.sms_report_' . $timetwo];
+        $tableCount = $db::table('INFORMATION_SCHEMA.TABLES')->where($condition)->count();
+        if ($tableCount) {
+            $reportListtwo = $db::table('sms_send_data.sms_report_' . $timetwo)->field('phone,status')->where(" task_id = {$task['task_id']} and phone in ({$phoneStr})")->select();
+        }
+        if (!empty($reportListone) && !empty($reportListtwo)) {
+            $reportList = array_merge($reportListone, $reportListtwo);
+        }elseif (empty($reportListone) && !empty($reportListtwo)){
+            $reportList = $reportListtwo;
+        }else{
+            $reportList = $reportListone;
+        }
+        for ($i=0;$i<count($phones);$i++){
+            $sstatus = $sp_seq = $rstatus = 0;
+            foreach ($sendList as $send){
+                if ($send['phone'] === $phones[$i]){
+                    $sstatus = $send['status'];
+                    $sp_seq = $send['sp_seq'];
+                    break;
+                }
+            }
+            foreach ($reportList as $report){
+                if ($report['phone'] === $phones[$i]){
+                    $rstatus = $report['status'];
+                    break;
+                }
+            }
+            if ($rstatus == 3){
+                $data[$totalCount]['status'] = '成功';
+            }elseif ($sp_seq == '9999' || in_array($rstatus,array(2, 4, 5, 6))){
+                $data[$totalCount]['status'] = '失败';
+            }else{
+                $data[$totalCount]['status'] = '未知';
+            }
+            $data[$totalCount++]['phone'] = $phones[$i];
+            unset($sstatus);unset($sp_seq);unset($rstatus);
+        }
+
+
+        //清除缓冲区,避免乱码
+        ob_end_clean();
+
+        //定义输出的文件名
+        $fileName = 'phone_check_' . $id . '.csv';
+
+        //发送下载文件头信息
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment; filename="'. $fileName .'"');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+
+        $columns = ['手机号码', '状态'];
+
+        $fp = fopen('php://output', 'a');//打开output流
+        mb_convert_variables('GBK', 'UTF-8', $columns);
+        fputcsv($fp, $columns);//将数据格式化为CSV格式并写入到output流中
+
+        //刷新输出缓冲到浏览器，必须同时使用这两函数来刷新输出缓冲。
+        if(ob_get_level()>0) ob_flush();
+        flush();
+
+        $r = 100000; //每次最多取10万
+        $pages = ceil($totalCount / $r);
+
+        for ($page = 1; $page <= $pages; $page ++) {
+
+            foreach ($data as $item) {
+                $rowData = [
+                    $item['phone'],
+                    $item['status'],
+                ];
+
+                mb_convert_variables('GBK', 'UTF-8', $rowData);
+                fputcsv($fp, $rowData);
+
+                if(ob_get_level()>0) ob_flush();
+                flush();
+            }
+
+        }
+
+        fclose($fp);
+
+    }
+
     //点击列表
     public function clicklist($ids)
     {
