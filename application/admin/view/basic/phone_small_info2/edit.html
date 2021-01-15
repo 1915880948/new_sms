@@ -1,0 +1,29 @@
+<form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Phone')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-phone" class="form-control" name="row[phone]" type="text" value="{$row.phone|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Sms_sp_info_id')}:</label>
+        <div class="col-xs-12 col-sm-8">
+<!--            <input id="c-sms_sp_info_id" data-rule="required" data-source="sms/sp/info/index" class="form-control selectpage" name="row[sms_sp_info_id]" type="text" value="{$row.sms_sp_info_id|htmlentities}">-->
+            {:build_select('row[sms_sp_info_id]',$spList,$row.sms_sp_info_id,['class'=>'form-control selectpicker','data-live-search'=>'true'])}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_radios('row[status]',['0'=>'弃用','1'=>'正常'],1)}
+        </div>
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

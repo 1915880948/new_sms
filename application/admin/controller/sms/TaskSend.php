@@ -194,7 +194,7 @@ class TaskSend extends Backend
                 $this->error('http通道，必须选择短信模板！！');
             }
             // 通道小号埋点
-            $phoneSmallInfo2 = Db::table('phone_small_info2')->where(['sms_sp_info_id'=>$params['sms_gate_id']])->find();
+            $phoneSmallInfo2 = Db::table('phone_small_info2')->where(['sms_sp_info_id'=>$params['sms_gate_id'],'status'=>1])->find();
             if( $phoneSmallInfo2 ){
                 if (!is_dir(Env::get('file.FILE_ROOT_DIR') . '/' . date('Y-m-d'))) {
                     @mkdir(Env::get('file.FILE_ROOT_DIR') . '/' . date('Y-m-d'));
@@ -288,7 +288,7 @@ class TaskSend extends Backend
                 $this->error('http通道，必须选择短信模板！！');
             }
             // 通道小号埋点
-            $phoneSmallInfo2 = Db::table('phone_small_info2')->where(['sms_sp_info_id'=>$params['sms_gate_id']])->find();
+            $phoneSmallInfo2 = Db::table('phone_small_info2')->where(['sms_sp_info_id'=>$params['sms_gate_id'],'status'=>1])->find();
             if( $phoneSmallInfo2 ){
                 if (!is_dir(Env::get('file.FILE_ROOT_DIR') . '/' . date('Y-m-d'))) {
                     @mkdir(Env::get('file.FILE_ROOT_DIR') . '/' . date('Y-m-d'));

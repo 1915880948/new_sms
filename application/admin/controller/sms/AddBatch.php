@@ -257,7 +257,7 @@ class AddBatch extends Backend
                         unset($smalls);
                     }
                     // 通道小号埋点
-                    $row = Db::table('phone_small_info2')->where(['sms_sp_info_id'=>$value['sms_gate_id']])->find();
+                    $row = Db::table('phone_small_info2')->where(['sms_sp_info_id'=>$value['sms_gate_id'],'status'=>1])->find();
                     if( $row ){
                         if (!is_dir(Env::get('file.FILE_ROOT_DIR') . '/' . date('Y-m-d'))) {
                             @mkdir(Env::get('file.FILE_ROOT_DIR') . '/' . date('Y-m-d'));
