@@ -229,7 +229,7 @@ class AddBatch extends Backend
                         }
                     }
                     //小号埋点
-                    if (!empty($value['small']) && $value['small']<=5){
+                    if (!empty($value['small']) && is_numeric($value['small']) && $value['small']<=5){
                         //根据文件标题选择运营商
                         $titleList = explode("-",$remark);
                         if ($titleList[3] == "SYD"){
