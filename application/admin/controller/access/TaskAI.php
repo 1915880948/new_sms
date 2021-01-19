@@ -67,7 +67,10 @@ class TaskAI extends Backend
             }
             $this->error(__('Parameter %s can not be empty', ''));
         }
-        $row['content'] = file_get_contents($row['auc_path']);
+        $row['content'] = '';
+        if( $row['auc_path'] ){
+            $row['content'] = file_get_contents($row['auc_path']);
+        }
         $this->view->assign("row", $row);
         return $this->view->fetch();
     }
