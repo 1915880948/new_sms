@@ -59,7 +59,7 @@
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Encrypt')}:</label>
         <div class="col-xs-12 col-sm-8">
-            {:build_radios('row[encrypt]',['0'=>'不加密','1'=>'AES加密'],$row.encrypt)}
+            {:build_radios('row[encrypt]',['0'=>'不加密','1'=>'AES加密','2'=>'通用AES加密'],$row.encrypt)}
         </div>
     </div>
     {/if}
