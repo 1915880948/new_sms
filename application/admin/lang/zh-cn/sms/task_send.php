@@ -49,4 +49,8 @@ return [
     'Finish_time'         => '完成时间',
     'Sp_name'             => '通道名称',
     'Encrypt'             => '加密方式',
+    'Is_space'            => '是否空号',
+    'Is_small'            => '是否小号',
+    'SpaceCheck'          => '空号检测',
+    'SmallCheck'          => '小号检测',
 ];

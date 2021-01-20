@@ -151,7 +151,11 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                     return 0+'%';
                                 }
                             }},
-                        {field: 'total_click', title: __('Total_click'),operate:false,sortable:true},
+                        {field: 'total_click', title: __('Total_click'),formatter:function(value,row){
+                                var url="sms/single/clicklist?ids="+row.sm_task_id;
+                                var str='<a href="'+url+'" class="btn btn-xs btn-dialog" title="点击列表" data-table-id="table" data-area=["90%","90%"]><i class="fa fa-message"></i> '+value+'</a>';
+                                return str;
+                            },operate:false,sortable:true},
                         {field: '', title: __('点击率'),operate:false,formatter:function (value,row,index) {
                                 if( row.total_receive >0 ){
                                     return ( row.total_click/row.total_receive*100).toFixed(2)+'%';

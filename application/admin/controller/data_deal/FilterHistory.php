@@ -116,8 +116,8 @@ class FilterHistory extends Backend
                 $data['total_num'] = $total_nums[$i];
                 $result = $model->save($data);
                 $res = $model->getLastInsID();
-                $lastPath = Env::get('file.FILE_ROOT_DIR') . '/'.'black_file';
-                $copyPath = Env::get('file.FILE_ROOT_DIR') . '/'.'black_list/b';
+                $lastPath = Env::get('file.UPLOAD_BLACK_DOWNLOAD') .'black_file';
+                $copyPath = Env::get('file.UPLOAD_BIG_DOWNLOAD') .'black_list/b';
                 if(!is_dir($lastPath)){
                     @mkdir($lastPath);
                 }
@@ -147,7 +147,7 @@ class FilterHistory extends Backend
         if (empty($fetchList)) {
             $this->error('请选择需要下载的历史数据。','',15);
         } else {
-            $filepath = Env::get('file.FILE_ROOT_DIR') . '/' .'black_list/b/';
+            $filepath = Env::get('file.UPLOAD_BIG_DOWNLOAD') . '/' .'black_list/b/';
             $filename = $ids;
             $txtfile = urlencode($fetchList['source_name']);
             //告诉浏览器这是一个文件流格式的文件

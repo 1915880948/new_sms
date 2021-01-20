@@ -8,6 +8,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     index_url: 'sms/task_send/index' + location.search,
                     add_url: 'sms/task_send/add?link_from=1',
                     edit_url: 'sms/task_send/edit',
+                    check_url: 'sms/single/check',
                     //del_url: 'sms/task_send/del',
                     multi_url: 'sms/task_send/multi',
                     filter_url: 'sms/task_send/index?is_filter=',
@@ -55,6 +56,34 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         Layer.close(index);
                     }
                 );
+            });
+            //批量空号检测
+            $(document).on("click", ".btn-check", function () {
+                var _this = this;
+                //Bootstrap-table配置
+                var options = table.bootstrapTable('getOptions');
+                var ids = Table.api.selectedids(table);
+                //Layer.confirm('你确定空号检测选中的'+ids.length+'项吗？', {icon: 3, title: __('Warning'), offset: 100, shadeClose: true},
+                //function (index) {
+                Fast.api.open(options.extend.check_url+"?type=1&ids="+ids, '空号检测', $(this).data() || {});
+                /*window.location.href = options.extend.check_url+"?ids="+ids;
+                Layer.close(index);*/
+                //}
+                //);
+            });
+            //批量小号检测
+            $(document).on("click", ".btn-small", function () {
+                var _this = this;
+                //Bootstrap-table配置
+                var options = table.bootstrapTable('getOptions');
+                var ids = Table.api.selectedids(table);
+                //Layer.confirm('你确定空号检测选中的'+ids.length+'项吗？', {icon: 3, title: __('Warning'), offset: 100, shadeClose: true},
+                //function (index) {
+                Fast.api.open(options.extend.check_url+"?type=2&ids="+ids, '小号检测', $(this).data() || {});
+                /*window.location.href = options.extend.check_url+"?ids="+ids;
+                Layer.close(index);*/
+                //}
+                //);
             });
             //在普通搜索渲染后
             table.on('post-common-search.bs.table', function (event, table) {
@@ -161,6 +190,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                 18: '写入发送队列中',
                                 19: '通道连接异常',},
                         },
+                        {field: 'phone_path', title: __('Is_space'),formatter:function(value){if(value){return '是';}else{return '否';}},visible: false},
+                        {field: 'small', title: __('Is_small'),formatter:function(value){if(value){return '是';}else{return '否';}},visible: false},
                         {field: 'send_time', title: __('Send_time'), operate:'RANGE', addclass:'datetimerange'},
                         {field: 'finish_time', title: __('Finish_time'), operate:'RANGE', addclass:'datetimerange',visible: false},
 
