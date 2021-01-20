@@ -9,5 +9,6 @@ return [
     'Total_num'   => '文件行数',
     'Source_name' => '源文件名',
     'File_name'   => '文件名',
-    'Create_time' => '创建时间'
+    'Create_time' => '创建时间',
+    'File_path'   => '上传文件',
 ];
