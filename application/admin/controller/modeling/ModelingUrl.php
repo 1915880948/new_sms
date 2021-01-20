@@ -42,8 +42,6 @@ class ModelingUrl extends Backend
     {
         if( $this->request->isPost() ){
             $params = $this->request->post('row/a');
-//            print_r($params);die;
-
             if (!is_file($params['file_path'])) {
                 $this->error(__('No results were found'));
             }
@@ -62,7 +60,6 @@ class ModelingUrl extends Backend
             $modelingBase = $modelingBaseModel->where(['id'=>$params['source_no_id']])->find();
             $modelingUrlMaxId = $this->model->where(['source_no'=>$modelingBase['source_no']])->max('source_id');
             if( !$modelingUrlMaxId ) $modelingUrlMaxId = 0 ;
-            //print_r( $modelingUrlMaxId );die;
             $insert = [];
             $currentSheet = $PHPExcel->getSheet(0);  //读取文件中的第一个工作表
             //$allColumn = $currentSheet->getHighestDataColumn(); //取得最大的列号
@@ -137,7 +134,6 @@ class ModelingUrl extends Backend
         }
         $sourceArr['999'] = '全部';
         krsort($sourceArr);
-//        print_r($sourceArr);die;
         $this->view->assign("sourceArr", $sourceArr);
         return  $this->view->fetch();
     }

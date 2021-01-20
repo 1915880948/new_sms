@@ -5,6 +5,7 @@ return [
     'Source_no_id' => '管理建模来源ID',
     'Source_no'    => '建模来源',
     'Source_id'    => '建模源编号id',
+    'Source_name'  => '建模来源',
     'Url_no'       => 'URL编号',
     'Url'          => 'URL链接',
     'Host'         => 'host',

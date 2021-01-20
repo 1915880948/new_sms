@@ -1,0 +1,118 @@
+<form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Source_no_id')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-source_no_id" data-rule="required" data-source="source/no/index" class="form-control selectpage" name="row[source_no_id]" type="text" value="{$row.source_no_id|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Source_no')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-source_no" class="form-control" name="row[source_no]" type="text" value="{$row.source_no|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Source_name')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-source_name" class="form-control" name="row[source_name]" type="text" value="{$row.source_name|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Source_id')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-source_id" data-rule="required" data-source="source/index" class="form-control selectpage" name="row[source_id]" type="text" value="{$row.source_id|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Url_no')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-url_no" data-rule="required" class="form-control" name="row[url_no]" type="text" value="{$row.url_no|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Url')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-url" data-rule="required" class="form-control" name="row[url]" type="text" value="{$row.url|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Host')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-host" class="form-control" name="row[host]" type="text" value="{$row.host|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Path')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-path" class="form-control" name="row[path]" type="text" value="{$row.path|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Key')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-key" class="form-control" name="row[key]" type="text" value="{$row.key|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Root')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-root" class="form-control" name="row[root]" type="text" value="{$row.root|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Name')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-name" class="form-control" name="row[name]" type="text" value="{$row.name|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Category')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-category" class="form-control" name="row[category]" type="text" value="{$row.category|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Industry')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-industry" class="form-control" name="row[industry]" type="text" value="{$row.industry|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Is_valid')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-is_valid" class="form-control" name="row[is_valid]" type="text" value="{$row.is_valid|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Leader')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-leader" class="form-control" name="row[leader]" type="text" value="{$row.leader|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Time')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-time" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[time]" type="text" value="{$row.time}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Creator')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-creator" class="form-control" name="row[creator]" type="text" value="{$row.creator|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Create_time')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-create_time" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[create_time]" type="text" value="{$row.create_time}">
+        </div>
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

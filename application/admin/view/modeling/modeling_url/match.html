@@ -1,0 +1,69 @@
+<form id="add-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('文件')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="col-xs-10 col-sm-10">
+                <input class="form-control" size="50" name="file_name" type="text" value="">
+                <input id="c-files" size="50" type="hidden" name="row[file_path]"  value="">
+            </div>
+            <div class="col-xs-2 col-sm-2">
+                <div class="input-group-addon no-border no-padding">
+                    <span><button type="button" id="plupload-files" class="btn btn-danger plupload" data-input-id="c-files" data-mimetype="csv,xls,xlsx" data-multiple="false" data-preview-id="p-files"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                    <!--  <span><button type="button" id="fachoose-files" class="btn btn-primary fachoose" data-input-id="c-files" data-mimetype="txt" data-multiple="false"><i class="fa fa-list"></i> {:__('Choose')}</button></span>-->
+<!--                    <a href="/uploads/fetch_template.xlsx" download="" data-toggle="tooltip" class="btn btn-info btn-download" title="{:__('下载导入模板')}" id="btn-download-file"><i class="fa fa-download"></i> {:__('模板')}</a>-->
+                </div>
+<!--                <span class="msg-box n-right" for="c-files"></span>-->
+            </div>
+        </div>
+    </div>
+    <span style="font-size: smaller; color: red;">注：HOST PATH KEY为空则按照URL匹配，HOST PATH KEY不为空，则按照URL拆分HOST、PATH、KEY匹配</span>
+
+    <div class="">
+        <div class="col-xs-12 col-sm-12 "></div>
+    </div>
+    <div class="">
+        <h4>例：Excel表格。</h4>
+        <div class="col-xs-12 col-sm-12 ">
+            <table id="Excel" class="table table-striped table-bordered table-hover table-nowrap" data-operate-edit="1" data-operate-del="1" width="100%">
+                <thead>
+                <tr>
+                    <th style="text-align: center; vertical-align: middle; " data-field="url">
+                        <div class="th-inner ">URL链接</div><div class="fht-cell"></div>
+                    </th>
+                    <th style="text-align: center; vertical-align: middle; " data-field="host">
+                        <div class="th-inner ">host</div><div class="fht-cell"></div>
+                    </th>
+                    <th style="text-align: center; vertical-align: middle; " data-field="path">
+                        <div class="th-inner ">path</div><div class="fht-cell"></div>
+                    </th>
+                    <th style="text-align: center; vertical-align: middle; " data-field="key">
+                        <div class="th-inner ">key</div><div class="fht-cell"></div>
+                    </th>
+                </tr>
+                </thead>
+                <tbody data-listidx="0">
+                <tr data-index="0">
+                    <td style="text-align: center; vertical-align: middle; "> http://a.shanghai.gov/newvideoshow.aspx?id=6211E4</td>
+                    <td style="text-align: center; vertical-align: middle; ">a.shanghai.gov</td>
+                    <td style=""><span title="/newvideoshow.aspx" data-toggle="tooltip">/newvideoshow.aspx</span></td>
+                    <td style="min-width: 100px; max-width: 200px; "><span title="" data-toggle="tooltip" data-original-title="id=6211E4">id=6211E4</span></td>
+                </tr>
+                <tr data-index="1">
+                    <td style="text-align: center; vertical-align: middle; "> http://b.shanghai.gov/newvideoshow.aspx?id=6211E4</td>
+                    <td style="text-align: center; vertical-align: middle; ">b.shanghai.gov</td>
+                    <td style=""><span title="/newvideoshow.aspx" data-toggle="tooltip">/newvideoshow.aspx</span></td>
+                    <td style="min-width: 100px; max-width: 200px; "><span title="" data-toggle="tooltip" data-original-title="id=6211E4">id=6211E4</span></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed ">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>
