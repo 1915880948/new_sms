@@ -47,7 +47,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form','jstree'], function ($
                 Fast.api.open(options.extend.import_url, __('批量导入'), $(this).data() || {});
             });
             // 打包下载
-            $(document).on("click", ".btn-download", function () {
+            $(document).on("click", ".btn-downloadbatch", function () {
                 var options = table.bootstrapTable('getOptions');
                 var ids = Table.api.selectedids(table);
                 Layer.confirm('<h4>你确定打包下载以下项吗？</h4><div>'+ids.join(',')+'</div>', {icon: 3, title: __('Warning'), offset: 100, shadeClose: true},
@@ -86,6 +86,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form','jstree'], function ($
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
                 pk: 'id',
                 sortName: 'id',
+                search: false,                       //1.快捷搜索框,设置成false隐藏
+                showToggle: false,                  //2.列表和视图切换
                 columns: [
                     [
                         {checkbox: true},
@@ -109,7 +111,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form','jstree'], function ($
                         // {field: 'ntype', title: __('Ntype')},
                         {field: 'out_type', title: __('Out_type'),
                             formatter:Table.api.formatter.normal,
-                            searchList:{0:'密文',1:'云海出数形式', 2:'AI出数形式'},
+                            searchList:{0:'密文',1:'云海出数形式', 2:'AI出数形式'},operate:false,visible:false,
                         },
                         {field: 'status', title: __('Status'),
                             formatter: Table.api.formatter.normal,

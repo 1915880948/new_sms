@@ -31,7 +31,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'jstree'], function (
                 table.bootstrapTable('refresh',{url:url});
             });
             // 打包下载
-            $(document).on("click", ".btn-download", function () {
+            $(document).on("click", ".btn-downloadbatch", function () {
                 var options = table.bootstrapTable('getOptions');
                 var ids = Table.api.selectedids(table);
                 Layer.confirm('<h4>你确定打包下载以下项吗？</h4><div>'+ids.join(',')+'</div>', {icon: 3, title: __('Warning'), offset: 100, shadeClose: true},
