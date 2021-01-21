@@ -9,6 +9,7 @@
                         <a href="javascript:;" class="btn btn-primary btn-refresh" title="{:__('Refresh')}" ><i class="fa fa-refresh"></i> </a>
                         <a href="javascript:;" class="btn btn-warning btn-filter" title="显示全部" ><i class="fa fa-hourglass-start"></i> 显示全部</a>
                         <a href="javascript:;" class="btn btn-success btn-add {:$auth->check('data_deal/filter_black/add')?'':'hide'}" title="{:__('Add')}" ><i class="fa fa-plus"></i> {:__('Add')}</a>
+                        <a href="javascript:;" class="btn btn-warning btn-download btn-disabled disabled {:$auth->check('data_deal/filter_black/downloadBatch')?'':'hide'}" title="{:__('打包下载')}" ><i class="fa fa-download"></i> {:__('打包下载')}</a>
                         <a href="javascript:;" class="btn btn-danger btn-del btn-disabled disabled {:$auth->check('data_deal/filter_black/del')?'':'hide'}" title="{:__('Delete')}" ><i class="fa fa-trash"></i> {:__('Delete')}</a>
 
                         

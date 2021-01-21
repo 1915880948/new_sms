@@ -1,118 +1,80 @@
 <form id="add-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+    <div class="form-group">
+        <label for="plupload-files" class="control-label col-xs-12 col-sm-2">{:__('上传文件')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="col-xs-10 col-sm-8">
+                <textarea style="height:150px" class="form-control" id="textarea" type="text" readonly="readonly" placeholder="仅支持txt后缀的文件"></textarea>
+                <input id="c-files" size="50" type="hidden" name="row[file_path]"  value="">
+                <input id="files_list" type="hidden" name="row[files_list]"  value="">
+            </div>
+            <div class="col-xs-2 col-sm-2">
+                <div class="input-group-addon no-border no-padding">
+                    <span><button type="button" id="plupload-files" class="btn btn-danger plupload" data-input-id="c-files" data-mimetype="txt" data-multiple="true" data-preview-id="p-files"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                    <!--                <span><button type="button" id="fachoose-files" class="btn btn-primary fachoose" data-input-id="c-files" data-mimetype="txt" data-multiple="false"><i class="fa fa-list"></i> {:__('Choose')}</button></span>-->
+                </div>
+                <span class="msg-box n-right" for="c-files"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('全局黑名单')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_select('row[all_black][]',$blackAllArr,'',['class'=>'form-control selectpicker','data-live-search'=>'true','multiple'=>'', 'data-rule'=>''])}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('业务黑名单')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_select('row[black][]',$blackNewArr,'',['class'=>'form-control selectpicker','data-live-search'=>'true','multiple'=>'', 'data-rule'=>''])}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('过滤疑似库')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_select('row[distrust][]',$distrustArr,'',['class'=>'form-control selectpicker','data-live-search'=>'true','multiple'=>'', 'data-rule'=>''])}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('不敏感库')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_select('row[sensitive][]',$sensitiveArr,'',['class'=>'form-control selectpicker','data-live-search'=>'true','multiple'=>'', 'data-rule'=>''])}
+        </div>
+    </div>
 
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('End_time')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-end_time" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[end_time]" type="text" value="{:date('Y-m-d H:i:s')}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Total_num')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-total_num" class="form-control" name="row[total_num]" type="number">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Num')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-num" class="form-control" name="row[num]" type="number">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Create_time')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-create_time" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[create_time]" type="text" value="{:date('Y-m-d H:i:s')}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Creator')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-creator" class="form-control" name="row[creator]" type="text">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('File_name')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-file_name" class="form-control" name="row[file_name]" type="text">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Black_name')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-black_name" class="form-control" name="row[black_name]" type="text">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Source_name')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-source_name" class="form-control" name="row[source_name]" type="text">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Black')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-black" class="form-control" name="row[black]" type="text" value="0">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Phone_manufacturer')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-phone_manufacturer" data-rule="required" class="form-control" name="row[phone_manufacturer]" type="number" value="-1">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('All_black')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-all_black" class="form-control" name="row[all_black]" type="text" value="0">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Bank')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-bank" class="form-control" name="row[bank]" type="number">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Bank_city_codes')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-bank_city_codes" data-rule="required" class="form-control" name="row[bank_city_codes]" type="text" value="全国">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-status" class="form-control" name="row[status]" type="number" value="1">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Distrust')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-distrust" class="form-control" name="row[distrust]" type="text" value="0">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Sensitive')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-sensitive" class="form-control" name="row[sensitive]" type="text" value="0">
-        </div>
-    </div>
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Region')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-region" class="form-control" name="row[region]" type="text">
+            <textarea id="c-region" class="form-control" rows="3" name="row[region]" placeholder="请填写城市多个之间以|分隔,不填代表全国"></textarea>
+            <div class="col-xs-6 col-sm-6">
+                <button type="button" class="btn btn-info button_tree">{:__('地域')}</button>
+                <button type="button" class="btn btn-default button_tree_visible">{:__('显示/隐藏')}</button>
+                <div id="treeview"></div>
+            </div>
+            <div class="col-xs-6 col-sm-6">
+                {:build_select('bank_area',$bankAreasList,'',['class'=>'form-control selectpicker', 'data-live-search'=>'true'])}
+            </div>
+
         </div>
     </div>
+
     <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Output_pid_task_id')}:</label>
+        <label class="control-label col-xs-12 col-sm-2">{:__('选择需过滤的历史文件')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-output_pid_task_id" data-rule="required" data-source="output/pid/task/index" class="form-control selectpage" name="row[output_pid_task_id]" type="text" value="">
+            <div class="col-xs-12 col-sm-10">
+                <textarea id="c-filter_history_ids" class="form-control" rows="3" name="row[filter_history_ids]" placeholder="（历史文件批次号，多个之间以英文,分隔）"  data-rule=""></textarea>
+            </div>
+            <div class="col-xs-2 col-sm-2">
+                <div class="input-group-addon no-border no-padding">
+                    <span><button type="button" id="fachoose-filter_history_ids" class="btn btn-primary fachoose-filter_history_ids" data-input-id="filter_history_ids" data-mimetype="txt" data-multiple="true"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                </div>
+            </div>
         </div>
     </div>
+
     <div class="form-group layer-footer">
         <label class="control-label col-xs-12 col-sm-2"></label>
         <div class="col-xs-12 col-sm-8">
             <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
-            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
         </div>
     </div>
 </form>

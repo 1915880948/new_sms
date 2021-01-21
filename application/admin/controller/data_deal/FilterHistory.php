@@ -82,7 +82,7 @@ class FilterHistory extends Backend
             if( !$params['file_path']){
                 $this->error('文件必须上传！');
             }
-            $data['creator'] = $this->auth->getUserInfo()['username'];;
+            $data['creator'] = $this->auth->getUserInfo()['username'];
             $data['create_time'] = date('Y-m-d H:i:s');
             $data['use_time'] = $params['use_time'];
             $data['company'] = $this->company[$params["company_id"]];
