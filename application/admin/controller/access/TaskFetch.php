@@ -335,10 +335,35 @@ class TaskFetch extends Backend
             $params = $this->request->post('row/a');
             $rows = $this->model->where(['id'=>['in',$params['ids']]])->select();
             $blackNames = [];
-            if ( !empty($params['black']) )  $blackNames[] = $params['black'] . "/*";
-            if ( !empty($params['all_black']) ) $blackNames[] = $params['all_black'] . "/*";
-            if ( !empty($params['distrust']) ) $blackNames[] = $params['distrust'] . "/*";
-            if ( !empty($params['sensitive']) ) $blackNames[] = $params['sensitive'] . "/*";
+            $black = implode(",", $params['black']);
+            if (!empty($black)) {
+                foreach ($params['black'] as $v) {
+                    $blackNames[] = $v . "/*";
+                    $params['black'] = $black;
+                }
+            }
+            $all_black = implode(",", $params['all_black']);
+            if (!empty($all_black)) {
+                foreach ($params['all_black'] as $v) {
+                    $blackNames[] = $v . "/*";
+                    $params['all_black'] = $all_black;
+                }
+            }
+            $distrust = implode(",", $params['distrust']);
+            if (!empty($distrust)) {
+                foreach ($params['distrust'] as $v) {
+                    $blackNames[] = $v . "/*";
+                    $params['distrust'] = $distrust;
+                }
+            }
+            $sensitive = implode(",", $params['sensitive']);
+            if (!empty($sensitive)) {
+                foreach ($params['sensitive'] as $v) {
+                    $blackNames[] = $v . "/*";
+                }
+                $params['sensitive'] = $sensitive;
+            }
+
             if ( !empty($params['filter_history_ids']) ) {
                 $blackName = explode(',', $params['filter_history_ids']);
                 foreach ($blackName as $v) {
@@ -360,18 +385,19 @@ class TaskFetch extends Backend
             //$params['bank'] = 0;
             $params['creator'] =  $this->auth->getUserInfo()['username'];
             $params['create_time'] = date('Y-m-d H:i:s');
-            $filterBlackModel = new FilterBlack();
             unset($params['ids']);
             unset($params['filter_history_ids']);
             foreach ($rows as $item){
                 if( $item['status'] <3 )  continue;
+                $filterBlackModel = new FilterBlack();
                 $params['num'] = $item['total_num'];
                 $params['output_pid_task_id'] = $item['id'];
                 $rs = $filterBlackModel->insertGetId($params);
                 //Log::log('$filterBlackModel----->id:'.$rs);
-                $abc = copy(Env::get('file.UPLOAD_BIG_DOWNLOAD') . "tian_output/models" . $item['id'] . ".txt", Env::get('file.UPLOAD_BLACK_DOWNLOAD') . "need_filter_file/" . $rs);
+                //$abc = copy(Env::get('file.UPLOAD_BIG_DOWNLOAD') . "tian_output/models" . $item['id'] . ".txt", Env::get('file.UPLOAD_BLACK_DOWNLOAD') . "need_filter_file/" . $rs);
                 $filterBlackModel->save(array('file_name' => $rs),['id'=>$rs]);
-                $this->model->save(array('status' => 4),['id'=>$item['id']]);
+                $taskFetachModel = new \app\admin\model\access\TaskFetch();
+                $taskFetachModel->save(array('status' => 4),['id'=>$item['id']]);
             }
             $this->success('二次处理成功');
         }

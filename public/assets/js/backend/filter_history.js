@@ -86,6 +86,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             table.bootstrapTable({
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
                 sortName: 'id',
+                search: false,                       //1.快捷搜索框,设置成false隐藏
                 showToggle: false,
                 showExport: false,
                 columns: [
