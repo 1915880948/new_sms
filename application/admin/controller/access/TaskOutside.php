@@ -88,7 +88,7 @@ class TaskOutside extends Backend
             $this->error('当前出库未完成请稍后！！！');
         }
 
-        $filepath = Env::get('file.FILE_ROOT_DIR') . 'outside_output/';
+        $filepath = Env::get('file.FILE_ROOT_DIR') . '/outside_output/';
         $filename = $ids . '.txt';
         $txtfile = urlencode($row['source_no'] . "-" . $row['total_number'] . "-" . $row['number'] . ".txt");
         //告诉浏览器这是一个文件流格式的文件
