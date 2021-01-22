@@ -4,12 +4,22 @@ namespace app\admin\controller\modeling;
 
 use app\admin\controller\data_in\TaskSourceDetail;
 use app\common\controller\Backend;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Reader\Csv;
 use PhpOffice\PhpSpreadsheet\Reader\Xls;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use think\Config;
 use think\Log;
-
+use PhpOffice\PhpSpreadsheet\Helper\Sample;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 /**
  * 
  *
@@ -199,119 +209,116 @@ class ModelingUrl extends Backend
     }
 
     public function match(){
-
         if( $this->request->isPost() ){
             $params = $this->request->post('row/a');
             if( !$params['file_path'] ){
-//                $this->error('请上传文件或无权限');
+                $this->error('请上传文件或无权限');
             }
-            //实例化reader
-            $ext = pathinfo($params['file_path'], PATHINFO_EXTENSION);
-            if( $ext === 'csv'){
-                $reader = new Csv();
-            }elseif ($ext === 'xls') {
-                $reader = new Xls();
-            } else {
-                $reader = new Xlsx();
-            }
-            //$reader->setInputEncoding('GBK');
-            if (!$PHPExcel = $reader->load($params['file_path'])) {
-                $this->error(__('Unknown data format'));
-            }
-
-            $insert = [];
-            $currentSheet = $PHPExcel->getSheet(0);  //读取文件中的第一个工作表
-            $allColumn = $currentSheet->getHighestDataColumn(); //取得最大的列号
-            $allRow = $currentSheet->getHighestRow(); //取得一共有多少行
-            //$maxColumnNumber = Coordinate::columnIndexFromString($allColumn);
-            for ($currentRow  = 2; $currentRow <= $allRow; $currentRow++) {
-                $i = 1;
-                $urlL=$url = trim($currentSheet->getCellByColumnAndRow($i++, $currentRow)->getValue());
-                $host = trim($currentSheet->getCellByColumnAndRow($i++, $currentRow)->getValue());
-                if (empty($url)) {
-                    break;
-                }
-                if (substr($url,0,4) != "http"){
-                    $urlL = "http://".$url;
-                }
-                $where = [];
-                if( $host ){ //如果HOST不为空，则按照URL拆分HOST、PATH、KEY匹配
-                    $links = parse_url($urlL);
-                    if( isset($links['host']) ) $where['host'] = $links['host'];
-                    if( isset($links['path']) ) $where['path'] = $links['path'];
-                    if( isset($links['query']) ) $where['key'] = $links['query'];
-                }else{//如果HOST为空，Host path key为空则按照URL匹配
-                    $where['url'] = $url;
-                }
-                $urls = $this->model->where($where)->select();
-                if( empty($urls) ){
-                    $urls[0]['url'] = $url;
-                }
-                foreach ( $urls as $item ){
-                    $values = [
-                        'url'         => $url,
-                        'url_no'      => $item['url_no'],
-                        'host'        => $item['host'],
-                        'path'        => $item['path'],
-                        'key'         => $item['key'],
-                        'name'        => $item['name'],
-                        'category'    => $item['category'],
-                        'industry'    => $item['industry'],
-                        'is_valid'    => $item['is_valid'],
-                        'leader'      => $item['leader'],
-                        'time'        => $item['time'],
-                        'creator'     => $this->auth->getUserInfo()['username'],
-                        'create_time' => date('Y-m-d H:i:s'),
-                    ];
-                    $insert[] = $values;
-                }
-            }
-            ob_end_clean();//清除缓冲区,避免乱码
-
-            $filename = 'modeling_table_' . date('YmdHis');
-            $headers = ['url编号','URL','host','path','key','名称', '类型', '行业', '是否有效', '负责人','时间'];
-
-            $spreadsheet = new Spreadsheet();
-            $sheet = $spreadsheet->getActiveSheet();
-
-            $headerColumns = \PhpOffice\PhpSpreadsheet\Writer\Xls::instance()
-                ->generateColumn(count($headers));
-            foreach($headerColumns as $k => $item){
-                $column = "{$item}1";
-                $sheet->setCellValue($column, (string) $headers[$k]);
-            }
-            $row = 1;
-            foreach($insert as $key => $item) {
-                $xml = [
-                    $item['url'],
-                    $item['url_no'],
-                    $item['host'],
-                    $item['path'],
-                    $item['key'],
-                    $item['name'],
-                    $item['category'],
-                    $item['industry'],
-                    $item['is_valid'],
-                    $item['leader'],
-                    $item['time'] . "\t",
-                ];
-                foreach ($headerColumns as $k => $headerColumn) {
-                    $column = $headerColumn . ($row + 1);
-                    $sheet->setCellValue($column, (string)$xml[$k]);
-                }
-                $row++;
-            }
-            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment;filename="' . $filename . '"');
-            header('Cache-Control: max-age=0');
-
-            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
-            $writer->save('php://output');
-            exit;
+            $this->success();
         }
         return $this->view->fetch();
     }
 
+    public function match1($file_path){
+        //实例化reader
+        $ext = pathinfo($file_path, PATHINFO_EXTENSION);
+        if( $ext === 'csv'){
+            $reader = new Csv();
+        }elseif ($ext === 'xls') {
+            $reader = new Xls();
+        } else {
+            $reader = new Xlsx();
+        }
+        //$reader->setInputEncoding('GBK');
+        if (!$PHPExcel = $reader->load($file_path)) {
+            $this->error(__('Unknown data format'));
+        }
+
+        $insert[] = ['url'=>'url编号','url_no'=>'URL','host'=>'host','path'=>'path','key'=>'key','name'=>'名称', 'category'=>'类型', 'industry'=>'行业', 'is_valid'=>'是否有效', 'leader'=>'负责人','time'=>'时间'];
+        $currentSheet = $PHPExcel->getSheet(0);  //读取文件中的第一个工作表
+        $allColumn = $currentSheet->getHighestDataColumn(); //取得最大的列号
+        $allRow = $currentSheet->getHighestRow(); //取得一共有多少行
+        //$maxColumnNumber = Coordinate::columnIndexFromString($allColumn);
+        for ($currentRow  = 2; $currentRow <= $allRow; $currentRow++) {
+            $i = 1;
+            $urlL=$url = trim($currentSheet->getCellByColumnAndRow($i++, $currentRow)->getValue());
+            $host = trim($currentSheet->getCellByColumnAndRow($i++, $currentRow)->getValue());
+            if (empty($url)) {
+                break;
+            }
+            if (substr($url,0,4) != "http"){
+                $urlL = "http://".$url;
+            }
+            $where = [];
+            if( $host ){ //如果HOST不为空，则按照URL拆分HOST、PATH、KEY匹配
+                $links = parse_url($urlL);
+                if( isset($links['host']) ) $where['host'] = $links['host'];
+                if( isset($links['path']) ) $where['path'] = $links['path'];
+                if( isset($links['query']) ) $where['key'] = $links['query'];
+            }else{//如果HOST为空，Host path key为空则按照URL匹配
+                $where['url'] = $url;
+            }
+            $urls = $this->model->where($where)->select();
+            if( empty($urls) ){
+                $urls[0]['url'] = $url;
+            }
+            foreach ( $urls as $item ){
+                $values = [
+                    'url'         => $url,
+                    'url_no'      => $item['url_no'],
+                    'host'        => $item['host'],
+                    'path'        => $item['path'],
+                    'key'         => $item['key'],
+                    'name'        => $item['name'],
+                    'category'    => $item['category'],
+                    'industry'    => $item['industry'],
+                    'is_valid'    => $item['is_valid'],
+                    'leader'      => $item['leader'],
+                    'time'        => $item['time'],
+                    'creator'     => $this->auth->getUserInfo()['username'],
+                    'create_time' => date('Y-m-d H:i:s'),
+                ];
+                $insert[] = $values;
+            }
+        }
+        //ob_end_clean();//清除缓冲区,避免乱码
+
+        $filename = 'modeling_table_' . date('YmdHis').'.xlsx';
+        $spreadsheet = new Spreadsheet();
+        $spreadsheet->getProperties()
+            ->setCreator("sms")
+            ->setLastModifiedBy("sms")
+            ->setTitle("匹配")
+            ->setSubject("sms");
+//            $spreadsheet->getDefaultStyle()->getFont()->setName('Microsoft Yahei');
+//            $spreadsheet->getDefaultStyle()->getFont()->setSize(12);
+//            $worksheet = $spreadsheet->setActiveSheetIndex(0);
+        $worksheet = $spreadsheet->getActiveSheet();     //指向激活的工作表
+        $worksheet->setTitle('模板测试标题');
+        $i= 1;
+        foreach($insert as $key => $item) {
+            $worksheet->setCellValue(('A'.$i), $item['url']);
+            $worksheet->setCellValue(('B'.$i), $item['url_no']);
+            $worksheet->setCellValue(('C'.$i), $item['host']);
+            $worksheet->setCellValue(('D'.$i), $item['path']);
+            $worksheet->setCellValue(('E'.$i), $item['key']);
+            $worksheet->setCellValue(('F'.$i), $item['name']);
+            $worksheet->setCellValue(('G'.$i), $item['category']);
+            $worksheet->setCellValue(('H'.$i), $item['industry']);
+            $worksheet->setCellValue(('I'.$i), $item['is_valid']);
+            $worksheet->setCellValue(('J'.$i), $item['leader']);
+            $worksheet->setCellValue(('K'.$i), $item['time']);
+            $i++;
+        }
+
+        //下载文档
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
+    }
 
     public function get_host_to_root($host){
         //按照":"截取防止端口

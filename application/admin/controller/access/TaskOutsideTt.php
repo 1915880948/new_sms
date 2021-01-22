@@ -3,7 +3,7 @@
 namespace app\admin\controller\access;
 
 use app\common\controller\Backend;
-
+use think\Env;
 /**
  * 外部数据出库任务管理
  *
@@ -112,8 +112,8 @@ class TaskOutsideTt extends Backend
         }
         $types = explode(",",$row['type']);
         foreach ($types as $val) {
-            if (file_exists(C('file.FILE_ROOT_DIR') . 'outside_output/'.$ids. '/' . $val . '.txt')) {
-                $zip->addFile(C('file.FILE_ROOT_DIR') . 'outside_output/'.$ids. '/' . $val . '.txt', $val . '.txt');
+            if (file_exists(Env::get('file.FILE_ROOT_DIR') . 'outside_output/'.$ids. '/' . $val . '.txt')) {
+                $zip->addFile(Env::get('file.FILE_ROOT_DIR') . 'outside_output/'.$ids. '/' . $val . '.txt', $val . '.txt');
             }
         }
         $zip->close();//关闭

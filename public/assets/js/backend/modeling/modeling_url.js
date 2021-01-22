@@ -130,6 +130,18 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             Controller.api.bindevent();
         },
         match:function () {
+            $("#plupload-files").data("upload-success", function(data, ret){
+                let file_json = JSON.parse(data.row.extparam);
+                console.log(file_json);
+                $("input[name='file_name']").val(file_json.name);
+            });
+            // 匹配导出
+            $(document).on("click", "#match", function () {
+                let file_path = $("input[name='row[file_path]']").val();
+                // console.log(file_path);
+                window.location.href = "match1?file_path="+file_path;
+                //Fast.api.open(options.extend.export_url, __('URL导出'), $(this).data() || {});
+            });
 
             Controller.api.bindevent();
         },
