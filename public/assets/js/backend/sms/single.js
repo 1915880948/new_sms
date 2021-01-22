@@ -713,7 +713,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form','bootstrap-table-fixed
                 search: false,                       //1.快捷搜索框,设置成false隐藏
                 showToggle: false,                  //2.列表和视图切换
                 showColumns: false,                 //3.字段显示
-                //showExport: false,                  //4.导出按钮
+                showExport: true,                  //4.导出按钮
                 commonSearch: false,                //5.通用搜索框
                 pagination: true,                   //6.是否显示分页条
                 // onlyInfoPagination: true,           //7.只显示总数据数

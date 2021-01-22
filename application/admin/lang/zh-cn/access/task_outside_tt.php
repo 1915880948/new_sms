@@ -10,5 +10,7 @@ return [
     'Creator'     => '创建者',
     'Create_time' => '创建时间',
     'Startdate'   => '开始时间',
-    'Enddate'     => '结束时间'
+    'Enddate'     => '结束时间',
+    'Total_number'     => '总数据量',
+    'Number'     => '匹配后数据量',
 ];
