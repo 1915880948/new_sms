@@ -77,6 +77,7 @@ class TaskFetch2 extends Backend
             $params = $this->request->post("row/a");
             $params['creator'] = $this->auth->getUserInfo()['username'];
             $params['create_time'] = date('Y-m-d H:i:s');
+            $params['region'] = empty($params['region'])? "全国": $params['region'];
             $result = $this->model->allowField(true)->save($params);
             if( $result ){
                 $this->success();
