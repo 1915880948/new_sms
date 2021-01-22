@@ -204,14 +204,16 @@ class TaskFetch2 extends Backend
             $batchRowError = [];
             for ($currentRow  = 2; $currentRow <= $allRow; $currentRow++) {
                 $i = 1;
+                $region = trim($currentSheet->getCellByColumnAndRow($i++, $currentRow)->getValue());
+                if (empty($region)) $region = "全国";
                 $values = [
-                    'remark'      => $currentSheet->getCellByColumnAndRow($i++, $currentRow)->getValue(),
-                    'carrier'     => $currentSheet->getCellByColumnAndRow($i++, $currentRow)->getValue(),
-                    'batchs'      => $currentSheet->getCellByColumnAndRow($i++, $currentRow)->getValue(),
-                    'url_nos'     => $currentSheet->getCellByColumnAndRow($i++, $currentRow)->getValue(),
-                    'min_num'     => $currentSheet->getCellByColumnAndRow($i++, $currentRow)->getValue(),
-                    'max_num'     => $currentSheet->getCellByColumnAndRow($i++, $currentRow)->getValue(),
-                    'region'      => $currentSheet->getCellByColumnAndRow($i++, $currentRow)->getValue(),
+                    'remark'      => trim($currentSheet->getCellByColumnAndRow($i++, $currentRow)->getValue()),
+                    'carrier'     => trim($currentSheet->getCellByColumnAndRow($i++, $currentRow)->getValue()),
+                    'batchs'      => trim($currentSheet->getCellByColumnAndRow($i++, $currentRow)->getValue()),
+                    'url_nos'     => trim($currentSheet->getCellByColumnAndRow($i++, $currentRow)->getValue()),
+                    'min_num'     => trim($currentSheet->getCellByColumnAndRow($i++, $currentRow)->getValue()),
+                    'max_num'     => trim($currentSheet->getCellByColumnAndRow($i++, $currentRow)->getValue()),
+                    'region'      => $region,
                     'black'       => $params['black'],
                     'out_type'    => $params['out_type'],
                     'status'      => 1,

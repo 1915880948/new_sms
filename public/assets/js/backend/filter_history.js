@@ -33,7 +33,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'use_time', title: __('Use_time'), operate:'RANGE', addclass:'datetimerange'},
                         {field: 'creator', title: __('Creator')},
                         {field: 'total_num', title: __('Total_num'),operate:false},
-                        {field: 'source_name', title: __('Source_name')},
+                        {field: 'source_name', title: __('Source_name'),operate:'like'},
                         {field: 'file_name', title: __('File_name')},
                         {field: 'create_time', title: __('Create_time'), operate:'RANGE', addclass:'datetimerange'},
                         {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
@@ -100,7 +100,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'business', title: __('Business'),operate:'like'},
                         {field: 'use_time', title: __('Use_time')},
                         {field: 'total_num', title: __('Total_num'),operate:false},
-                        {field: 'source_name', title: __('Source_name')},
+                        {field: 'source_name', title: __('Source_name'),operate:'like'},
                         //{field: 'create_time', title: __('Create_time'), operate:'RANGE', addclass:'datetimerange'},
                     ]
                 ]
