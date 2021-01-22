@@ -20,6 +20,7 @@ class Income extends Backend
         "3" =>'豪斯莱广发',
         "4" =>'麦星广发',
         "5" =>'顺风车',
+        "6" =>'中信银行',
     ];
     
     /**
@@ -37,6 +38,7 @@ class Income extends Backend
         $this->hslgfDetailModel = new \app\admin\model\plot\Hslgfdetail;
         $this->mxgfDetailModel = new \app\admin\model\plot\Mxgfdetail;
         $this->sfcDetailModel = new \app\admin\model\plot\Sfcdetail;
+        $this->zhongxinDetailModel = new \app\admin\model\plot\Zhongxindetail;
 
     }
     
@@ -141,7 +143,7 @@ class Income extends Backend
                         'creator' => $creator,
                         'create_time' => date('Y-m-d H:i:s'),
                     ];
-                }else{
+                }elseif ($params['type'] == 5){
                     $channel = trim($currentSheet->getCellByColumnAndRow(5, $currentRow)->getValue());
                     $collect_time = trim($currentSheet->getCellByColumnAndRow(2, $currentRow)->getValue());
                     if (is_numeric($collect_time)){
@@ -159,6 +161,34 @@ class Income extends Backend
                         'collect_time' => $collect_time,
                         'auth_time' => $auth_time,
                         'bank_id' => $bank_id,
+                        'creator' => $creator,
+                        'create_time' => date('Y-m-d H:i:s'),
+                    ];
+                }else{
+                    //中信银行
+                    if ($currentRow == 2) continue;
+                    $channel = trim($currentSheet->getCellByColumnAndRow(3, $currentRow)->getValue());
+                    $enter_time = trim($currentSheet->getCellByColumnAndRow(4, $currentRow)->getValue());
+                    if (is_numeric($enter_time)){
+                        $enter_time = gmdate('Y-m-d H:i',intval(($enter_time - 25569) * 3600 * 24));
+                    }
+                    $first_card_in = trim($currentSheet->getCellByColumnAndRow(5, $currentRow)->getValue());
+                    if (empty($channel)) continue;
+                    $first_card_pass = trim($currentSheet->getCellByColumnAndRow(6, $currentRow)->getValue());
+                    $first_pass = trim($currentSheet->getCellByColumnAndRow(8, $currentRow)->getValue());
+                    $pass_15 = trim($currentSheet->getCellByColumnAndRow(9, $currentRow)->getValue());
+                    $pass_30 = trim($currentSheet->getCellByColumnAndRow(10, $currentRow)->getValue());
+                    $pass_card = trim($currentSheet->getCellByColumnAndRow(11, $currentRow)->getValue());
+                    $values = [
+                        'channel' => $channel,
+                        'enter_time' => $enter_time,
+                        'first_card_in' => $first_card_in,
+                        'bank_id' => $bank_id,
+                        'first_card_pass' => $first_card_pass,
+                        'first_pass' => $first_pass,
+                        'pass_15' => $pass_15,
+                        'pass_30' => $pass_30,
+                        'pass_card' => $pass_card,
                         'creator' => $creator,
                         'create_time' => date('Y-m-d H:i:s'),
                     ];
@@ -186,7 +216,7 @@ class Income extends Backend
                     $result = $this->hslgfDetailModel->saveAll($insert);
                 }elseif ($params['type'] == 4){
                     $result = $this->mxgfDetailModel->saveAll($insert);
-                }else{
+                }elseif ($params['type'] == 5){
                     Db::query("truncate sms_sfc_income_detail");
                     $inum = 100;//每次导入条数
                     $limit = ceil($num/$inum);
@@ -196,6 +226,8 @@ class Income extends Backend
                         $result=Db::table('sms_sfc_income_detail')->insertAll($data);
                     }
                     //$result = $this->sfcDetailModel->saveAll($insert);
+                }else{
+                    $result = $this->zhongxinDetailModel->saveAll($insert);
                 }
                 Db::commit();
             } catch (ValidateException $e) {

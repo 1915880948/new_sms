@@ -21,6 +21,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
                 pk: 'task_id',
                 sortName: 'task_id',
+                search: false,                       //1.快捷搜索框,设置成false隐藏
+                showToggle: false,                  //2.列表和视图切换
                 columns: [
                     [
                         {checkbox: true},
@@ -30,7 +32,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         // {field: 'city', title: __('City')},
                         {field: 'number', title: __('Number')},
                         {field: 'date', title: __('Date'), operate:'RANGE', addclass:'datetimerange'},
-                        {field: 'source_no', title: __('Source_no')},
                         {field: 'nickname', title: __('Nickname')},
                         {field: 'status', title: __('Status'),
                             formatter: Table.api.formatter.normal,
@@ -107,6 +108,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             table.bootstrapTable({
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
                 sortName: 'task_id',
+                search: false,
                 showToggle: false,
                 showExport: false,
                 columns: [
@@ -115,7 +117,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'task_id', title: __('Task_id')},
                         {field: 'number', title: __('Number')},
                         {field: 'date', title: __('Date'), operate:'RANGE', addclass:'datetimerange'},
-                        {field: 'source_no', title: __('Source_no')},
                         {field: 'nickname', title: __('Nickname'),
                             formatter: Table.api.formatter.normal,
                             searchList:Config.modList,

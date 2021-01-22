@@ -8,7 +8,7 @@ return [
     'Number'        => '数据量',
     'Date'          => '时间',
     'Source_no'     => '源ID',
-    'Nickname'      => '别名',
+    'Nickname'      => '建模源',
     'Status'        => '状态',
     'Ai_status'     => 'AI任务是否创建状态',
     'File_path'     => '导入发送文件路径',
