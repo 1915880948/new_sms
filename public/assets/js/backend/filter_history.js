@@ -95,11 +95,11 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     [
                         {checkbox: true},
                         {field: 'id', title: __('Id')},
-                        {field: 'company', title: __('Company')},
-                        {field: 'bank', title: __('Bank')},
-                        {field: 'business', title: __('Business')},
+                        {field: 'company', title: __('Company'),operate:'like'},
+                        {field: 'bank', title: __('Bank'),operate:'like'},
+                        {field: 'business', title: __('Business'),operate:'like'},
                         {field: 'use_time', title: __('Use_time')},
-                        {field: 'total_num', title: __('Total_num')},
+                        {field: 'total_num', title: __('Total_num'),operate:false},
                         {field: 'source_name', title: __('Source_name')},
                         //{field: 'create_time', title: __('Create_time'), operate:'RANGE', addclass:'datetimerange'},
                     ]
