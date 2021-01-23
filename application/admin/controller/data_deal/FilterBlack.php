@@ -215,6 +215,12 @@ class FilterBlack extends Backend
                 $data['num'] = $total_nums[$i];
                 $data['source_name'] = $file_names[$i];
                 $rs = $filterBlackModel->insertGetId($data);
+                $lastPath = Env::get('file.UPLOAD_BLACK_DOWNLOAD') . 'need_filter_file';
+                if (!is_dir($lastPath)) {
+                    @mkdir($lastPath);
+                }
+                $lastFile = $lastPath . '/' . $rs;
+                $abc = copy($files[$i], $lastFile);
                 //Log::log('$filterBlackModel----->id:'.$rs);
                 $filterBlackModel->save(array('file_name' => $rs),['id'=>$rs]);
             }

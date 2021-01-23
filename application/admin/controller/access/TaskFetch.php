@@ -394,7 +394,7 @@ class TaskFetch extends Backend
                 $params['output_pid_task_id'] = $item['id'];
                 $rs = $filterBlackModel->insertGetId($params);
                 //Log::log('$filterBlackModel----->id:'.$rs);
-                //$abc = copy(Env::get('file.UPLOAD_BIG_DOWNLOAD') . "tian_output/models" . $item['id'] . ".txt", Env::get('file.UPLOAD_BLACK_DOWNLOAD') . "need_filter_file/" . $rs);
+                $abc = copy(Env::get('file.UPLOAD_BIG_DOWNLOAD') . "tian_output/models" . $item['id'] . ".txt", Env::get('file.UPLOAD_BLACK_DOWNLOAD') . "need_filter_file/" . $rs);
                 $filterBlackModel->save(array('file_name' => $rs),['id'=>$rs]);
                 $taskFetachModel = new \app\admin\model\access\TaskFetch();
                 $taskFetachModel->save(array('status' => 4),['id'=>$item['id']]);
