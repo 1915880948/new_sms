@@ -53,18 +53,11 @@ class Ftp extends Backend
     {
         if ($this->request->isPost()) {
             $params = $this->request->post('row/a');
-            if (!$params['use_time']) {
-                $this->error('请选择建模源ID！');
-            }
             if (!$params['file_path']) {
                 $this->error('文件必须上传！');
             }
             $data['creator'] = $this->auth->getUserInfo()['username'];
             $data['create_time'] = date('Y-m-d H:i:s');
-            $data['use_time'] = $params['use_time'];
-            $data['company'] = $this->company[$params["company_id"]];
-            $data['bank'] = $this->bank[$params["bank_id"]];
-            $data['business'] = $this->business[$params["business_id"]];
             $files = $file_paths = [];
             $files_list = rtrim($params['files_list'], "|");
             $files_list = explode('|', $files_list);
@@ -73,39 +66,33 @@ class Ftp extends Backend
                 $file_name = trim($filelists[0]);
                 $file_path = $filelists[1];
                 if ($file_path) {
-                    $handle = fopen($file_path, "r");//以只读方式打开一个文件
-                    $k = 0;
-                    while (!feof($handle)) {
-                        if (fgets($handle)) {
-                            $k++;
-                        };
+                    //$file_path = C('DOWNLOAD_UPLOAD.rootPath') . $file_path['savepath'] . $file_path['savename'];
+                    $lastPath = Env::get('file.UPLOAD_BLACK_DOWNLOAD') . 'input_imei';
+                    if (!is_dir($lastPath)) {
+                        @mkdir($lastPath);
                     }
-                    fclose($handle);
-                    $total_nums[] = $k;
-                    $files[] = $file_path;
-                    $file_names[] = $file_name;
-                }
-            }
+                    $lastFile = $lastPath . '/' . $file_name;
+                    $abc = copy($file_path, $lastFile);
+                    if ($abc && !empty($lastFile)) {
+                        $name = str_replace(strrchr($file_name, "."), "", $file_name);
+                        $list = explode('_', $name);
+                        //去掉后缀
+                        $data['name'] = $list[0];
+                        $data['model_date'] = $list[1];
+                        $data['class_one'] = $list[2];
+                        $data['class_two'] = $list[3];
+                        $data['model_name'] = $list[4];
+                        $data['model_num'] = $list[5];
+                        $data['file_path'] = $file_name;
+                        $contents[] = $data;
 
-            for ($i = 0; $i < count($file_names); $i++) {
-                $model = new \app\admin\model\data_deal\FilterHistory();
-                $data['source_name'] = $file_names[$i];
-                $data['total_num'] = $total_nums[$i];
-                $result = $model->save($data);
-                $res = $model->getLastInsID();
-                $lastPath = Env::get('file.UPLOAD_BLACK_DOWNLOAD') . 'black_file';
-                $copyPath = Env::get('file.UPLOAD_BIG_DOWNLOAD') . 'black_list/b';
-                if (!is_dir($lastPath)) {
-                    @mkdir($lastPath);
+                    } else {
+                        $this->error('ftp文件下载失败。');
+                    }
                 }
-                $lastFile = $lastPath . '/' . $res;
-                $copyFile = $copyPath . '/' . $res;
-                $abc = copy($files[$i], $lastFile);
-                $abc = copy($files[$i], $copyFile);
-                $model->save(['file_name' => $res], ['id' => $res]);
             }
-            if (!$result) {
-                $this->success('数据入库失败！！');
+            if (!empty($contents)) {
+                $this->model->saveAll($contents);
             }
             $this->success('数据入库成功！！');
         }

@@ -205,7 +205,7 @@ class TaskFetch2 extends Backend
             $batchRowError = [];
             for ($currentRow  = 2; $currentRow <= $allRow; $currentRow++) {
                 $i = 1;
-                $region = trim($currentSheet->getCellByColumnAndRow($i++, $currentRow)->getValue());
+                $region = trim($currentSheet->getCellByColumnAndRow(7, $currentRow)->getValue());
                 if (empty($region)) $region = "全国";
                 $values = [
                     'remark'      => trim($currentSheet->getCellByColumnAndRow($i++, $currentRow)->getValue()),
