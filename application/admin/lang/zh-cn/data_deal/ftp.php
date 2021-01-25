@@ -13,6 +13,7 @@ return [
     'Type'        => '数据格式',
     'Status'      => '状态',
     'File_path'   => '导入发送文件路径',
+    'File_name'   => '导入文件',
     'Creator'     => '创建者',
     'Create_time' => '创建时间',
     'End_time'    => '完成时间',

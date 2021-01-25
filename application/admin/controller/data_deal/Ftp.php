@@ -67,7 +67,7 @@ class Ftp extends Backend
                 $file_path = $filelists[1];
                 if ($file_path) {
                     //$file_path = C('DOWNLOAD_UPLOAD.rootPath') . $file_path['savepath'] . $file_path['savename'];
-                    $lastPath = Env::get('file.UPLOAD_BLACK_DOWNLOAD') . 'input_imei';
+                    $lastPath = Env::get('file.UPLOAD_FTP_DOWNLOAD') . 'input_imei';
                     if (!is_dir($lastPath)) {
                         @mkdir($lastPath);
                     }
@@ -78,11 +78,11 @@ class Ftp extends Backend
                         $list = explode('_', $name);
                         //去掉后缀
                         $data['name'] = $list[0];
-                        $data['model_date'] = $list[1];
-                        $data['class_one'] = $list[2];
-                        $data['class_two'] = $list[3];
-                        $data['model_name'] = $list[4];
-                        $data['model_num'] = $list[5];
+                        $data['model_date'] = isset($list[1])?$list[1]:'';
+                        $data['class_one'] = isset($list[2])?$list[2]:'';
+                        $data['class_two'] = isset($list[3])?$list[3]:'';
+                        $data['model_name'] = isset($list[4])?$list[4]:'';
+                        $data['model_num'] = isset($list[5])?$list[5]:'';
                         $data['file_path'] = $file_name;
                         $contents[] = $data;
 

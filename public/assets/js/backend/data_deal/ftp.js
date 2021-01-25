@@ -75,10 +75,18 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
         add: function () {
             $("#plupload-files").data("upload-success", function (data, ret) {
                 //这里进行后续操作
-                console.log(data.row);
                 let file_json = JSON.parse(data.row.extparam);
                 $("#textarea").val($("#textarea").val()+file_json.name+"\n");
                 $("#files_list").val($("#files_list").val()+file_json.name+","+data.row.url+"|");
+            });
+            $(document).on("change", "select[name='row[ntype]']", function () {
+                var ntype = $("select[name='row[ntype]']").val();
+                if (ntype == 2) {
+                    $("#imei-type").css('display', 'block');
+                } else {
+                    $("#imei-type").css('display', 'none');
+                }
+
             });
             Controller.api.bindevent();
         },
