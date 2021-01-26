@@ -110,6 +110,7 @@ class Income extends Backend
             $allRow = $currentSheet->getHighestRow(); //取得一共有多少行
             //$maxColumnNumber = Coordinate::columnIndexFromString($allColumn);
             for ($currentRow  = 2; $currentRow <= $allRow; $currentRow++) {
+                //得保  守护保
                 if ($params['type'] == 1 || $params['type'] == 2) {
                     $channel = trim($currentSheet->getCellByColumnAndRow(2, $currentRow)->getValue());
                     $enter_time = trim($currentSheet->getCellByColumnAndRow(3, $currentRow)->getValue());
@@ -124,6 +125,7 @@ class Income extends Backend
                         'create_time' => date('Y-m-d H:i:s'),
                     ];
                 }elseif ($params['type'] == 3 || $params['type'] == 4){
+                    //豪斯莱广发  麦星广发
                     $channel = trim($currentSheet->getCellByColumnAndRow(2, $currentRow)->getValue());
                     $enter_time = trim($currentSheet->getCellByColumnAndRow(1, $currentRow)->getValue());
                     if (is_numeric($enter_time)){
@@ -134,6 +136,11 @@ class Income extends Backend
 
                     if (empty($channel)) continue;
                     if (empty($enter_time)) continue;
+                    if ($params['type'] == 3){
+                        $result = $this->hslgfDetailModel->where("channel='$channel' and enter_time='$enter_time'")->delete();
+                    }else{
+                        $result = $this->mxgfDetailModel->where("channel='$channel' and enter_time='$enter_time'")->delete();
+                    }
                     $values = [
                         'channel' => $channel,
                         'enter_time' => $enter_time,
@@ -144,6 +151,7 @@ class Income extends Backend
                         'create_time' => date('Y-m-d H:i:s'),
                     ];
                 }elseif ($params['type'] == 5){
+                    //顺风车
                     $channel = trim($currentSheet->getCellByColumnAndRow(5, $currentRow)->getValue());
                     $collect_time = trim($currentSheet->getCellByColumnAndRow(2, $currentRow)->getValue());
                     if (is_numeric($collect_time)){
@@ -179,6 +187,7 @@ class Income extends Backend
                     $pass_15 = trim($currentSheet->getCellByColumnAndRow(9, $currentRow)->getValue());
                     $pass_30 = trim($currentSheet->getCellByColumnAndRow(10, $currentRow)->getValue());
                     $pass_card = trim($currentSheet->getCellByColumnAndRow(11, $currentRow)->getValue());
+                    $result = $this->zhongxinDetailModel->where("channel='$channel' and enter_time='$enter_time'")->delete();
                     $values = [
                         'channel' => $channel,
                         'enter_time' => $enter_time,
