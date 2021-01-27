@@ -14,6 +14,7 @@ use app\common\controller\Backend;
 use app\common\model\Config;
 use think\Db;
 use think\Env;
+use think\Log;
 
 class Timely extends Backend
 {
@@ -140,6 +141,7 @@ class Timely extends Backend
                     'sms_content' => trim($postData['sms_content']),
                     'send_status' => $postData['send_status'],
                     'timely_type' => implode(',',$postData['timely_type']),
+                    'timely_encrypt_type' => $postData['timely_encrypt_type'],
                     'city' => $postData['city'],
                     'group' => $this->auth->getUserInfo()['username'], // 用于每天自动生成任务时，确定该配置文件的所有者
                 ]);
@@ -154,6 +156,7 @@ class Timely extends Backend
 
                     $apiUrl = "http://".Env::get('sms_short.host')."/short.php?key=68598736&dm=" . trim($postData['domain_short']) . '&url=' . rawurlencode($transfer_link);
                     $shortLinkResult = httpRequest($apiUrl, 'GET');
+                    //Log:Log::log($shortLinkResult);
                     $shortLinkResult = json_decode($shortLinkResult, true);
                     if (empty($shortLinkResult['data'][0])) {
                         throw new \Exception('短链生成失败，请稍后重试..');

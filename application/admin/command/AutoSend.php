@@ -142,7 +142,11 @@ class AutoSend extends Command
 
             if( strlen($v)  == 11 ){ // 是手机号
                 $this->total_send ++;
-                $linkArr[] = $linkShortData['transfer_link'].'&m='.($this->en($v));
+                if( $config['timely_encrypt_type'] == 2){ // 2 通用aes加密
+                    $linkArr[] = $linkShortData['transfer_link'].'&m='.($this->en($v)).'&c=3'; // c=3 预填手机号
+                }else{
+                    $linkArr[] = $linkShortData['transfer_link'].'&m='.($this->en($v));
+                }
             }
             if( count($linkArr) == $createShortPre ){
                 $this->createShortLinkForUser($linkArr,$taskSendData['task_id'],$spInfo['sp_no'],$queueTime,$config);
