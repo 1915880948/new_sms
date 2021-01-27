@@ -130,7 +130,7 @@ class AutoSend extends Command
         $decodeResult = json_decode($decodeResult, true);
         //Log::log( json($decodeResult['data']));
         $queueTime =  date("Y-m-d H:i:s");
-        $createShortPre = 40; // 为用户生成短链 40请求一次
+        $createShortPre = 30; // 为用户生成短链 40请求一次
         $linkArr = [] ;
         $this->task_num +=count($decodeResult['data']);
         $this->total_num = $this->task_num;
