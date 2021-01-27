@@ -128,9 +128,10 @@ class AutoSend extends Command
         //Log::log('dealEnPhone');
         $decodeResult = curl_encrypt($phoneEncodeStr); //解密手机号，最多10000
         $decodeResult = json_decode($decodeResult, true);
-        //Log::log( json($decodeResult['data']));
+//        Log::log('$decodeResult-----');
+//        Log::log( json($decodeResult['data']));
         $queueTime =  date("Y-m-d H:i:s");
-        $createShortPre = 30; // 为用户生成短链 40请求一次
+        $createShortPre = 40; // 为用户生成短链 40请求一次
         $linkArr = [] ;
         $this->task_num +=count($decodeResult['data']);
         $this->total_num = $this->task_num;
@@ -153,7 +154,7 @@ class AutoSend extends Command
                 $linkArr = [] ;
             }
         }
-        //print_r( $linkArr );
+//        Log::log( $linkArr );
         if( $linkArr ){  // 剩余请求一次
             $this->createShortLinkForUser($linkArr,$taskSendData['task_id'],$spInfo['sp_no'],$queueTime,$config);
         }
@@ -196,12 +197,13 @@ class AutoSend extends Command
         $apiUrl = "http://".Env::get('sms_short.host')."/short.php?key=68598736&dm=" . trim($config['domain_short'])  . $transfer_link;
         //print_r( $apiUrl) ; die;
         $shortLinkResult = httpRequest($apiUrl, 'GET');
+//        Log::log($shortLinkResult);
         $shortLinkResult = json_decode($shortLinkResult,true);
-        //print_r( $shortLinkResult );
+//        print_r( $shortLinkResult );
         $realIntoQueueNumber = 0;
         if(!empty($shortLinkResult['data'][0])) {
             foreach($shortLinkResult['data'] as $item) {
-                $phoneArr = explode('&m=',$item['url']);
+                $phoneArr = explode('&m=',str_replace('&c=3','',$item['url']));
                 if( isset($phoneArr[1]) ){
                     $realIntoQueueNumber++;
                     $phone = $this->de($phoneArr[1]);
