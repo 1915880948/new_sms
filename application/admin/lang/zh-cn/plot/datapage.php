@@ -5,6 +5,7 @@ return [
     'Url_link'      => '链接',
     'Day'           => '日期',
     'Second'        => '停留时间(s)',
+    'Is_show'       => '首页曝光',
     'Is_top'        => '头部下载',
     'Is_draw'       => '领取福利',
     'Is_retrie'     => '回收',

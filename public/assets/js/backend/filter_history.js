@@ -98,7 +98,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'company', title: __('Company'),operate:'like'},
                         {field: 'bank', title: __('Bank'),operate:'like'},
                         {field: 'business', title: __('Business'),operate:'like'},
-                        {field: 'use_time', title: __('Use_time')},
+                        {field: 'use_time', title: __('Use_time'), operate:'RANGE', addclass:'datetimerange'},
                         {field: 'total_num', title: __('Total_num'),operate:false},
                         {field: 'source_name', title: __('Source_name'),operate:'like'},
                         //{field: 'create_time', title: __('Create_time'), operate:'RANGE', addclass:'datetimerange'},

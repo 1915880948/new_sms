@@ -36,6 +36,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'url_link', title: __('Url_link'),operate: 'like'},
                         {field: 'create_time', title: __('Day'),formatter: Table.api.formatter.date, operate: 'like', type: 'date', addclass: 'datetimepicker', data: 'data-date-format="YYYY-MM-DD"'},
                         {field: 'second', title: __('Second'),operate: false},
+                        {field: 'is_show', title: __('Is_show'),operate:false},
                         {field: 'is_top', title: __('Is_top'),operate:false},
                         {field: 'is_draw', title: __('Is_draw'),operate:false},
                         {field: 'is_retrie', title: __('Is_retrie'),operate:false},

@@ -134,29 +134,32 @@ class TaskSource extends Backend
         }
         $modList = (new \app\admin\model\access\ModSource())->column('nickname');
 
-        $this->assignconfig("modList", array_combine($modList,$modList));
+        //$this->assignconfig("modList", array_combine($modList,$modList));
         $this->assignconfig('params',$params);
         return $this->view->fetch();
 
     }
 
     public function detail($ids=null){
+        $this->relationSearch = true;
         $row = $this->model->get($ids);
 
         if (empty($row) || $row['status'] == 4) {
             $this->error('您查看的建模源任务不存在或已被删除。');
         }
-
+        $this->model = new \app\admin\model\data_in\TaskSourceDetail();
         if( $this->request->isAjax() ){
             $myWhere['source_task_id'] = $ids;
-            $detailModel = new \app\admin\model\data_in\TaskSourceDetail();
+            //$detailModel = new \app\admin\model\data_in\TaskSourceDetail();
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
-            $total = $detailModel
+            $total = $this->model
+                ->with('industry')
                 ->where($where)->where($myWhere)
                 ->order($sort, $order)
                 ->count();
 
-            $list = $detailModel
+            $list = $this->model
+                ->with('industry')
                 ->where($where)->where($myWhere)
                 ->order($sort, $order)
                 ->limit($offset, $limit)
@@ -205,8 +208,8 @@ class TaskSource extends Backend
             return json($result);
         }
 
-        $modList = (new \app\admin\model\access\ModSource())->column('nickname');
-        $this->assignconfig("modList", array_combine($modList,$modList));
+        //$modList = (new \app\admin\model\access\ModSource())->column('nickname');
+        //$this->assignconfig("modList", array_combine($modList,$modList));
         $this->assignconfig('row',$row);
         return $this->view->fetch();
     }

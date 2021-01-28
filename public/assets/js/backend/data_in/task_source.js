@@ -27,24 +27,34 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     [
                         {checkbox: true},
                         {field: 'task_id', title: __('Task_id')},
+                        {field: 'nickname', title: __('Nickname'),
+                            searchList:$.getJSON("access/mod_source/modList")},
                         // {field: 'carrier', title: __('Carrier')},
                         // {field: 'province', title: __('Province')},
                         // {field: 'city', title: __('City')},
-                        {field: 'number', title: __('Number')},
-                        {field: 'date', title: __('Date'), operate:'RANGE', addclass:'datetimerange'},
-                        {field: 'nickname', title: __('Nickname')},
-                        {field: 'status', title: __('Status'),
-                            formatter: Table.api.formatter.normal,
-                            searchList:{1:'上传完毕',2:'入库中',3:'入库完毕',4:'已删除'},
-                        },
                         // {field: 'AI_status', title: __('Ai_status')},
                         // {field: 'file_path', title: __('File_path')},
                         // {field: 'before_price', title: __('Before_price')},
                         // {field: 'last_price', title: __('Last_price')},
-                        {field: 'cost_num', title: __('Cost_num')},
-                        {field: 'create_time', title: __('Create_time'), operate:'RANGE', addclass:'datetimerange'},
+                        {field: 'cost_num', title: __('Cost_num'),operate:false},
+                        {field: 'number', title: __('Number'),operate:false},
+                        {field: 'cost', title: __('成本'),operate:false,formatter:function (value,row,index) {
+                                if( row.before_price >0 || row.last_price>0 ){
+                                    return ( row.cost_num * row.before_price+row.number*row.last_price).toFixed(2);
+                                }else {
+                                    return 0;
+                                }
+                            }},
+                        {field: 'date', title: __('Date'), operate:'RANGE', addclass:'datetimerange'},
                         {field: 'paydays', title: __('Paydays')},
-                        {field: 'remark', title: __('Remark')},
+                        {field: 'remark', title: __('Remark'),operate:false},
+                        {field: 'status', title: __('Status'),
+                            formatter: Table.api.formatter.normal,
+                            searchList:{1:'上传完毕',2:'入库中',3:'入库完毕',4:'已删除'},
+                        },
+                        {field: 'create_time', title: __('Create_time'), operate:false,visible:false},
+
+
                         // {field: 'handle', title: __('Handle')},
                         // {field: 'handle_remark', title: __('Handle_remark')},
                         {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate,
@@ -118,9 +128,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'number', title: __('Number')},
                         {field: 'date', title: __('Date'), operate:'RANGE', addclass:'datetimerange'},
                         {field: 'nickname', title: __('Nickname'),
-                            formatter: Table.api.formatter.normal,
-                            searchList:Config.modList,
-                        },
+                            searchList:$.getJSON("access/mod_source/modList")},
                         {field: 'status', title: __('Status'),
                             formatter: Table.api.formatter.normal,
                             searchList:{1:'上传完毕',2:'入库中',3:'入库完毕',4:'已删除'},
@@ -178,6 +186,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             Table.api.init({
                 extend: {
                     index_url: 'data_in/task_source/detail'+"?ids="+Config.row.task_id,
+                    table: 'sms_task_source_detail',
                 }
             });
             var table = $("#detail");
@@ -186,24 +195,24 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             table.bootstrapTable({
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
                 sortName: 'id',
+                search: false,                       //1.快捷搜索框,设置成false隐藏
                 showToggle: false,
                 //showExport: false,
                 columns: [
                     [
                         {checkbox: true},
-                        {field: 'task_id', title: __('Task_id')},
                         {field: 'url_no', title: __('URL编号')},
-                        {field: 'industry', title: __('行业'), },
-                        {field: 'category', title: __('分类')},
-                        {field: 'name', title: __('名称'),},
-                        {field: 'class', title: __('部门'),},
-                        {field: 'num_total', title: __('总数据量'),},
-                        {field: 'original_num', title: __('原始数据量'),},
-                        {field: 'filter_city_num', title: __('规则过滤后'),},
-                        {field: 'not_filter_rule_num', title: __('规则过滤前'),},
-                        {field: 'threshold_before_num', title: __('阈值分割前'),},
-                        {field: 'threshold_after_num', title: __('阈值分割后'),},
-                        {field: 'limit_output_before_num', title: __('AI总数量'),},
+                        {field: 'industry.industry', title: __('行业'),operate:'like'},
+                        {field: 'industry.category', title: __('分类'),operate:false},
+                        {field: 'industry.name', title: __('名称'),operate:false},
+                        {field: 'industry.class', title: __('部门'),operate:false},
+                        {field: 'num_total', title: __('总数据量'),operate:false},
+                        {field: 'original_num', title: __('原始数据量'),operate:false},
+                        {field: 'filter_city_num', title: __('规则过滤后'),operate:false},
+                        {field: 'not_filter_rule_num', title: __('规则过滤前'),operate:false},
+                        {field: 'threshold_before_num', title: __('阈值分割前'),operate:false},
+                        {field: 'threshold_after_num', title: __('阈值分割后'),operate:false},
+                        {field: 'limit_output_before_num', title: __('AI总数量'),operate:false},
                         // {
                         //     field: 'operate', title: __('Operate'), events: {
                         //         'click .btn-chooseone': function (e, value, row, index) {
@@ -240,16 +249,14 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             table.bootstrapTable({
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
                 sortName: 'id',
+                search: false,                       //1.快捷搜索框,设置成false隐藏
                 showToggle: false,
-                //showExport: false,
                 columns: [
                     [
                         {checkbox: true},
                         {field: 'days', title: __('时间')},
                         {field: 'nickname', title: __('建模源'),
-                            formatter:Table.api.formatter.normal,
-                            searchList:Config.modList,
-                        },
+                            searchList:$.getJSON("access/mod_source/modList")},
                         {field: 'task_id', title: __('批次号'), },
                         {field: 'cost_num', title: __('数据行数'),operate:false},
                         {field: 'number', title: __('入库行数'),operate:false},

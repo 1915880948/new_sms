@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'Task_id'       => '任务id(批次号)',
+    'Task_id'       => '批次号',
     'Carrier'       => '运营商',
     'Province'      => '省',
     'City'          => '市',
-    'Number'        => '数据量',
+    'Number'        => '入库行数',
     'Date'          => '时间',
     'Source_no'     => '源ID',
     'Nickname'      => '建模源',

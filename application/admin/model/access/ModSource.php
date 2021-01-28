@@ -27,11 +27,16 @@ class ModSource extends Model
     protected $append = [
 
     ];
-    
-
-    
 
 
+
+
+    public function getModList()
+    {
+        $modlist = $this->column("nickname,nickname");
+        return $modlist;
+
+    }
 
 
 

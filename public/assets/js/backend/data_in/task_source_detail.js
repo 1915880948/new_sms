@@ -70,6 +70,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             table.bootstrapTable({
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
                 sortName: 'id',
+                search: false,
                 showToggle: false,
                 showExport: false,
                 sidePagination:'server',
@@ -83,7 +84,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'name', title: __('名称')},
                         {field: 'category', title: __('类型'),operate:false},
                         {field: 'industry', title: __('行业')},
-                        {field: 'num', title: __('数据量')},
+                        {field: 'num', title: __('数据量'),operate:'BETWEEN'},
                     ]
                 ]
             });

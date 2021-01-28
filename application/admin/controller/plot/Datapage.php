@@ -51,7 +51,7 @@ class Datapage extends Backend
                 ->count();
 
             $list = $db::table('sms_send_data.sms_landpage_total')
-                ->field("url_link,DATE_FORMAT(create_time,'%Y-%m-%d') day,sum(second) as second, sum(is_top) as is_top, sum(is_draw) as is_draw,sum(is_retrie) as is_retrie,sum(is_start) as is_start,sum(is_jump) as is_jump,sum(is_jump_click) as is_jump_click,sum(is_prize) as is_prize,sum(is_jump_close) as is_jump_close,sum(other_click) as other_click")
+                ->field("url_link,DATE_FORMAT(create_time,'%Y-%m-%d') day,sum(second) as second, sum(is_show) as is_show,sum(is_top) as is_top, sum(is_draw) as is_draw,sum(is_retrie) as is_retrie,sum(is_start) as is_start,sum(is_jump) as is_jump,sum(is_jump_click) as is_jump_click,sum(is_prize) as is_prize,sum(is_jump_close) as is_jump_close,sum(other_click) as other_click")
                 ->where($where)
                 ->group('url_link,day')
                 ->order($sort, $order)

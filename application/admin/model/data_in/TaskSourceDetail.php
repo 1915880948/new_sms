@@ -2,6 +2,7 @@
 
 namespace app\admin\model\data_in;
 
+use app\admin\model\modeling\Dpindustry;
 use think\Model;
 
 
@@ -39,10 +40,8 @@ class TaskSourceDetail extends Model
         return $this->belongsTo('app\\admin\\model\\access\\basic\\Model2', 'url_no', 'model_no', [], 'LEFT')->setEagerlyType(0);
     }
 
-
-
-
-
-
-
+    public function industry()
+    {
+        return $this->belongsTo('app\\admin\\model\\modeling\\Dpindustry','url_no','source_no',[],'LEFT')->setEagerlyType(0);
+    }
 }

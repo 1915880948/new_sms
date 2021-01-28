@@ -118,7 +118,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form','jstree'], function ($
                             searchList:{1:'提交',2:'出数中', 3:'出数完毕',4:'二次处理中',5:'二次处理完毕'},
                         },
                         // {field: 'file_path', title: __('File_path')},
-                        {field: 'total_num', title: __('Total_num')},
+                        {field: 'total_num', title: __('Total_num'),operate:false},
                         {field: 'creator', title: __('Creator')},
                         {field: 'create_time', title: __('Create_time'), operate:'RANGE', addclass:'datetimerange'},
                         {field: 'end_time', title: __('End_time'), operate:'RANGE', addclass:'datetimerange'},
