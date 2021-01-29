@@ -3,6 +3,12 @@
 namespace app\admin\controller\modeling;
 
 use app\common\controller\Backend;
+use app\common\model\Attachment;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\Reader\Xls;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use think\Db;
 use think\Env;
 
 /**
@@ -19,6 +25,9 @@ class U2SubmitTask extends Backend
      */
     protected $model = null;
 
+    protected $source_no_arr = [
+        1=>'U2',2=>'TL',3=>'DPI',4=>'TY',5=>'TS',6=>'TD',7=>'TW',
+    ];
     public function _initialize()
     {
         parent::_initialize();
@@ -65,6 +74,234 @@ class U2SubmitTask extends Backend
         return $this->view->fetch();
     }
 
+    public function template($source_no){
+
+        $insert = [];
+        $filename = 'submit_'.$this->source_no_arr[$source_no].'_template.xlsx';
+        $spreadsheet = new Spreadsheet();
+        $spreadsheet->getProperties()
+            ->setCreator("sms")
+            ->setLastModifiedBy("sms")
+            ->setTitle("提交取数")
+            ->setSubject("sms");
+        $worksheet = $spreadsheet->getActiveSheet();     //指向激活的工作表
+        $worksheet->setTitle('提交取数模板');
+        $i= 1;
+        if($source_no == 1 ){ // U2
+            $worksheet->setCellValue(('A'.$i), 'URL编号');
+            $worksheet->setCellValue(('B'.$i), '最小次数');
+            $worksheet->setCellValue(('C'.$i), '最大次数');
+            $worksheet->setCellValue(('D'.$i), '取数天数（最大15天）');
+            $worksheet->setCellValue(('E'.$i), '取数地域');
+            $worksheet->setCellValue(('E'.($i+1)), '1|2|3');
+            $worksheet->setCellValue(('F'.$i), '手机编号');
+            $worksheet->setCellValue(('F'.($i+1)), '1（）');
+            $worksheet->setCellValue(('G'.$i), '去重天数');
+            $worksheet->setCellValue(('G'.($i+1)), '1（取最近1天的数据）');
+            $worksheet->setCellValue(('H'.$i), '去重方式');
+            $worksheet->setCellValue(('H'.($i+1)), '1（标签去重）');
+            $worksheet->setCellValue(('H'.($i+2)), '2（行业去重）');
+            $worksheet->setCellValue(('I'.$i), '取数限制');
+            $worksheet->setCellValue(('I'.($i+1)), '10000（代表取1万数据）');
+            $worksheet->setCellValue(('J'.$i), 'UV输出');
+            $worksheet->setCellValue(('J'.($i+1)), '都填1');
+            $worksheet->setCellValue(('K'.$i), '行业标签');
+            $worksheet->setCellValue(('K'.($i+1)), 'YX（游戏）');
+            $worksheet->setCellValue(('K'.($i+2)), 'JR（金融）');
+            $worksheet->setCellValue(('K'.($i+3)), 'BX（保险）');
+            $worksheet->setCellValue(('K'.($i+4)), 'SFC（顺风车）');
+            $worksheet->setCellValue(('K'.($i+5)), 'YH（云海）');
+            $worksheet->setCellValue(('K'.($i+6)), 'HL（火狼）');
+        }
+        if($source_no == 2 ){ // TL
+            $i= 1;
+            $insert = [
+                ['1','2','3','4','5','6','7','8','9'],
+                ['other001','BXB1802','1','10000','1','0999','0','20000','0'],
+                ['other001','BXB1801','1','10000','1','0999','0','20000','0'],
+                ['other001','BXB1800','1','10000','1','0999','0','20000','0'],
+                ['BXGTL_1','Z18869','1','10000','1','0999','0','30000','0'],
+                ['BXGTL_1','Z18866','1','10000','1','0999','0','30000','0'],
+                ['BXGTL_1','Z18865','1','10000','1','0999','0','30000','0'],
+            ];
+            foreach($insert as $key => $item) {
+                $worksheet->setCellValue(('A'.$i), $item[0]);
+                $worksheet->setCellValue(('B'.$i), $item[1]);
+                $worksheet->setCellValue(('C'.$i), $item[2]);
+                $worksheet->setCellValue(('D'.$i), $item[3]);
+                $worksheet->setCellValue(('E'.$i), $item[4]);
+                $worksheet->setCellValue(('F'.$i), $item[5]);
+                $worksheet->setCellValue(('G'.$i), $item[6]);
+                $worksheet->setCellValue(('H'.$i), $item[7]);
+                $worksheet->setCellValue(('I'.$i), $item[8]);
+                $i++;
+            }
+        }
+        if($source_no == 5 ){ // TS
+            $i= 1;
+            $insert = [
+                ['模型','编号'],
+                ['BXB1802','Z12930'],
+                ['BXB1801','Z12931'],
+                ['BXB1800','Z12932'],
+                ['BXB1798','Z12934'],
+            ];
+            foreach($insert as $key => $item) {
+                $worksheet->setCellValue(('A'.$i), $item[0]);
+                $worksheet->setCellValue(('B'.$i), $item[1]);
+                $i++;
+            }
+        }
+        if($source_no == 6 ){ // TD
+            $i= 1;
+            $insert = [
+                ['模型','编号'],
+                ['BXB1802','Z12930'],
+                ['BXB1801','Z12931'],
+                ['BXB1800','Z12932'],
+                ['BXB1798','Z12934'],
+            ];
+            foreach($insert as $key => $item) {
+                $worksheet->setCellValue(('A'.$i), $item[0]);
+                $worksheet->setCellValue(('B'.$i), $item[1]);
+                $i++;
+            }
+        }
+        if($source_no == 7 ){ // TW
+            $i= 1;
+            $insert = [
+                ['模型','编号'],
+                ['BXB1802','Z12930'],
+                ['BXB1801','Z12931'],
+                ['BXB1800','Z12932'],
+                ['BXB1798','Z12934'],
+            ];
+            foreach($insert as $key => $item) {
+                $worksheet->setCellValue(('A'.$i), $item[0]);
+                $worksheet->setCellValue(('B'.$i), $item[1]);
+                $i++;
+            }
+        }
+
+        //下载文档
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
+
+    }
+
+    public function import()
+    {
+        $params =  $this->request->post();
+        //print_r( $params );
+        $attachmentModel = new Attachment(); // Env::get('file.FILE_ROOT_DIR').
+        $row = $attachmentModel->where('url',$params['file'])->value('extparam');
+        $row = json_decode($row,true);
+        $data['type'] = 0;
+        $data['file_name'] = $row['name'];
+        $data['file_path'] = $params['file'];
+        $data['source_no'] = $params['source_no'];
+        $data['creator'] = $this->auth->getUserInfo()['username'];
+        $data['create_time'] = date('YmdHis');
+
+        $unm = $this->model->where(['creator'=>['=',$data['creator']],'source_no'=>['=',$params['source_no']]])->count();
+        if( $unm ){
+            $this->error('库中已有取数文件，请删除后重新提交');
+        }
+        $result = $this->model->save($data);
+        if( !$result ){
+            $this->error('提交失败');
+        }
+
+        //实例化reader
+        $ext = pathinfo($params['file'], PATHINFO_EXTENSION);
+        if ($ext === 'xls') {
+            $reader = new Xls();
+        } else {
+            $reader = new Xlsx();
+        }
+        if (!$PHPExcel = $reader->load($params['file'])) {
+            $this->error(__('Unknown data format'));
+        }
+        $currentSheet = $PHPExcel->getSheet(0);  //读取文件中的第一个工作表
+        $allColumn = $currentSheet->getHighestDataColumn(); //取得最大的列号
+        $allRow = $currentSheet->getHighestRow(); //取得一共有多少行
+        $maxColumnNumber = Coordinate::columnIndexFromString($allColumn);
+        $content = [];
+        for( $i=2; $i<= $allRow ; $i++){
+            $rowCon = [];
+            for( $j=1; $j<=$maxColumnNumber; $j++ ){
+                $rowCon[] = trim($currentSheet->getCellByColumnAndRow($j, $i)->getValue());
+            }
+            $content[] = $rowCon;
+        }
+        //$content = array_unique($content);
+        if( $params['source_no'] == 1){ // U2
+
+        }
+        if( in_array($params['source_no'], [2,5,6,7])){ // TL
+            foreach ($content as $item){
+                $match = substr($item[0],0,2);
+                $addData['source_no'] = $item[0];
+                switch ($match){
+                    case 'JR':
+                        $addData['industry'] = '金融';
+                        $addData['class'] = '金融事业部';
+                        break;
+                    case 'SF':
+                        $addData['industry'] = "顺风车";
+                        $addData['class'] = "金融事业部";
+                        break;
+                    case 'JY':
+                        $addData['industry'] = "教育";
+                        $addData['class'] = "金融事业部";
+                        break;
+                    case 'DJ':
+                        $addData['industry'] = "营销点击";
+                        $addData['class'] = "互联网事业部";
+                        break;
+                    case 'YX':
+                        $addData['industry'] = "游戏";
+                        $addData['class'] = "互联网事业部";
+                        break;
+                    case 'BX':
+                        $addData['industry'] = "保险";
+                        $addData['class'] = "互联网事业部";
+                        break;
+                    case 'YH':
+                        $addData['industry'] = "云海";
+                        $addData['class'] = "互联网事业部";
+                        break;
+                    case 'HL':
+                        $addData['industry'] = "火狼";
+                        $addData['class'] = "互联网事业部";
+                        break;
+                    default:
+                        $addData['industry'] = "其他";
+                        $addData['class'] = "互联网事业部";
+                }
+                $result = Db::table('sms_center_new.sms_dpi_industry')->insert($addData);
+            }
+        }
+        if( $params['source_no'] == 5){ // TS
+
+        }
+        if( $params['source_no'] == 6){ // TD
+
+        }
+        if( $params['source_no'] == 7){ // TW
+
+        }
+
+
+
+        $this->success('批量提交成功');
+
+
+    }
 
     public function download($ids=null){
         $row = $this->model->where(['id'=>['in',$ids]])->find();

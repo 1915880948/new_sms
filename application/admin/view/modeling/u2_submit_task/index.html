@@ -19,10 +19,11 @@
                 <div class="widget-body no-padding">
                     <div id="toolbar" class="toolbar">
                         <a href="javascript:;" class="btn btn-primary btn-refresh" title="{:__('Refresh')}" ><i class="fa fa-refresh"></i> </a>
-                        <a href="javascript:;" class="btn btn-success btn-add {:$auth->check('modeling/u2_submit_task/add')?'':'hide'}" title="{:__('Add')}" ><i class="fa fa-plus"></i> {:__('Add')}</a>
+<!--                        <a href="javascript:;" class="btn btn-success btn-add {:$auth->check('modeling/u2_submit_task/add')?'':'hide'}" title="{:__('Add')}" ><i class="fa fa-plus"></i> {:__('Add')}</a>-->
 <!--                        <a href="javascript:;" class="btn btn-success btn-edit btn-disabled disabled {:$auth->check('modeling/u2_submit_task/edit')?'':'hide'}" title="{:__('Edit')}" ><i class="fa fa-pencil"></i> {:__('Edit')}</a>-->
 <!--                        <a href="javascript:;" class="btn btn-danger btn-del btn-disabled disabled {:$auth->check('modeling/u2_submit_task/del')?'':'hide'}" title="{:__('Delete')}" ><i class="fa fa-trash"></i> {:__('Delete')}</a>-->
-<!--                        <a href="javascript:;" class="btn btn-danger btn-import {:$auth->check('modeling/u2_submit_task/import')?'':'hide'}" title="{:__('Import')}" id="btn-import-file" data-url="ajax/upload" data-mimetype="csv,xls,xlsx" data-multiple="false"><i class="fa fa-upload"></i> {:__('Import')}</a>-->
+                        <a href="javascript:;" class="btn btn-success btn-import {:$auth->check('modeling/u2_submit_task/import')?'':'hide'}" title="{:__('Add')}" id="btn-import-file" data-url="ajax/upload" data-mimetype="csv,xls,xlsx" data-multiple="false" data-multipart={"key1":"value1"}><i class="fa fa-plus"></i> {:__('Add')}</a>
+                        <a href="javascript:;" class="btn btn-danger btn-download" title="{:__('Download')}" ><i class="fa fa-download"></i> 下载模板</a>
 
 
                     </div>
