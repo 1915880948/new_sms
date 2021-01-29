@@ -1,5 +1,5 @@
 define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefined, Backend, Table, Form) {
-
+var source_no = 1;
     var Controller = {
         index: function () {
             // 初始化表格参数配置
@@ -10,16 +10,25 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     // edit_url: 'modeling/u2_submit_task/edit',
                     del_url: 'modeling/u2_submit_task/del',
                     multi_url: 'modeling/u2_submit_task/multi',
+                    download_url: 'u2_submit_task/template',
+                    import_url: 'modeling/u2_submit_task/import',
                     table: 'sms_u2_submit_task',
                 }
             });
-
             var table = $("#table");
             //在普通搜索渲染后
             table.on('post-common-search.bs.table', function (event, table) {
                 var form = $("form", table.$commonsearch);
                 $("form select[name='source_no']").val(1);
+                source_no = 1;
             });
+
+            $(document).on("click", ".btn-download", function () {
+                var options = table.bootstrapTable('getOptions');
+                window.location.href = options.extend.download_url+"?source_no="+source_no;
+                //Fast.api.open(options.extend.download_url+"?source_no="+source_no, __('模板导出'), $(this).data() || {});
+            });
+
             // 初始化表格
             table.bootstrapTable({
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
@@ -54,8 +63,25 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 ]
             });
 
-            // 为表格绑定事件
-            Table.api.bindevent(table);
+            var parenttable = table.closest('.bootstrap-table');
+            //Bootstrap-table配置
+            var options = table.bootstrapTable('getOptions');
+            //Bootstrap操作区
+            var toolbar = $(options.toolbar, parenttable);
+            // 导入按钮事件
+            if ($(Table.config.importbtn, toolbar).size() > 0) {
+                require(['upload'], function (Upload) {
+                    Upload.api.plupload($(Table.config.importbtn, toolbar), function (data, ret) {
+                        Fast.api.ajax({
+                            url: options.extend.import_url,
+                            data: {file: data.url,source_no:source_no},
+                        }, function (data, ret) {
+                            table.bootstrapTable('refresh');
+                        });
+                    });
+                });
+            }
+
             //绑定TAB事件
             $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
                 // var options = table.bootstrapTable(tableOptions);
@@ -68,6 +94,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         params.type = 1;
                     }else {
                         params.source_no = typeStr;
+                        source_no = typeStr;
                     }
                     return params;
                 };
@@ -76,6 +103,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
 
             });
 
+            // 为表格绑定事件
+            Table.api.bindevent(table) ;
         },
         add: function () {
             Controller.api.bindevent();
@@ -84,10 +113,40 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             Controller.api.bindevent();
         },
         api: {
+
             bindevent: function () {
                 Form.api.bindevent($("form[role=form]"));
             }
-        }
+        },
+        import:function () {
+            $("#btn-import-file").data("upload-success", function(data, ret){
+                let file_json = JSON.parse(data.row.extparam);
+                console.log(file_json);
+                $("input[name='file_name']").val(file_json.name);
+            });
+            // var table = $("#table");
+            // //Bootstrap-table的父元素,包含table,toolbar,pagnation
+            // var parenttable = table.closest('.bootstrap-table');
+            // //Bootstrap-table配置
+            // var options = table.bootstrapTable('getOptions');
+            // //Bootstrap操作区
+            // var toolbar = $(options.toolbar, parenttable);
+            // // 导入按钮事件
+            // if ($(Table.config.importbtn, toolbar).size() > 0) {
+            //     require(['upload'], function (Upload) {
+            //         Upload.api.plupload($(Table.config.importbtn, toolbar), function (data, ret) {
+            //             Fast.api.ajax({
+            //                 url: options.extend.import_url,
+            //                 data: {file: data.url,a:'123456'},
+            //             }, function (data, ret) {
+            //                 table.bootstrapTable('refresh');
+            //             });
+            //         });
+            //     });
+            // }
+            Controller.api.bindevent();
+        },
+
     };
     return Controller;
 });
