@@ -17,6 +17,7 @@ class ModSource extends Backend
      * @var \app\admin\model\access\ModSource
      */
     protected $model = null;
+    protected $noNeedRight = ['modList'];
 
     public function _initialize()
     {
