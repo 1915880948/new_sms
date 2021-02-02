@@ -108,7 +108,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 columns: [
                     [
                         {checkbox: true},
-                        {field: 'task_id', title: __('Task_id'),operate:false},
+                        {field: 'task_id', title: __('Task_id')},
                         {field: 'title', title: __('Title'),operate:'like',
                             // cellStyle: cellStyle(),
                             // formatter: paramsMatter,
@@ -135,7 +135,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         },*/
                         {field: 'link_from', title: __('Link_from'),
                             formatter: Table.api.formatter.normal,
-                            searchList:{0:'未知',1:'内部',2:'外部'},visible: false
+                            searchList:{0:'未知',1:'内部',2:'外部'},operate:false,visible: false
                         },
                         {field: 'sm_task_id', title: __('Sm_task_id'),visible: false},
                         //{field: 'shortlink', title: __('Shortlink'),formatter:Table.api.formatter.url},
@@ -374,7 +374,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
 
             $("#plupload-files").data("upload-success", function(data, ret){
                 let file_json = JSON.parse(data.row.extparam);
-                $("input[name='file_name']").val(file_json.name);
+                $("input[name='file_name']").val($("input[name='file_name']").val()+file_json.name+",");
             });
 
             // 选择短信模板

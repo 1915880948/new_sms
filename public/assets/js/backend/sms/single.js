@@ -142,14 +142,14 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form','bootstrap-table-fixed
                 columns: [
                     [
                         {checkbox: true},
-                        {field: 'task_id', title: __('Task_id'),operate:false},
+                        {field: 'task_id', title: __('Task_id')},
                         {field: 'title', title: __('Title'),operate:'like',
                             // cellStyle: cellStyle(),
                             // formatter: paramsMatter,
                         },
                         {field: 'link_from', title: __('Link_from'),
                             formatter: Table.api.formatter.normal,
-                            searchList:{0:'未知',1:'内部',2:'外部'},visible: false
+                            searchList:{0:'未知',1:'内部',2:'外部'},operate:false,visible: false
                         },
                         {field: 'sm_task_id', title: __('Sm_task_id'),visible: false},
                         {field: 'company', title: __('Company')},

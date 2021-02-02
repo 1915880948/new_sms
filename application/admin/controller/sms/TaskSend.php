@@ -214,7 +214,8 @@ class TaskSend extends Backend
             if( $params['link_from'] == 1 && !$params['file_path']){ // 0:未知 1:内部 2:外部
                 $this->error('发送文件必须上传！');
             }
-            $params['file_path'] = trim($params['file_path'],Env::get('file.FILE_ROOT_DIR'));
+            //$params['file_path'] = trim($params['file_path'],Env::get('file.FILE_ROOT_DIR'));
+            $params['file_path'] = str_replace(Env::get('file.FILE_ROOT_DIR').'/', '', $params['file_path']);
             // 设置短信类型及初始状态
             switch ($params['channel_from'] ){
                 case 0: $params['status'] = 3;break;
