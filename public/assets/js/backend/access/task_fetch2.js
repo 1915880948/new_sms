@@ -124,7 +124,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form','jstree'], function ($
                         {field: 'end_time', title: __('End_time'), operate:'RANGE', addclass:'datetimerange'},
                         //{field: 'two_total_num', title: __('Two_total_num')},
                         //{field: 'two_end_time', title: __('Two_end_time'), operate:'RANGE', addclass:'datetimerange'},
-                        {field: 'remark', title: __('Remark')},
+                        {field: 'remark', title: __('Remark'),operate:'like'},
                         {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate,
                             buttons: [{
                                 name: 'click',
