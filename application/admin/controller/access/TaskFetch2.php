@@ -45,6 +45,8 @@ class TaskFetch2 extends Backend
         19 => '新广发黑名单',
         20 => 'CCI投保用户',
         21 => '保险通道黑名单',
+        22 => '电信游戏不敏感库',
+        23 => '回Y黑名单',
     ];
     protected $statusList = [
         1 => '提交',

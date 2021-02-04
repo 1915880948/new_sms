@@ -42,6 +42,8 @@ class FilterBlack extends Backend
         19 => '新广发黑名单',
         20 => 'CCI投保用户',
         21 => '保险通道黑名单',
+        22 => '电信游戏不敏感库',
+        23 => '回Y黑名单',
     ];
     protected $statusList = [
         1 => '提交',
@@ -60,6 +62,7 @@ class FilterBlack extends Backend
         1 => '全局黑名单',
         17=> '回T黑名单',
         11 => '金融所有银行黑名单',
+        23 => '回Y黑名单',
     ];
     //分开业务黑名单库
     private $blackNewArr = [
@@ -87,6 +90,7 @@ class FilterBlack extends Backend
         14 => '信用卡大于等于2',
         15 => '信用卡大于等于3',
         20 => 'CCI投保用户',
+        22 => '电信游戏不敏感库',
     ];
 
     public function _initialize()
